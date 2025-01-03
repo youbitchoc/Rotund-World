@@ -23,8 +23,8 @@ namespace Expedition
 			if (this.cornDisqualify)
 			{
 				string prefix = (this.flashTimer <= 15) ? ChallengeTools.IGT.Translate(" !!!!!!!!! ") : ChallengeTools.IGT.Translate(" ______ ");
-                this.description += prefix + ChallengeTools.IGT.Translate(" - Hibernating with popcorn will DISQUALIFY this challenge") + prefix;
-            }
+				this.description += prefix + ChallengeTools.IGT.Translate(" - Hibernating with popcorn will DISQUALIFY this challenge") + prefix;
+			}
 			base.UpdateDescription();
 		}
 
@@ -82,27 +82,27 @@ namespace Expedition
 				 this.UpdateDescription();
 			}
 
-            if (this.flashTimer > 0)
-                this.flashTimer--;
+			if (this.flashTimer > 0)
+				this.flashTimer--;
 
 
-            if (this.game?.cameras[0].room?.shelterDoor != null)
+			if (this.game?.cameras[0].room?.shelterDoor != null)
 			{
-                this.UpdateDescription();
-                //CHECK IF THERE'S CORN IN OUR SHELTER
-                //Debug.Log("CHECKING FOR CORN");
-                Room thisRoom = this.game.cameras[0].room;
+				this.UpdateDescription();
+				//CHECK IF THERE'S CORN IN OUR SHELTER
+				//Debug.Log("CHECKING FOR CORN");
+				Room thisRoom = this.game.cameras[0].room;
 				for (int j = 0; j < thisRoom.abstractRoom.entities.Count; j++)
-                {
-                    if (!this.hidden && (thisRoom.abstractRoom.entities[j] as AbstractPhysicalObject).realizedObject != null && (thisRoom.abstractRoom.entities[j] as AbstractPhysicalObject).realizedObject is SeedCob myCobb)
-                    {
-                        if (myCobb.open >= 1) //!myCobb.AbstractCob.dead && 
-                        {
+				{
+					if (!this.hidden && (thisRoom.abstractRoom.entities[j] as AbstractPhysicalObject).realizedObject != null && (thisRoom.abstractRoom.entities[j] as AbstractPhysicalObject).realizedObject is SeedCob myCobb)
+					{
+						if (myCobb.open >= 1) //!myCobb.AbstractCob.dead && 
+						{
 							this.cornDisqualify = true;
 							//Debug.Log("FOUND A CORN");
 						}
-                    }
-                }
+					}
+				}
 
 				if (this.cornDisqualify && this.flashTimer <= 0)
 				{
@@ -120,8 +120,8 @@ namespace Expedition
 			else
 				this.cornDisqualify = false;
 
-            
-        }
+			
+		}
 
 
 		public override string ToString()
@@ -173,6 +173,6 @@ namespace Expedition
 		
 		//A FEW EXTRA
 		public bool cornDisqualify;
-        public int flashTimer;
-    }
+		public int flashTimer;
+	}
 }

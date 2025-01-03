@@ -133,7 +133,7 @@ public class patch_SoundImporter
 			Debug.Log("-------Non existent triggers: ");
 			for (int n = 0; n < list2.Count; n++)
 			{
-				self.errors.Add("     " + array[list2[n]]);
+				self.errors.Add("	 " + array[list2[n]]);
 			}
 		}
 		self.audioClipNames = list3.ToArray();

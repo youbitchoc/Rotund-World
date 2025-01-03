@@ -18,7 +18,7 @@ public static class patch_OverseerTutorial
 
 
 	private static void OverseerTutorialBehavior_ctor(On.OverseerTutorialBehavior.orig_ctor orig, OverseerTutorialBehavior self, OverseerAI AI)
-    {
+	{
 		orig.Invoke(self, AI);
 		stuckTrouble = 0;
 		wedgeTrouble = 0;
@@ -58,7 +58,7 @@ public static class patch_OverseerTutorial
 		
 		//EXTRA ONES
 		else if (self.player.FoodInStomach > self.player.slugcatStats.foodToHibernate && (self.player.FoodInStomach > self.lastFoodInStomach || BellyPlus.bonusHudPip > lastBonusPips))
-        {
+		{
 			if (self.player.FoodInStomach == self.player.slugcatStats.maxFood && BellyPlus.bonusHudPip == 0) // && BellyPlus.bonusHudPip == 0 && self.player.MaxFoodInStomach > self.player.slugcatStats.maxFood)
 			{
 				self.TutorialText("Your hunger is satisfied, but you could still eat more...", 10, 120, false);
@@ -108,7 +108,7 @@ public static class patch_OverseerTutorial
 		
 		//AND THIS ONE NEVER WORKED
 		if (patch_Player.IsStuckOrWedged(self.player) && (wedgeTrouble >= 800 || stuckTrouble >= 800))
-        {
+		{
 			self.overseer.TryAddHologram(OverseerHologram.Message.GetUpOnFirstBox, self.player, float.MaxValue);
 		}
 		*/

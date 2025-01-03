@@ -14,14 +14,14 @@ public class patch_FoodMeter
 	public static void Patch()
 	{
 		On.HUD.FoodMeter.ctor += FoodMeter_ctor;
-        On.HUD.FoodMeter.UpdateShowCount += FoodMeter_UpdateShowCount;
+		On.HUD.FoodMeter.UpdateShowCount += FoodMeter_UpdateShowCount;
 		On.HUD.FoodMeter.QuarterPipShower.Draw += QuarterPipShower_Draw;
 		On.HUD.FoodMeter.QuarterPipShower.ctor += QuarterPipShower_ctor;
 		On.HUD.FoodMeter.MeterCircle.Draw += MeterCircle_Draw;
 		On.HUD.FoodMeter.Update += FoodMeter_Update;
 	}
 
-    public static void FoodMeter_Update(On.HUD.FoodMeter.orig_Update orig, FoodMeter self)
+	public static void FoodMeter_Update(On.HUD.FoodMeter.orig_Update orig, FoodMeter self)
    {
 		orig.Invoke(self);
 		if (BellyPlus.VisualsOnly())
@@ -32,12 +32,12 @@ public class patch_FoodMeter
 		
 
 		if (arrowsOn && self.hud.owner.GetOwnerType() == HUD.HUD.OwnerType.Player && !self.IsPupFoodMeter)
-        {
+		{
 			//Debug.Log("---FOOD METER UPDATE! ---");
 			for (int j = 0; j < (self.hud.owner as Player).abstractCreature.world.game.cameras.Length; j++)
-            {
+			{
 				if ((self.hud.owner as Player).abstractCreature.world.game.cameras[0].hud == self.hud)
-                {
+				{
 					List<AbstractCreature> players = (self.hud.owner as Player).abstractCreature.world.game.session.Players;
 					FoodMeter myMeter = (self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud.foodMeter;
 					Vector2 myMeterPos = myMeter.circles[0].DrawPos(1f);// - new Vector2( ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].sSize.x / 4f), 0f);
@@ -65,27 +65,27 @@ public class patch_FoodMeter
 							foodArrows[i + (j * players.Count)].alpha = pipAlpha;
 							if (!BellyPlus.individualFoodEnabled)
 							{
-                                float lineSpace = (foodCount >= self.survivalLimit ? 0.5f : 0f);
-                                foodArrows[i + (j * players.Count)].x = myMeterPos.x + (self.CircleDistance(1f) * foodCount) + (self.CircleDistance(1f) * lineSpace) + (-1 + i * 3f);
-                                foodArrows[i + (j * players.Count)].y = myMeterPos.y + 20f;
-                            }
-                            else
-                            {
-                                //SPECIAL CASE FOR INDIVIDUAL FOOD BAR MOD
-                                float foodRow = (players.Count - i) + ((self.hud.foodMeter.pupBars != null) ? ((float)self.hud.foodMeter.pupBars.Count) : 0f);
-                                if (self.hud.gourmandmeter != null)
-                                    foodRow += (float)self.hud.gourmandmeter.visibleRows;
+								float lineSpace = (foodCount >= self.survivalLimit ? 0.5f : 0f);
+								foodArrows[i + (j * players.Count)].x = myMeterPos.x + (self.CircleDistance(1f) * foodCount) + (self.CircleDistance(1f) * lineSpace) + (-1 + i * 3f);
+								foodArrows[i + (j * players.Count)].y = myMeterPos.y + 20f;
+							}
+							else
+							{
+								//SPECIAL CASE FOR INDIVIDUAL FOOD BAR MOD
+								float foodRow = (players.Count - i) + ((self.hud.foodMeter.pupBars != null) ? ((float)self.hud.foodMeter.pupBars.Count) : 0f);
+								if (self.hud.gourmandmeter != null)
+									foodRow += (float)self.hud.gourmandmeter.visibleRows;
 
-                                if (i > 0 && foodCount >= SlugcatStats.SlugcatFoodMeter(myPlayer.slugcatStats.name).x)
+								if (i > 0 && foodCount >= SlugcatStats.SlugcatFoodMeter(myPlayer.slugcatStats.name).x)
 								{
-                                    float lineSpace = (foodCount >= SlugcatStats.SlugcatFoodMeter(myPlayer.slugcatStats.name).y ? 0.72f : 0f); //self.survivalLimit
-                                    float circDist = 20; //self.CircleDistance(1f)
-                                    foodArrows[i + (j * players.Count)].x = myMeterPos.x + (circDist * foodCount) + (circDist * lineSpace) - 2.0f; //(-1 + i * 3f);
-                                    foodArrows[i + (j * players.Count)].y = myMeterPos.y + (foodRow * 25f) + 2f; //+ 5f;
-                                }
-                                else //MAKE P1'S ARROW INVISIBLE, AND ANYONES BELOW FULL
-                                    foodArrows[i + (j * players.Count)].alpha = 0;
-                            }
+									float lineSpace = (foodCount >= SlugcatStats.SlugcatFoodMeter(myPlayer.slugcatStats.name).y ? 0.72f : 0f); //self.survivalLimit
+									float circDist = 20; //self.CircleDistance(1f)
+									foodArrows[i + (j * players.Count)].x = myMeterPos.x + (circDist * foodCount) + (circDist * lineSpace) - 2.0f; //(-1 + i * 3f);
+									foodArrows[i + (j * players.Count)].y = myMeterPos.y + (foodRow * 25f) + 2f; //+ 5f;
+								}
+								else //MAKE P1'S ARROW INVISIBLE, AND ANYONES BELOW FULL
+									foodArrows[i + (j * players.Count)].alpha = 0;
+							}
 						}
 						else
 						{	
@@ -95,7 +95,7 @@ public class patch_FoodMeter
 					}
 				}
 				else
-                {
+				{
 					//Debug.Log("THIS WAS SOMEONE ELSES HUD! " + j);
 				}
 			}
@@ -103,12 +103,12 @@ public class patch_FoodMeter
 	}
 
 
-    public static void FoodMeter_UpdateShowCount(On.HUD.FoodMeter.orig_UpdateShowCount orig, FoodMeter self)
+	public static void FoodMeter_UpdateShowCount(On.HUD.FoodMeter.orig_UpdateShowCount orig, FoodMeter self)
 	{
 		if (self.showCount > self.circles.Count)
 			return; //THAT WOULD HAVE CRASHED US!
 
-        orig.Invoke(self);
+		orig.Invoke(self);
 	}
 
 
@@ -119,41 +119,41 @@ public class patch_FoodMeter
 	
 	//THIS PART IS USED SPECIFICALLY FOR THE SLEEP SCREEN, SINCE WE HANDLE THAT DIFFERENTLY THAN THE PLAYER VERSION
 	public static void MeterCircle_Draw(On.HUD.FoodMeter.MeterCircle.orig_Draw orig, FoodMeter.MeterCircle self, float timeStacker)
-    {
+	{
 		orig.Invoke(self, timeStacker);
 		if (BellyPlus.VisualsOnly())
 			return;
 		
 		if (self.meter.hud?.owner?.GetOwnerType() == HUD.HUD.OwnerType.SleepScreen || self.meter.hud?.owner?.GetOwnerType() == HUD.HUD.OwnerType.CharacterSelect)
-        {
+		{
 
 			if (self.meter.hud.owner.GetOwnerType() == HUD.HUD.OwnerType.CharacterSelect)
 				bonusFoodMemory = self.meter.sleepScreenPhase; //CHEATING LOL THIS IS DUMB
 
-            //if (self.number >= (self.meter.hud.owner as Player).slugcatStats.maxFood)
-            if (self.number >= (self.meter.maxFood - bonusFoodMemory)) //(self.meter.hud.owner.CurrentFood - self.meter.survivalLimit)))//
-            {
+			//if (self.number >= (self.meter.hud.owner as Player).slugcatStats.maxFood)
+			if (self.number >= (self.meter.maxFood - bonusFoodMemory)) //(self.meter.hud.owner.CurrentFood - self.meter.survivalLimit)))//
+			{
 				self.circles[0].visible = false;
 				self.circles[0].sprite.alpha = 0f;
 			}
 		}
-    }
+	}
 
-    //GIVE EVERYONE THE QUARTERPIP METER. NOT JUST RED
-    public static void FoodMeter_ctor(On.HUD.FoodMeter.orig_ctor orig, HUD.FoodMeter self, HUD.HUD hud, int maxFood, int survivalLimit, Player pup, int pupNumber)
+	//GIVE EVERYONE THE QUARTERPIP METER. NOT JUST RED
+	public static void FoodMeter_ctor(On.HUD.FoodMeter.orig_ctor orig, HUD.FoodMeter self, HUD.HUD hud, int maxFood, int survivalLimit, Player pup, int pupNumber)
 	{
-        if (BellyPlus.VisualsOnly())
+		if (BellyPlus.VisualsOnly())
 		{
 			orig.Invoke(self, hud, maxFood, survivalLimit, pup, pupNumber); 
 			return;
 		}
 
-        //if (hud.owner.GetOwnerType() == HUD.HUD.OwnerType.CharacterSelect || hud.owner.GetOwnerType() == HUD.HUD.OwnerType.ArenaSession)
+		//if (hud.owner.GetOwnerType() == HUD.HUD.OwnerType.CharacterSelect || hud.owner.GetOwnerType() == HUD.HUD.OwnerType.ArenaSession)
 			//BellyPlus.tomorrowsBonusFood = 0;
 
 		//JUST REAL QUICK
 		if (self.IsPupFoodMeter)
-        {
+		{
 			//(hud.owner as Player).slugcatStats.maxFood += 2;
 			//maxFood += 2;
 		}
@@ -200,23 +200,23 @@ public class patch_FoodMeter
 			
 			List<AbstractCreature> players = (self.hud.owner as Player).abstractCreature.world.game.session.Players;
 			if (players.Count < 2)
-            {
+			{
 				arrowsOn = false;
 				//return;
 			}
 			else
-            {
+			{
 				arrowsOn = true;
 				int myPlyrNum = (self.hud.owner as Player).playerState.playerNumber;
 
-                //OKAY THAT'S NOT WORKING AFTER THE UPDATE.. WE HAVE TO DO THIS DUMB THING TO CHECK WHICH PLAYER NUMBER WE ACTUALLY ARE
-                for (int j = 0; j < (self.hud.owner as Player).abstractCreature.world.game.cameras.Length; j++)
+				//OKAY THAT'S NOT WORKING AFTER THE UPDATE.. WE HAVE TO DO THIS DUMB THING TO CHECK WHICH PLAYER NUMBER WE ACTUALLY ARE
+				for (int j = 0; j < (self.hud.owner as Player).abstractCreature.world.game.cameras.Length; j++)
 				{
 					if ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud == self.hud)
 						myPlyrNum = j;
 
-                }
-                    
+				}
+					
 				Debug.Log("CREATING ARROW HUD! PNUM:" + myPlyrNum);
 
 				//ONLY P1 SHOULD RUN THIS (WHAT A MESS...)
@@ -227,7 +227,7 @@ public class patch_FoodMeter
 				{
 					// if ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud == self.hud)
 					if ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud == self.hud)
-                    {
+					{
 						Debug.Log(" CURRENT CAM:" + j);
 
 						for (int i = 0; i < players.Count; i++)
@@ -244,7 +244,7 @@ public class patch_FoodMeter
 								//self.fContainer.AddChild(foodArrows[i + (j * players.Count)]);
 							}
 							catch (Exception e)
-                            {
+							{
 								Debug.Log("CATCH! ARROW ERROR" + e);
 							}
 
@@ -253,17 +253,17 @@ public class patch_FoodMeter
 							{
 								self.fContainer.AddChild(foodArrows[i + (j * players.Count)]);
 							}
-                            catch (Exception e)
-                            {
+							catch (Exception e)
+							{
 								Debug.Log("CATCH! ARROW ERROR PT 2" + e);
 							}
 
-                            //catch (Exception e)
-                            //      {
-                            //	Debug.Log("CATCH " + e);
-                            //}
-                        }
-                    }
+							//catch (Exception e)
+							//	  {
+							//	Debug.Log("CATCH " + e);
+							//}
+						}
+					}
 				}
 			}
 		}
@@ -276,7 +276,7 @@ public class patch_FoodMeter
 		//1-18-23 DISABLING
 
 		if (!self.IsPupFoodMeter)
-        {
+		{
 			//SET THIS BACK TO 0 FOR NEXT TIME
 			bonusFoodMemory = BellyPlus.bonusFood;
 			BellyPlus.bonusFood = 0; // Math.Max (BellyPlus.bonusFood - self.eatCircles, 0);
@@ -287,7 +287,7 @@ public class patch_FoodMeter
 			{
 				self.sleepScreenPhase = bonusFoodMemory;
 				bonusFoodMemory = 0;
-            }
+			}
 
 
 			Debug.Log("-BP FOOD METER DEBUG! PT 2- BONUS FRUIT!" + hud.owner.GetOwnerType() + " CURRENT FOOD:" + hud.owner.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " " + self.eatCircles + " MAX " + maxFood);
@@ -302,22 +302,22 @@ public class patch_FoodMeter
 
 	public static int GetPrePlayerNum(FoodMeter self)
 	{
-        //OKAY THAT'S NOT WORKING AFTER THE UPDATE.. WE HAVE TO DO THIS DUMB THING TO CHECK WHICH PLAYER NUMBER WE ACTUALLY ARE
-        try
-        {
-            for (int j = 0; j < (self.hud.owner as Player).abstractCreature.world.game.cameras.Length; j++)
-            {
-                if ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud == self.hud)
-                    return j;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log("CATCH! QUARTER PIP SETUP ERROR" + e);
-        }
-        
+		//OKAY THAT'S NOT WORKING AFTER THE UPDATE.. WE HAVE TO DO THIS DUMB THING TO CHECK WHICH PLAYER NUMBER WE ACTUALLY ARE
+		try
+		{
+			for (int j = 0; j < (self.hud.owner as Player).abstractCreature.world.game.cameras.Length; j++)
+			{
+				if ((self.hud.owner as Player).abstractCreature.world.game.cameras[j].hud == self.hud)
+					return j;
+			}
+		}
+		catch (Exception e)
+		{
+			Debug.Log("CATCH! QUARTER PIP SETUP ERROR" + e);
+		}
+		
 		return -1; //LAME. I WANT TO CRASH THE GAME
-    }
+	}
 
 	
 	// public static List<FoodMeter.MeterCircle> circles;
@@ -331,20 +331,20 @@ public class patch_FoodMeter
 	
 	public const int maxPupPips = 10; 
 
-    public static void QuarterPipShower_ctor(On.HUD.FoodMeter.QuarterPipShower.orig_ctor orig, HUD.FoodMeter.QuarterPipShower self, FoodMeter owner)
-    {
-        orig.Invoke(self, owner);
+	public static void QuarterPipShower_ctor(On.HUD.FoodMeter.QuarterPipShower.orig_ctor orig, HUD.FoodMeter.QuarterPipShower self, FoodMeter owner)
+	{
+		orig.Invoke(self, owner);
 		if (BellyPlus.VisualsOnly())
 			return;
 
-        self.owner = owner;
+		self.owner = owner;
 
-        //(self.owner.hud.owner as Player).playerState.playerNumber
-        int myPlyrNum = GetPrePlayerNum(self.owner);
-        //Debug.Log("BAR COUNT " + myPlyrNum);
+		//(self.owner.hud.owner as Player).playerState.playerNumber
+		int myPlyrNum = GetPrePlayerNum(self.owner);
+		//Debug.Log("BAR COUNT " + myPlyrNum);
 
-        if (!self.owner.IsPupFoodMeter)
-        {
+		if (!self.owner.IsPupFoodMeter)
+		{
 			int pupCircles = 0; // self.owner.pupBars.Count * 3;
 			// if (self.owner.pupBars != null)
 				// pupCircles = self.owner.pupBars.Count * 3;
@@ -380,7 +380,7 @@ public class patch_FoodMeter
 			}
 		}
 		else
-        {
+		{
 			if (myPlyrNum == 0)
 			{
 				Debug.Log("ADDING PUP BONUS CIRCLES ");
@@ -417,12 +417,12 @@ public class patch_FoodMeter
 	
 	
 	public static void BonusPipVisibility(HUD.FoodMeter.QuarterPipShower self, float timeStacker, FSprite mySprite, int circleCount, bool flipped, float alpha, int pipShow)
-    {
-        mySprite.isVisible = true; //BONUS PIP
+	{
+		mySprite.isVisible = true; //BONUS PIP
 		int lastCircle = self.owner.circles.Count - 1;// + circleCount;
 		int pipCap = pipShow < (4 * (circleCount + 1)) ? 3 : 2; //IF WE'VE GOT BOTH PIPS ACTIVE, CUT THIS FIRST PIP DOWN TO A HALF PIP SO THEY DONT OVERLAP
 		int displayPip = Mathf.Min(pipShow - (circleCount * 4), pipCap);
-        //Debug.Log("PIP INFO!" + displayPip + " CAP:" + pipCap + " CIRCLE:" + circleCount + " BONUSPIPS: " + BellyPlus.bonusHudPip);
+		//Debug.Log("PIP INFO!" + displayPip + " CAP:" + pipCap + " CIRCLE:" + circleCount + " BONUSPIPS: " + BellyPlus.bonusHudPip);
 		mySprite.element = Futile.atlasManager.GetElementWithName("QuarterPips" + displayPip); //OHHH, THESE ARE MANUALLY NAMED VISUAL ASSETS. AND THEY ONLY EXIST FOR THE FIRST 3
 		
 		// mySprite.alpha = Mathf.Lerp(self.owner.circles[lastCircle].circles[0].lastFade, self.owner.circles[lastCircle].circles[0].fade, timeStacker) * Mathf.Lerp(Mathf.Lerp(0.2f, 0.5f, Mathf.Pow(Mathf.Clamp01(0.5f + 0.5f * Mathf.Sin(Mathf.Lerp(self.lastQuarterPipSin, self.quarterPipSin, timeStacker) / 20f)), 0.4f)), 0.6f, Mathf.Pow(Mathf.Lerp(self.lastLightUp, self.lightUp, timeStacker), 2f));
@@ -434,7 +434,7 @@ public class patch_FoodMeter
 
 		//PUP PIPS
 		if (self.owner.IsPupFoodMeter)
-        {
+		{
 			mySprite.scale /= 2f;
 			mySprite.color = Color.Lerp(Color.Lerp(mySprite.color, Custom.HSL2RGB(self.owner.pup.npcStats.H, Mathf.Lerp(self.owner.pup.npcStats.S, 1f, 0.8f), self.owner.pup.npcStats.Dark ? 0.3f : 0.7f), 0.5f - (float)self.owner.circles[0].circles[0].color * 0.5f), new Color(0.6f, 0.6f, 0.6f), self.owner.deathFade);
 			//Debug.Log("PIP INFO!" + displayPip + " CAP:" + pipCap + " CIRCLE:" + circleCount + " X: " + mySprite.x + " ALPHA: " + mySprite.alpha);
@@ -447,23 +447,23 @@ public class patch_FoodMeter
 
 
 
-    public static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, HUD.FoodMeter.QuarterPipShower self, float timeStacker)
+	public static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, HUD.FoodMeter.QuarterPipShower self, float timeStacker)
 	{
-        //MOVING THIS CHECK UP HERE BECAUSE IT SHOULD ALWAYS CHECK IN CASE OUR PREVIOUS TICK HAD VISIBLE FOOD PIPS!
-        //EVERY ONCE IN A WHILE, FLIP ALL OF OUR PIPS BACK OFF IN CASE SOME WEIRDNESS WITH THE HP-BAR MOD LEFT US WITH FLOATING PIPS PAST OUR ACTUAL METER
-        if (self.owner.visibleCounter == 1 && bonusCircles != null)
-        {
-            Debug.Log("RESET ALL PIPS! ");
-            //for (int j = 0; j < BellyPlus.MaxBonusPips; j++)
-            for (int j = 0; j < bonusCircles.Count; j++) //WHY NOT JUST DO THIS? IDIOT
-            {
-                bonusCircles[j].isVisible = false;
-                bonusCircles2[j].isVisible = false;
-            }
-        }
+		//MOVING THIS CHECK UP HERE BECAUSE IT SHOULD ALWAYS CHECK IN CASE OUR PREVIOUS TICK HAD VISIBLE FOOD PIPS!
+		//EVERY ONCE IN A WHILE, FLIP ALL OF OUR PIPS BACK OFF IN CASE SOME WEIRDNESS WITH THE HP-BAR MOD LEFT US WITH FLOATING PIPS PAST OUR ACTUAL METER
+		if (self.owner.visibleCounter == 1 && bonusCircles != null)
+		{
+			Debug.Log("RESET ALL PIPS! ");
+			//for (int j = 0; j < BellyPlus.MaxBonusPips; j++)
+			for (int j = 0; j < bonusCircles.Count; j++) //WHY NOT JUST DO THIS? IDIOT
+			{
+				bonusCircles[j].isVisible = false;
+				bonusCircles2[j].isVisible = false;
+			}
+		}
 
-        //RUN THIS PART IF FULL. (JUST A DUPLICATE OF THE EXISTING ONE, WITH A FEW TWEAKS)
-        if (self.owner.showCount >= self.owner.maxFood && !BellyPlus.VisualsOnly()) //MAXFOOD SHOULD BE COMING FROM SLUGCATSTATS
+		//RUN THIS PART IF FULL. (JUST A DUPLICATE OF THE EXISTING ONE, WITH A FEW TWEAKS)
+		if (self.owner.showCount >= self.owner.maxFood && !BellyPlus.VisualsOnly()) //MAXFOOD SHOULD BE COMING FROM SLUGCATSTATS
 		{
 			int lastCircle = self.owner.circles.Count - 1;
 			
@@ -478,12 +478,12 @@ public class patch_FoodMeter
 			//bool primeHud = ((self.owner.hud.owner as Player).abstractCreature.world.game.cameras[0].hud == self.owner.hud);
 
 			if (self.owner.IsPupFoodMeter)
-            {
+			{
 				int foodCount = ( self.owner.pup.CurrentFood - self.owner.pup.MaxFoodInStomach) * 2;
 				//Debug.Log("IM A PUP! HERES MY HUD " + self.owner.pupNumber + "FOOD" + self.owner.pup.CurrentFood + " (bonus)foodCount: " + foodCount);
 				int startJ = BellyPlus.MaxBonusPips + (self.owner.pupNumber - 1) * maxPupPips;
 				for (int j = startJ; j < (startJ + maxPupPips); j++)
-                {
+				{
 					int pipCnt = j - startJ ;
 					if (firstHud)
 					{
@@ -514,7 +514,7 @@ public class patch_FoodMeter
 			}
 
 			else
-            {
+			{
 				//OKAY MAYBE OUR HUD ONLY SHOWS UP TO 20 BUT WE KEEP TRACKING MORE THAN THAT
 				int showBonusHudPips = Math.Min(BellyPlus.bonusHudPip, BellyPlus.MaxBonusPips * 4);
 				

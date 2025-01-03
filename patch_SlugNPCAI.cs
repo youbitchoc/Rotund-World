@@ -12,7 +12,7 @@ public class patch_SlugNPCAI
 	//public delegate bool orig_IsFull(SlugNPCAI self); //NEAT...
 	
 	public static void Patch()
-    {
+	{
 		On.MoreSlugcats.SlugNPCAI.Update += BP_Update;
 		On.MoreSlugcats.SlugNPCAI.Move += SlugNPCAI_Move;
 
@@ -22,33 +22,33 @@ public class patch_SlugNPCAI
 
 
 		//typeof(SlugNPCAI).GetProperty(nameof(SlugNPCAI.IsFull), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod()
-		//      Hook myNPCHook = new Hook(
-		//          typeof(MoreSlugcats.SlugNPCAI).GetProperty("IsFull", propFlags2).GetGetMethod(), // This gets the getter 
-		//          typeof(patch_SlugNPCAI).GetMethod("SlugNPCAI_get_IsFull", myMethodFlags2) // This gets our hook method
-		//      );
+		//	  Hook myNPCHook = new Hook(
+		//		  typeof(MoreSlugcats.SlugNPCAI).GetProperty("IsFull", propFlags2).GetGetMethod(), // This gets the getter 
+		//		  typeof(patch_SlugNPCAI).GetMethod("SlugNPCAI_get_IsFull", myMethodFlags2) // This gets our hook method
+		//	  );
 		// Debug.Log("SLUGNPC DEBUG! INIT");
 
-        //new Hook(typeof(SlugNPCAI).GetProperty(nameof(SlugNPCAI.IsFull)).GetGetMethod(),
-        //    (Func<Func<SlugNPCAI, bool>, SlugNPCAI, bool>)SlugNPCAI_get_IsFull);
-        //try
-        //      {
-        //          //new Hook(typeof(SlugNPCAI).GetProperty(nameof(SlugNPCAI.FunStuff)).GetGetMethod(),
-        //          //(Func<Func<SlugNPCAI, bool>, SlugNPCAI, bool>)SlugNPCAI_test);
-        //}
-        //catch (Exception e)
-        //      {
-        //	Debug.Log("CATCH " + e);
-        //}
+		//new Hook(typeof(SlugNPCAI).GetProperty(nameof(SlugNPCAI.IsFull)).GetGetMethod(),
+		//	(Func<Func<SlugNPCAI, bool>, SlugNPCAI, bool>)SlugNPCAI_get_IsFull);
+		//try
+		//	  {
+		//		  //new Hook(typeof(SlugNPCAI).GetProperty(nameof(SlugNPCAI.FunStuff)).GetGetMethod(),
+		//		  //(Func<Func<SlugNPCAI, bool>, SlugNPCAI, bool>)SlugNPCAI_test);
+		//}
+		//catch (Exception e)
+		//	  {
+		//	Debug.Log("CATCH " + e);
+		//}
 
-        //MAKE CATS THINK THEY ARE HUNGY
-        On.MoreSlugcats.SlugNPCAI.DecideBehavior += BPSlugNPCAI_DecideBehavior;
-        On.MoreSlugcats.SlugNPCAI.WantsToEatThis += BPSlugNPCAI_WantsToEatThis;
+		//MAKE CATS THINK THEY ARE HUNGY
+		On.MoreSlugcats.SlugNPCAI.DecideBehavior += BPSlugNPCAI_DecideBehavior;
+		On.MoreSlugcats.SlugNPCAI.WantsToEatThis += BPSlugNPCAI_WantsToEatThis;
 		//APPLIED TO EVERYTHING EXCEPT SOCIAL INTERATION
 	}
 
-    
+	
 
-    public static void FixFood(SlugNPCAI self)
+	public static void FixFood(SlugNPCAI self)
 	{
 		self.cat.playerState.foodInStomach = self.cat.abstractCreature.GetAbsBelly().myFoodInStomach;
 	}
@@ -68,47 +68,47 @@ public class patch_SlugNPCAI
 		else if (self.creature.personality.energy < 0.85)
 			limit = 2;
 
-        //Debug.Log("SLUGNPC DEBUG! MY LIMIT " + limit + " - " + self.creature.personality.energy);
-        return self.IsFull && self.cat.playerState.foodInStomach < self.cat.MaxFoodInStomach + limit;
+		//Debug.Log("SLUGNPC DEBUG! MY LIMIT " + limit + " - " + self.creature.personality.energy);
+		return self.IsFull && self.cat.playerState.foodInStomach < self.cat.MaxFoodInStomach + limit;
 	}
-    //this.creature.personality.energy > 0.6f
+	//this.creature.personality.energy > 0.6f
 
 
 
-    public static void BPSlugNPCAI_DecideBehavior(On.MoreSlugcats.SlugNPCAI.orig_DecideBehavior orig, SlugNPCAI self)
-    {
-        //BRIEFLY PRETEND WE AREN'T FULL
-        // int myFood = self.cat.playerState.foodInStomach;
-        bool hungry = WantsToOvereat(self);
-        if (hungry)
-            self.cat.playerState.foodInStomach = self.cat.MaxFoodInStomach - 1;
+	public static void BPSlugNPCAI_DecideBehavior(On.MoreSlugcats.SlugNPCAI.orig_DecideBehavior orig, SlugNPCAI self)
+	{
+		//BRIEFLY PRETEND WE AREN'T FULL
+		// int myFood = self.cat.playerState.foodInStomach;
+		bool hungry = WantsToOvereat(self);
+		if (hungry)
+			self.cat.playerState.foodInStomach = self.cat.MaxFoodInStomach - 1;
 
-        orig.Invoke(self);
+		orig.Invoke(self);
 
-        //PUT IT BACK TO NORMAL
-        // self.cat.playerState.foodInStomach = myFood;
-        if (hungry)
-            FixFood(self);
-    }
-
-
-    private static bool BPSlugNPCAI_WantsToEatThis(On.MoreSlugcats.SlugNPCAI.orig_WantsToEatThis orig, SlugNPCAI self, PhysicalObject obj)
-    {
-        bool hungry = WantsToOvereat(self);
-        if (hungry)
-            self.cat.playerState.foodInStomach = self.cat.MaxFoodInStomach - 1;
-
-        bool result = orig.Invoke(self, obj);
-
-        //PUT IT BACK TO NORMAL
-        if (hungry)
-            FixFood(self);
-
-        return result;
-    }
+		//PUT IT BACK TO NORMAL
+		// self.cat.playerState.foodInStomach = myFood;
+		if (hungry)
+			FixFood(self);
+	}
 
 
-    /*
+	private static bool BPSlugNPCAI_WantsToEatThis(On.MoreSlugcats.SlugNPCAI.orig_WantsToEatThis orig, SlugNPCAI self, PhysicalObject obj)
+	{
+		bool hungry = WantsToOvereat(self);
+		if (hungry)
+			self.cat.playerState.foodInStomach = self.cat.MaxFoodInStomach - 1;
+
+		bool result = orig.Invoke(self, obj);
+
+		//PUT IT BACK TO NORMAL
+		if (hungry)
+			FixFood(self);
+
+		return result;
+	}
+
+
+	/*
 	public static bool SlugNPCAI_get_IsFull(Func<SlugNPCAI, bool> orig, SlugNPCAI self)
 	{
 		Debug.Log("SLUGNPC DEBUG! DO I WORK");
@@ -119,7 +119,7 @@ public class patch_SlugNPCAI
 
 
 
-    private static void SlugNPCAI_Move(On.MoreSlugcats.SlugNPCAI.orig_Move orig, SlugNPCAI self)
+	private static void SlugNPCAI_Move(On.MoreSlugcats.SlugNPCAI.orig_Move orig, SlugNPCAI self)
 	{
 		bool hungry = WantsToOvereat(self);
 		if (hungry)
@@ -182,8 +182,8 @@ public class patch_SlugNPCAI
 	
 	
 	
-    public static void BP_Update(On.MoreSlugcats.SlugNPCAI.orig_Update orig, SlugNPCAI self)
-    {
+	public static void BP_Update(On.MoreSlugcats.SlugNPCAI.orig_Update orig, SlugNPCAI self)
+	{
 
 		if (self.IsFull && self.grabTarget != null && self.CanGrabItem(self.grabTarget))
 		{
@@ -207,14 +207,14 @@ public class patch_SlugNPCAI
 				//Debug.Log("SLUGNPC DEBUG! " + self.behaviorType);
 
 			if (self.behaviorType == SlugNPCAI.BehaviorType.Following && self.friendTracker.friend != null && self.friendTracker.friend.room != null)
-            {
+			{
 				Player myFriend = self.friendTracker.friend as Player;
 				WorldCoordinate myDest = myFriend.room.GetWorldCoordinate(myFriend.bodyChunks[1].pos);
 				self.creature.abstractAI.SetDestination(myDest);
 			}
 			//DON'T JUST STAND THERE!
 			else if (self.cat.input[0].IntVec == new IntVector2(0, 0))
-            {
+			{
 				WorldCoordinate myDest = self.cat.room.GetWorldCoordinate(self.cat.bodyChunks[1].pos + (patch_Player.ObjGetStuckVector(self.cat) * 20f));
 				self.creature.abstractAI.SetDestination(myDest);
 			}

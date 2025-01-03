@@ -45,12 +45,12 @@ public class patch_Player
 		On.Player.TerrainImpact += Player_TerrainImpact; //THIS ONE CAN STAY ON WITH VISUALS ONLY
 		On.Player.GrabUpdate += Player_GrabUpdate;
 		
-        // ANYTHING BELOW HERE IS SKIPPED FOR VISUALS ONLY MODE
+		// ANYTHING BELOW HERE IS SKIPPED FOR VISUALS ONLY MODE
 		// using (new DetourContext(-333))
 		//JOLLY FIXES MAKES US RELEASE OUR PULLER WHEN WE PRESS JUMP
 		On.Player.Jump += Player_Jump;
-        On.Player.JumpOnChunk += Player_JumpOnChunk;
-        On.Player.Update += BPPlayer_Update; //SO JOLLYFIXES DOESNT LET GO OF GRABBED TUGGERS WHEN BOOSTING
+		On.Player.JumpOnChunk += Player_JumpOnChunk;
+		On.Player.Update += BPPlayer_Update; //SO JOLLYFIXES DOESNT LET GO OF GRABBED TUGGERS WHEN BOOSTING
 
 		
 		//JOLLY CO-OP ALSO EDITS THESE, BUT WE PROBABLY WANT OURS TO RUN LAST
@@ -58,21 +58,21 @@ public class patch_Player
 		On.Player.ObjectEaten += Player_ObjectEaten;
 		On.Player.Grabability += Player_Grabability;
 		On.Player.CanIPickThisUp += Player_CanIPickThisUp; //TO UNDO SOME STUFF THAT JOLLY CO-OP DOES
-        On.Player.ReleaseObject += Player_ReleaseObject;
+		On.Player.ReleaseObject += Player_ReleaseObject;
 
 		On.Player.MovementUpdate += Player_MovementUpdate;
 		IL.Player.MovementUpdate += BPPlayer_MovementUpdate;
 		IL.Player.MovementUpdate += BPPlayer_MovementUpdate2;
-        IL.Player.MovementUpdate += RadToTerrainRad; //MULTI USE IL! SWAPS ALL BODYCHUNK.RAD TO TERRAINRAD
+		IL.Player.MovementUpdate += RadToTerrainRad; //MULTI USE IL! SWAPS ALL BODYCHUNK.RAD TO TERRAINRAD
 		IL.Player.UpdateBodyMode += RadToTerrainRad;
-        IL.ShortcutHelper.Update += BPShortcutHelper;
-        //IL.ShortcutHelper.ObjectPusher.Update += BPObjectPusher;
-        
+		IL.ShortcutHelper.Update += BPShortcutHelper;
+		//IL.ShortcutHelper.ObjectPusher.Update += BPObjectPusher;
+		
 
-        On.Player.UpdateBodyMode += Player_UpdateBodyMode;
+		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
 		On.Player.UpdateAnimation += BPUpdateAnimation;
-        
-        On.Player.ThrowObject += Player_ThrowObject;
+		
+		On.Player.ThrowObject += Player_ThrowObject;
 		On.Player.SlugcatGrab += Player_SlugcatGrab;
 		On.Player.PickupCandidate += Player_PickupCandidate;
 		On.Player.SpitOutOfShortCut += Player_SpitOutOfShortCut;
@@ -83,65 +83,65 @@ public class patch_Player
 		On.Player.Tongue.decreaseRopeLength += BPdecreaseRopeLength;
 		On.Player.DeathByBiteMultiplier += BP_DeathByBiteMultiplier;
 		//On.Player.Stun += BP_Stun;
-        On.Spear.HitSomething += BPSpear_HitSomething;
+		On.Spear.HitSomething += BPSpear_HitSomething;
 		// On.Player.SpearStick += ;
 
 		On.Player.ClassMechanicsGourmand += Player_ClassMechanicsGourmand;
 		On.Player.SlugSlamConditions += BP_SlugSlamConditions;
 		On.Player.CanBeSwallowed += BP_CanBeSwallowed;
-        
+		
 		//I'M TIRED OF THIS NOT WORKING!
 		On.Player.JollyUpdate += BP_JollyUpdate;
-        On.Player.JollyEmoteUpdate += Player_JollyEmoteUpdate;
-        //On.Player.ChangeCameraToPlayer +=  //IT'S A STATIC SO WE CAN'T DO IT? D:
-        //On.Player.TriggerCameraSwitch += BP_TriggerCameraSwitch; //JUST TO CATCH A CRASH I GUESS
+		On.Player.JollyEmoteUpdate += Player_JollyEmoteUpdate;
+		//On.Player.ChangeCameraToPlayer +=  //IT'S A STATIC SO WE CAN'T DO IT? D:
+		//On.Player.TriggerCameraSwitch += BP_TriggerCameraSwitch; //JUST TO CATCH A CRASH I GUESS
 
-        On.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;
+		On.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;
 		On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
-        On.Player.UpdateMSC += BPPlayer_UpdateMSC;
-        On.Player.SwallowObject += Player_SwallowObject;
-        On.Player.Regurgitate += Player_Regurgitate;
-        On.Creature.Abstractize += Creature_Abstractize; //CERTAIN PARTS OF ROTUND WORLD BREAK (FOODONBACK) WHEN THIS HAPPENS
+		On.Player.UpdateMSC += BPPlayer_UpdateMSC;
+		On.Player.SwallowObject += Player_SwallowObject;
+		On.Player.Regurgitate += Player_Regurgitate;
+		On.Creature.Abstractize += Creature_Abstractize; //CERTAIN PARTS OF ROTUND WORLD BREAK (FOODONBACK) WHEN THIS HAPPENS
 
 		//OKAY THIS ONE IS FOR ALL CREATURES
 		On.Creature.Violence += BP_Violence;
 		// }
 
-        On.StoryGameSession.CreateJollySlugStats += StoryGameSession_CreateJollySlugStats;
+		On.StoryGameSession.CreateJollySlugStats += StoryGameSession_CreateJollySlugStats;
 		On.RainWorldGame.Update += RainWorldGame_Update;
-        //SLIME_CUBED REPORTED THAT THIS IS NEEDED TO WORK AROUND A BUG WHERE MOD PRIORITIES FOR OTHER MODS AREN'T RESET UNLESS YOU RESET IT MANUALLY
-        // using (new DetourContext()) { } //ISN'T A THING IN 1.9 UNFORTUNATELY...
-    }
+		//SLIME_CUBED REPORTED THAT THIS IS NEEDED TO WORK AROUND A BUG WHERE MOD PRIORITIES FOR OTHER MODS AREN'T RESET UNLESS YOU RESET IT MANUALLY
+		// using (new DetourContext()) { } //ISN'T A THING IN 1.9 UNFORTUNATELY...
+	}
 
-    //THE GAME SETS EVERYONES WEIGHTFAC TO 1 IN CO-OP. THAT SUCKS. UNDO THAT
-    private static void StoryGameSession_CreateJollySlugStats(On.StoryGameSession.orig_CreateJollySlugStats orig, StoryGameSession self, bool m)
-    {
-        if (self.game.Players.Count == 0)
-        {
-            orig(self, m); //JollyCustom.Log("[JOLLY] NO PLAYERS IN SESSION!!", false);
-            return;
-        }
+	//THE GAME SETS EVERYONES WEIGHTFAC TO 1 IN CO-OP. THAT SUCKS. UNDO THAT
+	private static void StoryGameSession_CreateJollySlugStats(On.StoryGameSession.orig_CreateJollySlugStats orig, StoryGameSession self, bool m)
+	{
+		if (self.game.Players.Count == 0)
+		{
+			orig(self, m); //JollyCustom.Log("[JOLLY] NO PLAYERS IN SESSION!!", false);
+			return;
+		}
 
-        orig(self, m); //RUN THE ORIG THAT SETS OUR WEIGHT WRONG
+		orig(self, m); //RUN THE ORIG THAT SETS OUR WEIGHT WRONG
 
-        //self.characterStatsJollyplayer = new SlugcatStats[4];
-        PlayerState playerState = self.game.Players[0].state as PlayerState;
-        for (int i = 0; i < self.game.world.game.Players.Count; i++)
-        {
+		//self.characterStatsJollyplayer = new SlugcatStats[4];
+		PlayerState playerState = self.game.Players[0].state as PlayerState;
+		for (int i = 0; i < self.game.world.game.Players.Count; i++)
+		{
 			//RECREATED PRETTY MUCH MOST OF THIS... THIS SHOULD REALLY BE AN IL BUT WHATEV
-            playerState = (self.game.Players[i].state as PlayerState);
-            SlugcatStats.Name playerClass = self.game.rainWorld.options.jollyPlayerOptionsArray[playerState.playerNumber].playerClass;
-            if (playerClass == null)
-            {
-                playerClass = self.saveState.saveStateNumber;
-            }
+			playerState = (self.game.Players[i].state as PlayerState);
+			SlugcatStats.Name playerClass = self.game.rainWorld.options.jollyPlayerOptionsArray[playerState.playerNumber].playerClass;
+			if (playerClass == null)
+			{
+				playerClass = self.saveState.saveStateNumber;
+			}
 			//GET OUR REAL CLASS'S WEIGHT AND REASSIGN IT TO US
-            SlugcatStats reStats = new SlugcatStats(playerClass, m);
+			SlugcatStats reStats = new SlugcatStats(playerClass, m);
 			self.characterStatsJollyplayer[playerState.playerNumber].bodyWeightFac = reStats.bodyWeightFac;
-        }
-    }
+		}
+	}
 
-    private static void PlayerPatch(On.Player.orig_ctor orig, Player player, AbstractCreature abstractCreature, World world)
+	private static void PlayerPatch(On.Player.orig_ctor orig, Player player, AbstractCreature abstractCreature, World world)
 	{
 		orig(player, abstractCreature, world);
 		
@@ -149,26 +149,26 @@ public class patch_Player
 		bool illegalSpawn = false; // CHECK FOR 400 BECAUSE FAST SHELTER DOORS BUMPS US UP TO 340 - we probably don't need this anymore... player.abstractCreature.world.rainCycle.timer > 400 && 
 		int playerNumber = player.playerState.playerNumber; // GetPlayerNum(player);
 
-        IntVector2 personalBelly = SlugcatStats.SlugcatFoodMeter(player.slugcatStats.name); //BECAUSE PLAYERSTATS.MAXFOOD ONLY GIVES PLAYER 1'S BELLY SIZE
-        player.GetBelly().bigBelly = player.isGourmand || (personalBelly.x > 10 && personalBelly.x - personalBelly.y >= 4);
+		IntVector2 personalBelly = SlugcatStats.SlugcatFoodMeter(player.slugcatStats.name); //BECAUSE PLAYERSTATS.MAXFOOD ONLY GIVES PLAYER 1'S BELLY SIZE
+		player.GetBelly().bigBelly = player.isGourmand || (personalBelly.x > 10 && personalBelly.x - personalBelly.y >= 4);
 
-        //OKAY INDIVIDUAL FOOD BARS BEATS US TO THE PUNCH SO WE HAVE TO SET THIS HERE TOO
-        if (player.abstractCreature.GetAbsBelly().origPoleSpeed == 0)
-            player.abstractCreature.GetAbsBelly().origPoleSpeed = player.slugcatStats.poleClimbSpeedFac;
+		//OKAY INDIVIDUAL FOOD BARS BEATS US TO THE PUNCH SO WE HAVE TO SET THIS HERE TOO
+		if (player.abstractCreature.GetAbsBelly().origPoleSpeed == 0)
+			player.abstractCreature.GetAbsBelly().origPoleSpeed = player.slugcatStats.poleClimbSpeedFac;
 
-        if (player.GetBelly().foodOnBack == null) //INITIALIZE THIS TOO, IF WE'RE MISSING IT
-            player.GetBelly().foodOnBack = new FoodOnBack(player); //player.GetBelly().foodOnBack.ReplaceOwner(player);
+		if (player.GetBelly().foodOnBack == null) //INITIALIZE THIS TOO, IF WE'RE MISSING IT
+			player.GetBelly().foodOnBack = new FoodOnBack(player); //player.GetBelly().foodOnBack.ReplaceOwner(player);
 
-        //IF OUR FOOD LEVEL WAS ALREADY INITIALIZED, SKIP THE REST
-        if (player.abstractCreature.GetAbsBelly().myFoodInStomach != -1)
+		//IF OUR FOOD LEVEL WAS ALREADY INITIALIZED, SKIP THE REST
+		if (player.abstractCreature.GetAbsBelly().myFoodInStomach != -1)
 		{
-            illegalSpawn = true;
-            Debug.Log("ILLEGAL SPAWN! CANCEL THE STARTUP " + playerNumber);
+			illegalSpawn = true;
+			Debug.Log("ILLEGAL SPAWN! CANCEL THE STARTUP " + playerNumber);
 			UpdateBellySize(player); //STILL DO THIS THOUGH. THIS WEIRD CLONE MAY WANT IT
-            return;
+			return;
 		}
 		else if (player.abstractCreature.GetAbsBelly().myFoodInStomach == -1) //INITIALIZE FOOD LEVEL IF IT HASN'T BEEN ALREADY
-        {
+		{
 			player.abstractCreature.GetAbsBelly().myFoodInStomach = player.FoodInStomach;
 		}
 		
@@ -177,11 +177,11 @@ public class patch_Player
 		//if (BPOptions.debugLogs.Value)
 			//Debug.Log("-FK YOU GIMME MY GODDANG BONUS FRUIT!" + player.abstractCreature.GetAbsBelly().myFoodInStomach + " OVERSTUFFED: " + GetOverstuffed(player) + " CURRENT FOOD:" + player.FoodInStomach + " BONUS:" + player.GetBelly().bigBelly + " " + player.slugcatStats.maxFood);
 
-        //HOLDUP!... CURRENTFOOD ACTUALLY SAVES CORRECLTY!!! WOW THAT IS INCREDIBLE
+		//HOLDUP!... CURRENTFOOD ACTUALLY SAVES CORRECLTY!!! WOW THAT IS INCREDIBLE
 		//SO THIS TRIMS OFF THE EXTRA FAT FROM OUR SAVE FILE AND ADDS IT TO OUR P1 INDIVIDUAL WEIGHT. WHICH IS WHAT WE WANT, EVEN IN 1.6
-        int blubberStored = player.CurrentFood - player.MaxFoodInStomach;
+		int blubberStored = player.CurrentFood - player.MaxFoodInStomach;
 		if (player.playerState.playerNumber == 0 && !player.isNPC) // || BellyPlus.individualFoodEnabled -IT DOESN'T SAVE THAT DATA. DOESN'T WORK
-        {
+		{
 			if (blubberStored > 0)
 			{
 				Debug.Log("-BLUBBER CHECK! " + blubberStored + " CURRENT FOOD" + player.CurrentFood + " MAX FOOD " + player.MaxFoodInStomach + " PERSONALFOOD" + player.abstractCreature.GetAbsBelly().myFoodInStomach);
@@ -195,48 +195,48 @@ public class patch_Player
 		
 		//if (BPOptions.debugLogs.Value)
 		//	Debug.Log("BIG BELLIED SLUG? " + player.GetBelly().bigBelly + " CURR FOOD?" + player.abstractCreature.GetAbsBelly().myFoodInStomach + " - " + player.slugcatStats.name + " - " + player.playerState.slugcatCharacter + " - " + SlugcatStats.SlugcatFoodMeter(player.slugcatStats.name) + " - " + player.slugcatStats.bodyWeightFac + " - " + player.bodyChunks[0].mass);
-        //Debug.Log(" CURRENT FOOD:" + player.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " " + BellyPlus.bonusHudPip);
+		//Debug.Log(" CURRENT FOOD:" + player.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " " + BellyPlus.bonusHudPip);
 
 
-        //IF THERE ARE MULTIPLE PLAYERS, CHECK OUR INDIVIDUAL LONG TERM STORED FOOD FROM PREVIOUS SESSIONS, IF ANY
-        if (player.abstractCreature.world.game.IsStorySession && !player.isSlugpup && player.abstractCreature.world.game.Players.Count > 1)
+		//IF THERE ARE MULTIPLE PLAYERS, CHECK OUR INDIVIDUAL LONG TERM STORED FOOD FROM PREVIOUS SESSIONS, IF ANY
+		if (player.abstractCreature.world.game.IsStorySession && !player.isSlugpup && player.abstractCreature.world.game.Players.Count > 1)
 		{
-            
+			
 			//IF OUR STORED FOOD VALUE WAS THE HIGHEST (OR TIED) REMAIN LORGE
 			WinState myWinState = player.abstractCreature.world.game.GetStorySession.saveState.deathPersistentSaveData.winState;
 			int playerCount = player.abstractCreature.world.game.Players.Count;
-            Debug.Log("--- PLAYERCOUNTE " + playerCount);
-            int biggestFood = patch_Misc.FindHighestLongtermFood(myWinState, playerCount);
+			Debug.Log("--- PLAYERCOUNTE " + playerCount);
+			int biggestFood = patch_Misc.FindHighestLongtermFood(myWinState, playerCount);
 			int myLongTrmFood = patch_Misc.MyLongtermFood(myWinState, playerNumber);
 			if (myLongTrmFood == -1)
-            {
+			{
 				Debug.Log("-ERROR STATE -NO LONGTERM FOOD HAS BEEN STORED YET! p" + playerNumber );
 				//UNLESS WE'RE NOT PLAYER 1 AND WE'RE JOINING IN A GAME
 				if (playerNumber >= 1 && !BellyPlus.individualFoodEnabled) //WE DO NEED THE FIRST PLAYER TO ALWAYS RUN THIS CHECK AND SKIP THE REST, IN CASE SOMEONE HAD DISABLED AND RE-ENABLED THE MOD
-                    player.abstractCreature.GetAbsBelly().myFoodInStomach = Math.Min(biggestFood, player.slugcatStats.foodToHibernate);
+					player.abstractCreature.GetAbsBelly().myFoodInStomach = Math.Min(biggestFood, player.slugcatStats.foodToHibernate);
 			}
 			else if (BellyPlus.sharedPips && myLongTrmFood >= biggestFood)
 			{ //OKAY WE NEED TO SKIP THIS FOR NON-SHARED PIPS OTHERWISE A FAT PLAYER LEAVING THE SESSION WILL HAVE ALL SORTS OF WEIRD EFFECTS
-                Debug.Log("-WE'VE GOT THE BIGGEST FOOD! DO NOTHING. P" + playerNumber + " -TO: " + myLongTrmFood);
-            }
-            //SPECIAL CASE FOR INDIVIDUAL FOOD BARS MOD! - THIS PROBABLY DOESN'T EVEN GET HERE, SINCE IFB UPDATES OUR FOOD VALUES BEFORE THE CONSTRUCTOR SO WE COUNT AS ILLEGAL SPAWNS
-            else if (BellyPlus.individualFoodEnabled)
+				Debug.Log("-WE'VE GOT THE BIGGEST FOOD! DO NOTHING. P" + playerNumber + " -TO: " + myLongTrmFood);
+			}
+			//SPECIAL CASE FOR INDIVIDUAL FOOD BARS MOD! - THIS PROBABLY DOESN'T EVEN GET HERE, SINCE IFB UPDATES OUR FOOD VALUES BEFORE THE CONSTRUCTOR SO WE COUNT AS ILLEGAL SPAWNS
+			else if (BellyPlus.individualFoodEnabled)
 			{
-                player.playerState.foodInStomach = Mathf.Min(Mathf.Max(player.playerState.foodInStomach, myLongTrmFood), SlugcatStats.SlugcatFoodMeter(player.slugcatStats.name).x);
+				player.playerState.foodInStomach = Mathf.Min(Mathf.Max(player.playerState.foodInStomach, myLongTrmFood), SlugcatStats.SlugcatFoodMeter(player.slugcatStats.name).x);
 				player.abstractCreature.GetAbsBelly().myFoodInStomach = Mathf.Max(player.playerState.foodInStomach, myLongTrmFood);
-            }
+			}
 			else
 			{
 				int newfood = myLongTrmFood;
-                //IF ANYONE'S GOT AT LEAST 1, THEN WE GET 1
-                //newfood = Math.Max(newfood, Math.Min(biggestFood, 1));
+				//IF ANYONE'S GOT AT LEAST 1, THEN WE GET 1
+				//newfood = Math.Max(newfood, Math.Min(biggestFood, 1));
 				//OKAY MAKE IT UP TO 3 - MAXIMUM FOOD
 				//TAKE OUR STARTING THRESHOLD INT ACCOUNT FOR THIS CALCULATION!
 				int threshMod = (expRotund && !player.isNPC) ? (player.slugcatStats.maxFood - player.slugcatStats.foodToHibernate) : 0;
-                newfood = Math.Max(newfood, Math.Min(biggestFood, player.slugcatStats.maxFood - 3 - threshMod));
+				newfood = Math.Max(newfood, Math.Min(biggestFood, player.slugcatStats.maxFood - 3 - threshMod));
 				newfood = Math.Max(newfood, 0); //SAFETY
 
-                player.abstractCreature.GetAbsBelly().myFoodInStomach = newfood;
+				player.abstractCreature.GetAbsBelly().myFoodInStomach = newfood;
 				Debug.Log("-LONG TERM FOOD ADJUSTMENT! P" + playerNumber + " -TO: " + newfood);
 			}
 		}
@@ -246,40 +246,40 @@ public class patch_Player
 		}
 
 		
-        // IF WE'RE IN ARENA MODE, MAKE ALL OUR BELLY SIZES THE SAME (Monk sized)
-        if (player.abstractCreature.world.game.IsArenaSession)
-        {
-            player.slugcatStats.maxFood = 5;
-            player.slugcatStats.foodToHibernate = 3;
-        }
+		// IF WE'RE IN ARENA MODE, MAKE ALL OUR BELLY SIZES THE SAME (Monk sized)
+		if (player.abstractCreature.world.game.IsArenaSession)
+		{
+			player.slugcatStats.maxFood = 5;
+			player.slugcatStats.foodToHibernate = 3;
+		}
 
-        //CHECK IF OUR FATNESS IS DISABLED
-        if (player.GetBelly().fatDisabled) //!patch_MiscCreatures.CheckFattable(player)
-        {
+		//CHECK IF OUR FATNESS IS DISABLED
+		if (player.GetBelly().fatDisabled) //!patch_MiscCreatures.CheckFattable(player)
+		{
 			player.abstractCreature.GetAbsBelly().myFoodInStomach = 0;
 		}
 
 
 		if (!illegalSpawn)
 			BellyPlus.lockEndFood = false;
-        UpdateBellySize(player);
+		UpdateBellySize(player);
 		//if (BPOptions.debugLogs.Value)
 		//	Debug.Log("-FK YOU PT 2 - GIMME MY GODDANG BONUS FRUIT!" + player.abstractCreature.GetAbsBelly().myFoodInStomach + " OVERSTUFFED: " + GetOverstuffed(player) + " CURRENT FOOD:" + player.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " " + BellyPlus.bonusHudPip);
 	}
 
 
-    
+	
 
-    /*
+	/*
 	public static void BPShortcutHelper(ILContext il)
 	{
-        BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD SHORTCUT IL! ");
-        var cursor = new ILCursor(il);
+		BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD SHORTCUT IL! ");
+		var cursor = new ILCursor(il);
 		int count = 0;
 
-        var player = 0;
-        var k = 0;
-        while (cursor.TryGotoNext(MoveType.After, 
+		var player = 0;
+		var k = 0;
+		while (cursor.TryGotoNext(MoveType.After, 
 			i => i.MatchLdloc(out player), //HERE
 			i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
 			i => i.MatchLdloc(out k), //AND HERE
@@ -287,83 +287,83 @@ public class patch_Player
 			i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
 			))
 		{
-            count++;
-            cursor.Emit(OpCodes.Ldloc, player); //OUT TO HERE
+			count++;
+			cursor.Emit(OpCodes.Ldloc, player); //OUT TO HERE
 			cursor.Emit(OpCodes.Ldloc, k);
 
-            cursor.EmitDelegate<System.Func<float, Player, int, float>>((float oldRad, Player player2, int k2) =>
-            {
+			cursor.EmitDelegate<System.Func<float, Player, int, float>>((float oldRad, Player player2, int k2) =>
+			{
 				return player2.bodyChunks[k2].TerrainRad;
 			});
 
 
 		}
-        BellyPlus.Logger.LogInfo("SHORTCUT IL LINES ADDED! " + count);
-    }
+		BellyPlus.Logger.LogInfo("SHORTCUT IL LINES ADDED! " + count);
+	}
 	*/
 
 
 
 
-    
+	
 
 
 
-    private static void BPShortcutHelper(ILContext il)
-    {
-        var cursor = new ILCursor(il);
+	private static void BPShortcutHelper(ILContext il)
+	{
+		var cursor = new ILCursor(il);
 
-        //IL_0355: ldc.r4 20
-        //IL_035a: ldloc.1
-        //IL_035b: callvirt instance class BodyChunk[] PhysicalObject::get_bodyChunks()
-        //IL_0360: ldloc.s 6
-        //IL_0362: ldelem.ref
-        //IL_0363: ldfld float32 BodyChunk::rad
-        //IL_0368: add
+		//IL_0355: ldc.r4 20
+		//IL_035a: ldloc.1
+		//IL_035b: callvirt instance class BodyChunk[] PhysicalObject::get_bodyChunks()
+		//IL_0360: ldloc.s 6
+		//IL_0362: ldelem.ref
+		//IL_0363: ldfld float32 BodyChunk::rad
+		//IL_0368: add
 
-        var player = 0;
-        var k = 0;
-        var x = 0;
-        while (cursor.TryGotoNext(MoveType.After, 
+		var player = 0;
+		var k = 0;
+		var x = 0;
+		while (cursor.TryGotoNext(MoveType.After, 
 			i => i.MatchLdloc(out player),
-            i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
-            i => i.MatchLdloc(out k),
-            i => i.MatchLdelemRef(),
-            i => i.MatchLdfld<BodyChunk>(nameof(BodyChunk.rad))))
-        {
-            x++;
-            cursor.Emit(OpCodes.Ldloc, player);
-            cursor.Emit(OpCodes.Ldloc, k);
+			i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
+			i => i.MatchLdloc(out k),
+			i => i.MatchLdelemRef(),
+			i => i.MatchLdfld<BodyChunk>(nameof(BodyChunk.rad))))
+		{
+			x++;
+			cursor.Emit(OpCodes.Ldloc, player);
+			cursor.Emit(OpCodes.Ldloc, k);
 
-            cursor.EmitDelegate((float rad, Player player, int k) =>
-            {
-                return player.bodyChunks[k].TerrainRad;
-            });
-        }
+			cursor.EmitDelegate((float rad, Player player, int k) =>
+			{
+				return player.bodyChunks[k].TerrainRad;
+			});
+		}
 		
-        BellyPlus.Logger.LogInfo("BELLYPLUS SHORTCUT IL LINES ADDED! " + x);
-    }
+		BellyPlus.Logger.LogInfo("BELLYPLUS SHORTCUT IL LINES ADDED! " + x);
+	}
 	
 
 
 
 
 	//OKAY THIS DOESN'T ACCTUALLY WORK. BUT TURNS OUT WE DON'T NEED IT TO WORK! THANK GOD...
-    public static void BPObjectPusher(ILContext il)
+	public static void BPObjectPusher(ILContext il)
 	{
-        BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD OBJECPUSHER IL! ");
-        var cursor = new ILCursor(il);
+		BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD OBJECPUSHER IL! ");
+		var cursor = new ILCursor(il);
 		int count = 0;
 
-        //IL_00f8: ldarg.0
-        //IL_00f9: ldfld class PhysicalObject ShortcutHelper/ObjectPusher::obj
-        //IL_00fe: callvirt instance class BodyChunk[] PhysicalObject::get_bodyChunks()
-        //IL_0103: ldloc.s 4
-        //IL_0105: ldelem.ref
-        //IL_0106: ldfld float32 BodyChunk::rad
+		//IL_00f8: ldarg.0
+		//IL_00f9: ldfld class PhysicalObject ShortcutHelper/ObjectPusher::obj
+		//IL_00fe: callvirt instance class BodyChunk[] PhysicalObject::get_bodyChunks()
+		//IL_0103: ldloc.s 4
+		//IL_0105: ldelem.ref
+		//IL_0106: ldfld float32 BodyChunk::rad
 
-        var k = 0;
-        while (cursor.TryGotoNext(MoveType.After, 
+		var k = 0;
+		while (cursor.TryGotoNext(MoveType.After, 
 			// i => i.MatchLdloc(out player), //HERE
 			// i => i.MatchLdfld<ShortcutHelper/ObjectPusher>("obj"),
 			i => i.MatchLdfld<ShortcutHelper.ObjectPusher>(nameof(ShortcutHelper.ObjectPusher.obj)),
@@ -378,82 +378,82 @@ public class patch_Player
 			cursor.Emit(OpCodes.Ldloc, k);
 			count++;
 
-            //cursor.EmitDelegate<System.Func<float, ShortcutHelper.ObjectPusher, int, float>>((float oldRad, ShortcutHelper.ObjectPusher mySelf, int k2) =>
-            cursor.EmitDelegate((float rad, ShortcutHelper.ObjectPusher mySelf, int k) =>
-            {
+			//cursor.EmitDelegate<System.Func<float, ShortcutHelper.ObjectPusher, int, float>>((float oldRad, ShortcutHelper.ObjectPusher mySelf, int k2) =>
+			cursor.EmitDelegate((float rad, ShortcutHelper.ObjectPusher mySelf, int k) =>
+			{
 				return mySelf.obj.bodyChunks[k].TerrainRad;
 			}
 			);
 		}
-        BellyPlus.Logger.LogInfo("OBJECPUSHER IL LINES ADDED! " + count);
-    }
+		BellyPlus.Logger.LogInfo("OBJECPUSHER IL LINES ADDED! " + count);
+	}
 
-    /*
-    private static void BPShortcutHelper(ILContext il)
-    {
-        Debug.Log("ATTEMPTING TO ADD SHORTCUT IL! ");
-        var cursor = new ILCursor(il);
-        int count = 0;
+	/*
+	private static void BPShortcutHelper(ILContext il)
+	{
+		Debug.Log("ATTEMPTING TO ADD SHORTCUT IL! ");
+		var cursor = new ILCursor(il);
+		int count = 0;
 		
 				
 					
 				
 
-        var player = 0;
-        var k = 0;
-        try
-        {
-            if (!cursor.TryGotoNext(MoveType.After,
-                i => i.MatchLdloc(out player), //HERE
-                i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
-                i => i.MatchLdloc(out k),
-                i => i.MatchLdelemRef(),
-                i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
-                ))
-            {
-                throw new Exception(" NOT MATCHES ARE ALLOWED HERE");
-            }
+		var player = 0;
+		var k = 0;
+		try
+		{
+			if (!cursor.TryGotoNext(MoveType.After,
+				i => i.MatchLdloc(out player), //HERE
+				i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
+				i => i.MatchLdloc(out k),
+				i => i.MatchLdelemRef(),
+				i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
+				))
+			{
+				throw new Exception(" NOT MATCHES ARE ALLOWED HERE");
+			}
 
-            while (cursor.TryGotoNext(MoveType.After,
-                i => i.MatchLdloc(out player), //HERE
-                i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
-                i => i.MatchLdloc(out k),
-                i => i.MatchLdelemRef(),
-                i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
-                ))
+			while (cursor.TryGotoNext(MoveType.After,
+				i => i.MatchLdloc(out player), //HERE
+				i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
+				i => i.MatchLdloc(out k),
+				i => i.MatchLdelemRef(),
+				i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
+				))
 
 
-                Debug.Log("IL HOOKS MATCHED");
-            {
-                cursor.Emit(OpCodes.Ldloc, player);
-                cursor.Emit(OpCodes.Ldloc, k);
-                count++;
+				Debug.Log("IL HOOKS MATCHED");
+			{
+				cursor.Emit(OpCodes.Ldloc, player);
+				cursor.Emit(OpCodes.Ldloc, k);
+				count++;
 
-                //cursor.EmitDelegate((float oldRad, Player player2, int k2) =>
-                cursor.EmitDelegate<System.Func<float, Player, int, float>>((float oldRad, Player player2, int k2) =>
-                {
-                    return player2.bodyChunks[k2].TerrainRad;
-                }
-                );
-            }
-            Debug.Log("Shorcut IL LINES ADDED! " + count);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("IL HOOK SEEMS TO NOT BE FINE, PRAY FOR HELP!!!!");
-            Debug.LogException(ex);
-            Debug.LogError(il);
-            throw;
-        }
-    }
+				//cursor.EmitDelegate((float oldRad, Player player2, int k2) =>
+				cursor.EmitDelegate<System.Func<float, Player, int, float>>((float oldRad, Player player2, int k2) =>
+				{
+					return player2.bodyChunks[k2].TerrainRad;
+				}
+				);
+			}
+			Debug.Log("Shorcut IL LINES ADDED! " + count);
+		}
+		catch (Exception ex)
+		{
+			Debug.LogError("IL HOOK SEEMS TO NOT BE FINE, PRAY FOR HELP!!!!");
+			Debug.LogException(ex);
+			Debug.LogError(il);
+			throw;
+		}
+	}
 	*/
 
 
-    private static void BPPlayer_MovementUpdate(ILContext il)
-    {
-        var cursor = new ILCursor(il);
+	private static void BPPlayer_MovementUpdate(ILContext il)
+	{
+		var cursor = new ILCursor(il);
 
-        if (!cursor.TryGotoNext(MoveType.After, 
+		if (!cursor.TryGotoNext(MoveType.After, 
 			i => i.MatchLdarg(0),
 			i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
 			i => i.MatchLdcI4(0),
@@ -466,25 +466,25 @@ public class patch_Player
 			i => i.MatchCallOrCallvirt<PhysicalObject>("get_EffectiveRoomGravity"),
 			i => i.MatchSub(),
 			i => i.MatchStindR4()))
-        {
-            throw new Exception("Couldn't match in whatever hook this is");
-        }
+		{
+			throw new Exception("Couldn't match in whatever hook this is");
+		}
 
-        var label = il.DefineLabel();
-        cursor.MarkLabel(label);
+		var label = il.DefineLabel();
+		cursor.MarkLabel(label);
 
-        if (!cursor.TryGotoPrev(MoveType.Before, 
+		if (!cursor.TryGotoPrev(MoveType.Before, 
 			i => i.MatchLdarg(0),
 			i => i.MatchLdsfld<Player.AnimationIndex>(nameof(Player.AnimationIndex.None)),
 			i => i.MatchStfld<Player>(nameof(Player.animation))))
-        {
-            throw new Exception("Couldn't match whatever bla bla bla error you can recognize later");
-        }
+		{
+			throw new Exception("Couldn't match whatever bla bla bla error you can recognize later");
+		}
 		else
-            BellyPlus.Logger.LogInfo("PB PLAYERMOVEMENT IL ADDED! ");
+			BellyPlus.Logger.LogInfo("PB PLAYERMOVEMENT IL ADDED! ");
 
-        cursor.Emit(OpCodes.Br, label);
-        /*
+		cursor.Emit(OpCodes.Br, label);
+		/*
 		we get a label to the end
 		then move back to the start
 		and emit a br
@@ -495,16 +495,16 @@ public class patch_Player
 		*/
 
 
-    }
+	}
 
 
-    //OKAY WHILE THIS TECHNICALLY WORKED, THIS WAS NOT THE RIGHT WAY TO DO IT 
-    /*
-    private static void BPPlayer_MovementUpdate2(ILContext il)
-    {
-        //OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
-        BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
-        var cursor = new ILCursor(il);
+	//OKAY WHILE THIS TECHNICALLY WORKED, THIS WAS NOT THE RIGHT WAY TO DO IT 
+	/*
+	private static void BPPlayer_MovementUpdate2(ILContext il)
+	{
+		//OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
+		BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
+		var cursor = new ILCursor(il);
 		
 		// ... && wantToJump > 0)
 		//IL_26d6: ldarg.0
@@ -512,173 +512,173 @@ public class patch_Player
 		//IL_26dc: ldc.i4.0
 		//IL_26dd: ble.s IL_26f5
 		
-        int count = 0;
-        var wantJmp = 0;
-        while (cursor.TryGotoNext(MoveType.After,
-            i => i.MatchLdarg(0),
+		int count = 0;
+		var wantJmp = 0;
+		while (cursor.TryGotoNext(MoveType.After,
+			i => i.MatchLdarg(0),
 			i => i.MatchLdfld<Player>(nameof(Player.wantToJump)),
-            i => i.MatchLdcI4(0)
+			i => i.MatchLdcI4(0)
 			// i => i.MatchLdloc(out k), //AND HERE
 			// i => i.MatchLdelemRef(),
 			// i => i.MatchLdflda<BodyChunk>(nameof(BodyChunk.rad))
 			))
-        {
-            // cursor.Emit(OpCodes.Ldloc, player); 
-            cursor.Emit(OpCodes.Ldarg_0); //OUT TO HERE //THIS REFERENCES 'this.' INSTANCE
-                                          // cursor.Emit(OpCodes.Ldloc, k);
-            count++;
+		{
+			// cursor.Emit(OpCodes.Ldloc, player); 
+			cursor.Emit(OpCodes.Ldarg_0); //OUT TO HERE //THIS REFERENCES 'this.' INSTANCE
+										  // cursor.Emit(OpCodes.Ldloc, k);
+			count++;
 
-            cursor.EmitDelegate((int wantToJump, Player mySelf) =>
-            {
-                int playerNum = GetPlayerNum(mySelf);
-                if (!(BellyPlus.VisualsOnly() || IsStuck(mySelf) || self.GetBelly().pushingOther || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0))
-                {
-                    Debug.Log("IL SKIP REALJUMP");
-                    Heave(mySelf);
-                    return 0; //SKIP JUMP()
-                }
-                else
-                {
-                    Debug.Log("IL REALJUMP ");
-                    return wantToJump;
-                }
-            });
-        }
-        BellyPlus.Logger.LogInfo("JUMP REMOVAL IL LINES ADDED! " + count);
-    }
+			cursor.EmitDelegate((int wantToJump, Player mySelf) =>
+			{
+				int playerNum = GetPlayerNum(mySelf);
+				if (!(BellyPlus.VisualsOnly() || IsStuck(mySelf) || self.GetBelly().pushingOther || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0))
+				{
+					Debug.Log("IL SKIP REALJUMP");
+					Heave(mySelf);
+					return 0; //SKIP JUMP()
+				}
+				else
+				{
+					Debug.Log("IL REALJUMP ");
+					return wantToJump;
+				}
+			});
+		}
+		BellyPlus.Logger.LogInfo("JUMP REMOVAL IL LINES ADDED! " + count);
+	}
 	*/
 
 
-    /*
+	/*
 	private static void BPPlayer_MovementUpdate2NOT(ILContext il)
-    {
-        //OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
-        BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
-        var cursor = new ILCursor(il);
+	{
+		//OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
+		BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
+		var cursor = new ILCursor(il);
 		
 		// // Jump();
 		//IL_26ed: ldarg.0
 		//IL_26ee: call instance void Player::Jump()
 		
-        int count = 0;
-        while (cursor.TryGotoNext(MoveType.After,
-            i => i.MatchLdarg(0),
+		int count = 0;
+		while (cursor.TryGotoNext(MoveType.After,
+			i => i.MatchLdarg(0),
 			//i => i.MatchCallOrCallvirt<Player>("Jump")
 			i => i.MatchCallOrCallvirt<Player>(nameof(Player.Jump))
 
 			))
-        {
-            cursor.Emit(OpCodes.Ldarg_0); 
-            count++;
+		{
+			cursor.Emit(OpCodes.Ldarg_0); 
+			count++;
 
-            cursor.EmitDelegate((Player mySelf) =>
-            {
-                int playerNum = GetPlayerNum(mySelf);
+			cursor.EmitDelegate((Player mySelf) =>
+			{
+				int playerNum = GetPlayerNum(mySelf);
 				if (BellyPlus.VisualsOnly())
 					mySelf.Jump(); //JUST JUMP
-                else if (!(IsStuck(mySelf) || self.GetBelly().pushingOther || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0))
-                {
-                    Debug.Log("JUMP, BUT WITH A TWIST");
-                    Heave(mySelf);
-                }
-                else
-                {
+				else if (!(IsStuck(mySelf) || self.GetBelly().pushingOther || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0))
+				{
+					Debug.Log("JUMP, BUT WITH A TWIST");
+					Heave(mySelf);
+				}
+				else
+				{
 					Debug.Log("OK I THINK WE DON'T JUMP (SKIP BC WE'RE STUCK OR SOMETH ");
-                }
-            });
-        }
-        BellyPlus.Logger.LogInfo("JUMP REMOVAL IL LINES ADDED! " + count);
-    }
+				}
+			});
+		}
+		BellyPlus.Logger.LogInfo("JUMP REMOVAL IL LINES ADDED! " + count);
+	}
 	*/
 
-    private static void BPPlayer_MovementUpdate2(ILContext il)
-    {
-        //OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
-        BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
-        var cursor = new ILCursor(il);
+	private static void BPPlayer_MovementUpdate2(ILContext il)
+	{
+		//OKAY WE'RE DOING ANOTHER ONE. CAN WE DO THEM BOTH IN THE SAME HOOK?
+		BellyPlus.Logger.LogInfo("ATTEMPTING TO ADD JUMP REMOVAL IL! ");
+		var cursor = new ILCursor(il);
 
-        // // Jump();
-        //IL_26ed: ldarg.0
-        //IL_26ee: call instance void Player::Jump()
-        if (!cursor.TryGotoNext(MoveType.After, 
+		// // Jump();
+		//IL_26ed: ldarg.0
+		//IL_26ee: call instance void Player::Jump()
+		if (!cursor.TryGotoNext(MoveType.After, 
 			i => i.MatchLdarg(0),
-            i => i.MatchCallOrCallvirt<Player>(nameof(Player.Jump))))
-        {
-            throw new Exception("Failed to match IL for MOVEMENTUPDATE! (first)");
-        }
-        //CREATE A LABEL TO JUMP FORWARD TO LATER
-        var label = cursor.DefineLabel();
-        cursor.MarkLabel(label);
+			i => i.MatchCallOrCallvirt<Player>(nameof(Player.Jump))))
+		{
+			throw new Exception("Failed to match IL for MOVEMENTUPDATE! (first)");
+		}
+		//CREATE A LABEL TO JUMP FORWARD TO LATER
+		var label = cursor.DefineLabel();
+		cursor.MarkLabel(label);
 		//THEN JUMP BACK BEFORE THE SPOT WHERE WE DECIDE IF WE SHOULD RUN THE NEXT LINE OR NOT
-        cursor.GotoPrev(MoveType.Before, i => i.MatchLdarg(0));
-        
+		cursor.GotoPrev(MoveType.Before, i => i.MatchLdarg(0));
+		
 		cursor.Emit(OpCodes.Ldarg_0); //P SURE WE NEED THIS TO EMIT THE VALUE OF THIS (THE PLAYER) TO THE DELEGATE
-        //cursor.EmitDelegate(() => myThing);
-        cursor.EmitDelegate((System.Func<Player, bool>)((Player self) =>
-        {
-            
+		//cursor.EmitDelegate(() => myThing);
+		cursor.EmitDelegate((System.Func<Player, bool>)((Player self) =>
+		{
+			
 			if (BellyPlus.VisualsOnly() || !(IsStuck(self) || self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0))
-            {
-                //Debug.Log("JUMP, BUT WITH A TWIST");
-                return true; // self.Jump(); //JUST JUMP
-            }
-            else
-            {
-                //IN THE VERY RARE CASE THAT WE ARE CLIMBING A POLE AND ALSO STANDING ON TOP OF A PIPE ENTRANCE...
-                if (IsStuck(self) && self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && self.GetBelly().inPipeStatus == false && self.GetBelly().stuckVector.y == -1 && self.input[0].y == 0)
-                {
+			{
+				//Debug.Log("JUMP, BUT WITH A TWIST");
+				return true; // self.Jump(); //JUST JUMP
+			}
+			else
+			{
+				//IN THE VERY RARE CASE THAT WE ARE CLIMBING A POLE AND ALSO STANDING ON TOP OF A PIPE ENTRANCE...
+				if (IsStuck(self) && self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && self.GetBelly().inPipeStatus == false && self.GetBelly().stuckVector.y == -1 && self.input[0].y == 0)
+				{
 					return true; //6-9-23 DON'T FORGER THIS
-                }
+				}
 
-                //Debug.Log("OK I THINK WE DON'T JUMP (SKIP BC WE'RE STUCK OR SOMETH ");
-                return false;
-            }
-        }));
-        cursor.Emit(OpCodes.Brfalse, label);
+				//Debug.Log("OK I THINK WE DON'T JUMP (SKIP BC WE'RE STUCK OR SOMETH ");
+				return false;
+			}
+		}));
+		cursor.Emit(OpCodes.Brfalse, label);
 		//var label = cursor.DefineLabel();
 		//cursor.MarkLabel(label);
 
 		BellyPlus.Logger.LogInfo("JUMP REMOVAL IL LINES ADDED! 1 probably");
-    }
+	}
 
 
 
 	//WE NEED THE PLAYER TERRAIN RADIUS TO ACTUALLY BE REPLACED. WE CAN'T DO IT THE CHEAP WAY (THIS TIME...)
-    private static void RadToTerrainRad(ILContext il)
-    {
-        var cursor = new ILCursor(il);
+	private static void RadToTerrainRad(ILContext il)
+	{
+		var cursor = new ILCursor(il);
 
-        //		+ base.bodyChunks[1].rad)
-        //IL_01f4: ldarg.0
-        //IL_01f5: call instance class BodyChunk[] PhysicalObject::get_bodyChunks()
-        //IL_01fa: ldc.i4.1
-        //IL_01fb: ldelem.ref
-        //IL_01fc: ldfld float32 BodyChunk::rad
-        //IL_0201: add
+		//		+ base.bodyChunks[1].rad)
+		//IL_01f4: ldarg.0
+		//IL_01f5: call instance class BodyChunk[] PhysicalObject::get_bodyChunks()
+		//IL_01fa: ldc.i4.1
+		//IL_01fb: ldelem.ref
+		//IL_01fc: ldfld float32 BodyChunk::rad
+		//IL_0201: add
 
 
-        //var player = 0;
-        var x = 0;
-        while (cursor.TryGotoNext(MoveType.After,
-            //i => i.MatchLdloc(out player),
-            i => i.MatchLdarg(0),
-            i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
-            i => i.MatchLdcI4(1),
-            //i => i.MatchLdloc(out k),
-            i => i.MatchLdelemRef(),
-            i => i.MatchLdfld<BodyChunk>(nameof(BodyChunk.rad))))
-        {
-            x++;
-            cursor.Emit(OpCodes.Ldarg_0); //P SURE WE NEED THIS TO EMIT THE VALUE OF THIS (THE PLAYER) TO THE DELEGATE
+		//var player = 0;
+		var x = 0;
+		while (cursor.TryGotoNext(MoveType.After,
+			//i => i.MatchLdloc(out player),
+			i => i.MatchLdarg(0),
+			i => i.MatchCallOrCallvirt<PhysicalObject>("get_bodyChunks"),
+			i => i.MatchLdcI4(1),
+			//i => i.MatchLdloc(out k),
+			i => i.MatchLdelemRef(),
+			i => i.MatchLdfld<BodyChunk>(nameof(BodyChunk.rad))))
+		{
+			x++;
+			cursor.Emit(OpCodes.Ldarg_0); //P SURE WE NEED THIS TO EMIT THE VALUE OF THIS (THE PLAYER) TO THE DELEGATE
 
-            cursor.EmitDelegate((float rad, Player player) =>
-            {
-                return player.bodyChunks[1].TerrainRad;
-            });
-        }
+			cursor.EmitDelegate((float rad, Player player) =>
+			{
+				return player.bodyChunks[1].TerrainRad;
+			});
+		}
 
-        BellyPlus.Logger.LogInfo("BELLYPLUS RAD-TO-TERRAIN_RAD IL LINES ADDED! " + x);
-    }
+		BellyPlus.Logger.LogInfo("BELLYPLUS RAD-TO-TERRAIN_RAD IL LINES ADDED! " + x);
+	}
 	
 	//NEW DIFFICULTY SCALING. GAPS DON'T GET ANY TIGHTER IF THE DIFFICULTY SLIDER GOES ABOVE 0. IT JUST GETS CLOSER TO HARDMODE
 	public static float GapDifficulty()
@@ -686,15 +686,15 @@ public class patch_Player
 		return Mathf.Min(BellyPlus.BPODifficulty(), 0f);
 	}
 
-    public static float BottomHeavyDiffScale()
-    {
+	public static float BottomHeavyDiffScale()
+	{
 		float result = BellyPlus.BPODifficulty();
 		if (BellyPlus.BPODifficulty() > 0) //LESS HARSH SCALING FOR DIFFICULTIES ABOVE 0
 			result /= 3f;
-        return result;
-    }
+		return result;
+	}
 
-    public static float HardmodeScaling(float baseDif, float hardest)
+	public static float HardmodeScaling(float baseDif, float hardest)
 	{
 		if (BPOptions.hardMode.Value)
 			return hardest;
@@ -703,17 +703,17 @@ public class patch_Player
 
 	
 	public static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
-    {
-        orig(self);
+	{
+		orig(self);
 		//BRIEF POPCORN TANGIBILITY FOR SPEARMASTER
-        if (self.processActive && !self.GamePaused && BellyPlus.popcornSpearable > 0)
+		if (self.processActive && !self.GamePaused && BellyPlus.popcornSpearable > 0)
 			BellyPlus.popcornSpearable--;
-    }
+	}
 	
 	
 	//SOUNDS THAT DON'T GET INTERRUPTED! -they already don't get interrupted I'm stupid
 	public static void PlayExternalSound(Creature self, SoundID soundId, float sVol, float sPitch)
-    {
+	{
 		Vector2 pos = self.mainBodyChunk.pos;
 		self.room.PlaySound(soundId, pos, sVol, sPitch);
 	}
@@ -721,7 +721,7 @@ public class patch_Player
 	
 	
 	public static void Player_ClassMechanicsGourmand(On.Player.orig_ClassMechanicsGourmand orig, Player self)
-    {
+	{
 		bool preExhCheck = self.lungsExhausted;
 		orig(self);
 		//IF RUNNING THIS CHECK CAUSED OUR LUNGSEXHAUSTED VALUE TO CHANGE TO TRUE, UNDO THAT IF WE'RE STUCK!
@@ -739,25 +739,25 @@ public class patch_Player
 	{
 		string slugName = self.slugcatStats?.name?.value;
 		return (slugName == "TrynsEvergreen" || slugName == "Citrus") && ChunkyFallRequirement(self); //GetOverstuffed(self) > 4 && 
-    }
+	}
 
-    public static bool ChunkyFallRequirement(Player self)
-    {
+	public static bool ChunkyFallRequirement(Player self)
+	{
 		float weightRequired = 3f + self.GetBelly().slamThreshold;
 		float myWeight = GetChubValue(self) + GetOverstuffed(self);
-        string slugName = self.slugcatStats?.name?.value;
+		string slugName = self.slugcatStats?.name?.value;
 
-        if (slugName == "TrynsEvergreen" || slugName == "Citrus")
+		if (slugName == "TrynsEvergreen" || slugName == "Citrus")
 			weightRequired += 5f;
 
-        if (slugName == "MMWingCat" || slugName == "Outsider")
-            weightRequired += 5f;
+		if (slugName == "MMWingCat" || slugName == "Outsider")
+			weightRequired += 5f;
 
-        return myWeight >= weightRequired;
-    }
+		return myWeight >= weightRequired;
+	}
 
 
-    public static bool CheckFriendlyFire(Player self)
+	public static bool CheckFriendlyFire(Player self)
 	{
 		bool flag2 = ModManager.CoopAvailable && Custom.rainWorld.options.friendlyFire;
 		bool flag3 = self.room != null && self.room.game.IsArenaSession && self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.spearsHitPlayers;
@@ -765,7 +765,7 @@ public class patch_Player
 	}
 	
 	public static bool BP_SlugSlamConditions(On.Player.orig_SlugSlamConditions orig, Player self, PhysicalObject otherObject)
-    {
+	{
 		if (BellyPlus.VisualsOnly() || (!BPOptions.slugSlams.Value && !ChunkyFallOverride(self)) || !ChunkyFallRequirement(self))
 			return orig(self, otherObject);
 		
@@ -798,7 +798,7 @@ public class patch_Player
 	
 	
 	public static bool BP_CanBeSwallowed(On.Player.orig_CanBeSwallowed orig, Player self, PhysicalObject testObj)
-    {
+	{
 		//LET US EAT NEURONS IF OUR BELLY IS FULL (NAH FIRE EGGS WE DON'T CARE ABOUT I THINK) -NO WE DO! GOURMAND NEEDS THOSE FOR SILLY BOMBS
 		if (!BellyPlus.VisualsOnly() && ((testObj is SSOracleSwarmer) || (testObj is FireEgg)) && (self.objectInStomach != null) && (self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
 			return false;
@@ -822,28 +822,28 @@ public class patch_Player
 		
 		//MAKE FAT NOODLEFLIES GIVE EXTRA
 		if (eatenobject is SmallNeedleWorm && (eatenobject as SmallNeedleWorm).graphicsModule != null)
-        {
+		{
 			float fatness = (eatenobject as SmallNeedleWorm).bodyChunks[0].mass;
 			// Debug.Log("NOODLEFLY THICKNESS! " + fatness + " RES: " + result);
 			if (fatness > 0.06f) //(0.15f * 0.7f)
 				result *= 2;
 		}
-        if (eatenobject is Centipede && patch_MiscCreatures.GetChub(eatenobject as Creature) >= 4) //&& (eatenobject as Centipede).Small 
-        {
-            result *= 2;
-        }
+		if (eatenobject is Centipede && patch_MiscCreatures.GetChub(eatenobject as Creature) >= 4) //&& (eatenobject as Centipede).Small 
+		{
+			result *= 2;
+		}
 		
 		//THESE ARE WORTH FULL ON THE COB. I'M MAKING THEM FULL FROM THE GROUND TOO
 		if (ModManager.MSC && eatenobject is SlimeMold && (eatenobject as PhysicalObject).abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed)
-        {
-            result = 4; //ALWAYS A FULL FOOD PIP
-        }
-        return result;
+		{
+			result = 4; //ALWAYS A FULL FOOD PIP
+		}
+		return result;
 	}
 
 
-    
-    
+	
+	
 
 	//THERE ARE A NUMBER OF OTHER FACTORS INVOLVED TAT MAKE THIS TRICKY. SO RATHER THAN RETURN TRUE WHEN NEEDED, WE'LL PRETEND WE'RE HUNTER WHEN NEEDED
 	public static bool BPPlayer_CanEatMeat(On.Player.orig_CanEatMeat orig, Player self, Creature crit)
@@ -851,44 +851,44 @@ public class patch_Player
 		if (IsFoodLover())
 		{
 			SlugcatStats.Name origClass = self.SlugCatClass;
-            SlugcatStats.Name origName = self.slugcatStats.name;
-            self.SlugCatClass = SlugcatStats.Name.Red;
-            self.slugcatStats.name = SlugcatStats.Name.Red;
-            bool result = orig(self, crit);
+			SlugcatStats.Name origName = self.slugcatStats.name;
+			self.SlugCatClass = SlugcatStats.Name.Red;
+			self.slugcatStats.name = SlugcatStats.Name.Red;
+			bool result = orig(self, crit);
 			self.SlugCatClass = origClass;
 			self.slugcatStats.name = origName;
-            return result;
+			return result;
 		}
-        return orig(self, crit);
+		return orig(self, crit);
 	}
 	
 	
 	
 	public static void BP_JollyUpdate(On.Player.orig_JollyUpdate orig, Player self, bool eu)
 	{
-        orig.Invoke(self, eu);
+		orig.Invoke(self, eu);
 		if (BellyPlus.VisualsOnly() || self.DreamState || self.isNPC)
 			return;
 
-        //IF WE'D NORMALLY SKIP THIS, RUN IT INSTEAD
-        if (!ModManager.CoopAvailable && !self.isNPC && self.room != null)
+		//IF WE'D NORMALLY SKIP THIS, RUN IT INSTEAD
+		if (!ModManager.CoopAvailable && !self.isNPC && self.room != null)
 		{
 			self.JollyInputUpdate();
 			self.JollyPointUpdate();
 			if (self.jollyButtonDown && self.room.game.cameras[0].hud != null && self.room.game.cameras[0].hud.map != null)
 			{
-                // self.input[0].mp = false; //self.standStillOnMapButton = true;
-                // self.input[1].mp = false; //self.standStillOnMapButton = true;
-                self.room.game.cameras[0].hud.map.fadeCounter = 0; //.fade
-            }
+				// self.input[0].mp = false; //self.standStillOnMapButton = true;
+				// self.input[1].mp = false; //self.standStillOnMapButton = true;
+				self.room.game.cameras[0].hud.map.fadeCounter = 0; //.fade
+			}
 		}
-        //else
-        //orig.Invoke(self, eu);
+		//else
+		//orig.Invoke(self, eu);
 
-        
+		
 
-        //ALLOW US TO FORCE SLEEP WITHOUT LEAVING IF WE REALLY WANT TO
-        if (self.stillInStartShelter && !self.isNPC && self.room != null && self.room.game.IsStorySession && self.FoodInRoom(self.room, false) >= (self.abstractCreature.world.game.GetStorySession.saveState.malnourished ? self.slugcatStats.maxFood : self.slugcatStats.foodToHibernate))
+		//ALLOW US TO FORCE SLEEP WITHOUT LEAVING IF WE REALLY WANT TO
+		if (self.stillInStartShelter && !self.isNPC && self.room != null && self.room.game.IsStorySession && self.FoodInRoom(self.room, false) >= (self.abstractCreature.world.game.GetStorySession.saveState.malnourished ? self.slugcatStats.maxFood : self.slugcatStats.foodToHibernate))
 		{
 			Player.InputPackage i = self.input[0];
 			bool y = i.y < 0 && !i.jmp; // || i.y == 0 && self.input.Take(10).All(inp => inp.jmp);
@@ -905,19 +905,19 @@ public class patch_Player
 					{
 						if (self.room.game.Players[j].realizedCreature != null && self.room.game.Players[j].realizedCreature is Player player)
 						{
-                            player.touchedNoInputCounter = 60; //THIS SHOULD TRIGGER THE SHELTER DOOR CLOSE BEFORE IT RECOGNIZES OUR INPUTS HAVE CHANGED
-                            player.stillInStartShelter = false;
-                            player.GetBelly().bpForceSleep = 91;
+							player.touchedNoInputCounter = 60; //THIS SHOULD TRIGGER THE SHELTER DOOR CLOSE BEFORE IT RECOGNIZES OUR INPUTS HAVE CHANGED
+							player.stillInStartShelter = false;
+							player.GetBelly().bpForceSleep = 91;
 
-                        }
+						}
 					}
 				}
 
-                if (x && y)
-                    self.GetBelly().bpForceSleep++;
+				if (x && y)
+					self.GetBelly().bpForceSleep++;
 				else
-                    self.GetBelly().bpForceSleep = 0;
-            }
+					self.GetBelly().bpForceSleep = 0;
+			}
 			else
 				self.GetBelly().bpForceSleep = 0;
 		}
@@ -947,88 +947,88 @@ public class patch_Player
 		}
 
 
-        //BULLY A CHUNKY OUTSIDER >:3c
-        if (self.slugcatStats?.name?.value == "Outsider")
-        {
-            //Debug.Log("IM AN OUTSIDER!! ");
-            //if (self.gravity < 0.9f && self.gravity < self.room.gravity)
-            if (self.airFriction < 0.999f) //THIS MEANS WE'RE FLYING
-            {
-                float reduction = Mathf.Pow(self.GetBelly().runSpeedMod, 1.5f);
+		//BULLY A CHUNKY OUTSIDER >:3c
+		if (self.slugcatStats?.name?.value == "Outsider")
+		{
+			//Debug.Log("IM AN OUTSIDER!! ");
+			//if (self.gravity < 0.9f && self.gravity < self.room.gravity)
+			if (self.airFriction < 0.999f) //THIS MEANS WE'RE FLYING
+			{
+				float reduction = Mathf.Pow(self.GetBelly().runSpeedMod, 1.5f);
 				Player backPlayer = GetHeaviestPlayerOnBack(self);
 				if (backPlayer != null)
 					reduction = Mathf.Min(reduction, Mathf.Pow(backPlayer.GetBelly().runSpeedMod, 1.5f));
 
-                if (self.gravity < self.room.gravity)
-                    self.gravity = Mathf.Lerp(self.room.gravity, self.gravity, reduction);
+				if (self.gravity < self.room.gravity)
+					self.gravity = Mathf.Lerp(self.room.gravity, self.gravity, reduction);
 
-                self.bodyChunks[0].vel.x *= reduction;
-                self.bodyChunks[1].vel.x *= reduction;
-                float falling = Mathf.Pow(self.GetBelly().runSpeedMod, 4);
-                self.bodyChunks[0].vel.y = Mathf.Lerp(fallspeed1, self.bodyChunks[0].vel.y, falling);
-                self.bodyChunks[1].vel.y = Mathf.Lerp(fallspeed2, self.bodyChunks[1].vel.y, falling);
+				self.bodyChunks[0].vel.x *= reduction;
+				self.bodyChunks[1].vel.x *= reduction;
+				float falling = Mathf.Pow(self.GetBelly().runSpeedMod, 4);
+				self.bodyChunks[0].vel.y = Mathf.Lerp(fallspeed1, self.bodyChunks[0].vel.y, falling);
+				self.bodyChunks[1].vel.y = Mathf.Lerp(fallspeed2, self.bodyChunks[1].vel.y, falling);
 
-                if (self.GetBelly().runSpeedMod <= 0.9)
-                {
-                    MakeStrainSparks(self, 2);
-                    if (!self.lungsExhausted)
-                        self.GetBelly().corridorExhaustion += 3;
-                    else
-                    {
+				if (self.GetBelly().runSpeedMod <= 0.9)
+				{
+					MakeStrainSparks(self, 2);
+					if (!self.lungsExhausted)
+						self.GetBelly().corridorExhaustion += 3;
+					else
+					{
 
-                    }
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 		
 		//WINGCAT GETS HANDLED A BIT DIFFERENTLY
 		if (self.slugcatStats?.name?.value == "MMWingCat")
 			WingcatUpdate(self, eu);
-    }
+	}
 
-    public static float fallspeed1 = 0;
-    public static float fallspeed2 = 0;
+	public static float fallspeed1 = 0;
+	public static float fallspeed2 = 0;
 
 
-    public static void BPPlayer_UpdateMSC(On.Player.orig_UpdateMSC orig, Player self)
-    {
+	public static void BPPlayer_UpdateMSC(On.Player.orig_UpdateMSC orig, Player self)
+	{
 		//MORE OUTSIDER BULLYING
-        if (self.slugcatStats?.name?.value == "Outsider" && !BellyPlus.VisualsOnly())
+		if (self.slugcatStats?.name?.value == "Outsider" && !BellyPlus.VisualsOnly())
 		{
-            fallspeed1 = self.bodyChunks[0].vel.y;
-            fallspeed2 = self.bodyChunks[1].vel.y;
+			fallspeed1 = self.bodyChunks[0].vel.y;
+			fallspeed2 = self.bodyChunks[1].vel.y;
 			if (self.lungsExhausted && self.airFriction < 0.999f && self.Submersion == 0)
 			{
-                self.Stun(2);
-                self.input[0].y = -1;
-                self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1f, 0.6f);
-            }
-        }
+				self.Stun(2);
+				self.input[0].y = -1;
+				self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1f, 0.6f);
+			}
+		}
 
-        orig.Invoke(self);
-    }
+		orig.Invoke(self);
+	}
 	
 	
 	public static void WingcatUpdate(Player self, bool eu)
 	{
 
-        MMWingCat.WingSlugcatClass.WingSlugcat cat = MMWingCat.WingSlugcatClass.GetCat(self);
+		MMWingCat.WingSlugcatClass.WingSlugcat cat = MMWingCat.WingSlugcatClass.GetCat(self);
 		if (cat.flightmode)
 		{
 			Player fattest = GetHeaviestOnStack(self, true);
 			float runMod = fattest.GetBelly().runSpeedMod - Mathf.Max((GetChubFloatValue(fattest) / 40f), 0);
-            float reduction = Mathf.Pow(runMod, 1.5f);
+			float reduction = Mathf.Pow(runMod, 1.5f);
 			
 			for (int i = 0; i < self.bodyChunks.Length; i++)
 			{
-                //self.bodyChunks[i].vel.x *= reduction;
-                self.bodyChunks[i].vel.x *= runMod;
+				//self.bodyChunks[i].vel.x *= reduction;
+				self.bodyChunks[i].vel.x *= runMod;
 				//LOSE ALTITUDE
 				if (self.bodyChunks[i].vel.y > 0)
 					self.bodyChunks[i].vel.y *= runMod * Mathf.Min((1.5f - GetExhaustionMod(self, 60)), 1f);
-                //if (self.bodyChunks[i].vel.y >= -2)
-                //    self.bodyChunks[i].vel.y -= Mathf.Lerp(5.5f, 0f, reduction);
+				//if (self.bodyChunks[i].vel.y >= -2)
+				//	self.bodyChunks[i].vel.y -= Mathf.Lerp(5.5f, 0f, reduction);
 			}
 			
 			//DRAIN STAMINA IF WE'RE STRUGGLING
@@ -1040,41 +1040,41 @@ public class patch_Player
 					self.GetBelly().corridorExhaustion += ((eu && runMod > 0.5) || !self.input[0].jmp) ? 1 : 2;
 			}
 
-            if (self.lungsExhausted && self.Submersion == 0)
-            {
-                self.Stun(2);
-                self.input[0].y = 0;
-                self.input[0].jmp = false;
-                cat.flightmode = false;
-                self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1f, 0.6f);
-            }
-        }
+			if (self.lungsExhausted && self.Submersion == 0)
+			{
+				self.Stun(2);
+				self.input[0].y = 0;
+				self.input[0].jmp = false;
+				cat.flightmode = false;
+				self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1f, 0.6f);
+			}
+		}
 		else if (self.lungsExhausted && self.Submersion == 0)
 		{
-            cat.flightmode = false;
-            cat.hovermode = false;
-            
+			cat.flightmode = false;
+			cat.hovermode = false;
+			
 			if (self.bodyChunks[1].ContactPoint.y != -1)
 			{
-                //self.input[0].y = 0; //WE CAN'T DO THAT, WE'LL FALL PAST POLES
-                self.input[0].jmp = false;
-                MakeStrainSparks(self, 1);
+				//self.input[0].y = 0; //WE CAN'T DO THAT, WE'LL FALL PAST POLES
+				self.input[0].jmp = false;
+				MakeStrainSparks(self, 1);
 			}
-        }
-    }
+		}
+	}
 
 
-    public static void BP_TriggerCameraSwitch(On.Player.orig_TriggerCameraSwitch orig, Player self)
-    {
-        try //OKAY I DON'T ACTUALLY KNOW HOW TO FIX THIS SO WE'RE JUST GOING TO BE LAZY AND CATCH IT BECAUSE WE DON'T EVEN NEED IT TO RUN ANYWAYS
-        {
-            orig.Invoke(self);
-        }
-        catch
-        {
-            Debug.Log("BP - CAMERA TRIGGER FAILED TO SWITCH ");
-        }
-    }
+	public static void BP_TriggerCameraSwitch(On.Player.orig_TriggerCameraSwitch orig, Player self)
+	{
+		try //OKAY I DON'T ACTUALLY KNOW HOW TO FIX THIS SO WE'RE JUST GOING TO BE LAZY AND CATCH IT BECAUSE WE DON'T EVEN NEED IT TO RUN ANYWAYS
+		{
+			orig.Invoke(self);
+		}
+		catch
+		{
+			Debug.Log("BP - CAMERA TRIGGER FAILED TO SWITCH ");
+		}
+	}
 	
 	
 	
@@ -1116,7 +1116,7 @@ public class patch_Player
 
 
 	public static float CheckWedge(Creature self, bool rigged)
-    {
+	{
 		//f(x)= sin(2x/pi) : y dips to -1 every 10 x units for 5 blocks
 		//f(x)= sin(x/pi) + 0.5 : y dips to -0.5 every 10 x units for 3.~ blocks
 		//f(x)= -|cos(x/pi)| + 0.5 : y dips to -0.5 every 10 x units for 3.~ blocks
@@ -1149,17 +1149,17 @@ public class patch_Player
 			coinFlip = ((myTilePos.x % 2) == 0);
 			mySpeed = Mathf.Abs(self.bodyChunks[1].vel.y);
 		}
-        //tileSeed = -1;
+		//tileSeed = -1;
 
 		if (rigged) //FOR TUTORIAL LEVEL SHENANIGANS
-        {
+		{
 			tileSeed = -0.5f;
 			coinFlip = true;
 		}
 
 		//EXTRA CHONKY FELLAS GET EVEN SLOWER
 		if (self is Player)
-        {
+		{
 			tileSeed -= ((Math.Min(GetOverstuffed(self as Player), 12) - self.shortcutDelay) * 0.2f) * (1 + (GapDifficulty() / 7.5f)); //LET EASY MODE PLAYERS GET UP MUCH EASIER ;
 			//DON'T TRAP PLAYERS BEHIND US FROM LEAVING PIPES WE'RE BLOCKING
 			tileSeed += ((self.GetBelly().fwumpFlag) * 0.5f) + (self.shortcutDelay * 0.2f);
@@ -1179,7 +1179,7 @@ public class patch_Player
 				lengthMod+= 0.05f;
 			//ALSO CHECK FOR OPENINGS AT OUR SIDES
 			if (Math.Abs(i) <= 1)
-            {
+			{
 				Vector2 parralelAx = new Vector2(Math.Abs(myVector.ToVector2().y * 20), Mathf.Abs(myVector.ToVector2().x * 20)); //ILL GET TO THIS LATER
 				//Debug.Log("NARROW SPACE?:" + ((myVector * i).x + Mathf.Abs(myVector.y)) + ":" + ((myVector * i).y + Mathf.Abs(myVector.x)) + " SOLID?" + self.IsTileSolid(1, (myVector * i).x + Mathf.Abs(myVector.y), (myVector * i).y + Mathf.Abs(myVector.x)));
 				//Debug.Log("NARROW SPACE2?:" + ((myVector * i).x - Mathf.Abs(myVector.y)) + ":" + ((myVector * i).y - Mathf.Abs(myVector.x)) + " SOLID?" + self.room.aimap.getAItile(pos - parralelAx).narrowSpace + " - " +  self.IsTileSolid(1, (myVector * i).x - Mathf.Abs(myVector.y), (myVector * i).y - Mathf.Abs(myVector.x)));
@@ -1226,7 +1226,7 @@ public class patch_Player
 		// }
 
 		if (self is Player && velReduce > 0.3f) //NO BENIFITS FROM CORRIDOR BOOSTING IF WEDGED TOO TIGHT
-        {
+		{
 			(self as Player).horizontalCorridorSlideCounter = Math.Min((self as Player).horizontalCorridorSlideCounter, 1);
 			(self as Player).verticalCorridorSlideCounter = Math.Min((self as Player).verticalCorridorSlideCounter, 1);
 		}
@@ -1241,12 +1241,12 @@ public class patch_Player
 	
 	
 	public static bool IsWedged(Player self)
-    {
+	{
 		return (self.GetBelly().inPipeStatus && self.GetBelly().wedgeStrain > 0.3f);
 	}
 	
 	public static bool IsStuckOrWedged(Creature self)
-    {
+	{
 		return (ObjIsStuck(self) || ObjIsWedged(self));
 	}
 	
@@ -1264,7 +1264,7 @@ public class patch_Player
 
 			//GODDANG THIS IS COMPLICATED... OK IF IT'S A FLOOR (OR AIR), CHECK THE TILE ON THE OTHER SIDE, BECAUSE IT MAY BE AN INVALID SHORTCUT ENTRANCE TYPE TO PLAYERS
 			if (self is Player && (terrain == Room.Tile.TerrainType.Floor || terrain == Room.Tile.TerrainType.Air))
-            {
+			{
 				IntVector2 shortCheckPos = tilePos;
 				
 				if (relativeY < 0 && relativeX == 0 && terrain == Room.Tile.TerrainType.Floor)
@@ -1274,11 +1274,11 @@ public class patch_Player
 				//IF IT'S ABOVE US, WE DON'T CARE. THE BARRIER BLOCKS OUR HEAD FROM GETTING UP THERE.
 				
 				if (self.room.GetTile(shortCheckPos).shortCut > 0)
-                {
+				{
 					Room.Tile.TerrainType deepTerrain = self.room.GetTile(shortCheckPos).Terrain;
 					//Debug.Log("SUPER SECRET SHORTCUT DATA: " + deepTerrain);
-                    if (deepTerrain == Room.Tile.TerrainType.ShortcutEntrance)
-                    {
+					if (deepTerrain == Room.Tile.TerrainType.ShortcutEntrance)
+					{
 						ShortcutData.Type deepShortCutType = self.room.shortcutData(shortCheckPos).shortCutType;
 						if ((deepShortCutType != ShortcutData.Type.RoomExit && deepShortCutType != ShortcutData.Type.Normal))
 							return false; //PLAYERS CAN ONLY ENTER THESE TWO TYPES OF SHORTCUTS
@@ -1301,10 +1301,10 @@ public class patch_Player
 			
 			else if (terrain != Room.Tile.TerrainType.Air && terrain != Room.Tile.TerrainType.Floor)
 			{
-                //isTight = false; //IF IT'S SOLID, WE AINT CRAWLING THROUGH IT - !FLOORS AREN'T ALWAYS SOLID!
-                //4/30/23 OKAY THIS DOESN'T SEEM TO WORK SPECIFICALLY WHEN BACKING INTO A WALL INSIDE A PIPE. MAYBE THIS COULD WORK?...
-                isTight = PipeStatus(self);
-            }
+				//isTight = false; //IF IT'S SOLID, WE AINT CRAWLING THROUGH IT - !FLOORS AREN'T ALWAYS SOLID!
+				//4/30/23 OKAY THIS DOESN'T SEEM TO WORK SPECIFICALLY WHEN BACKING INTO A WALL INSIDE A PIPE. MAYBE THIS COULD WORK?...
+				isTight = PipeStatus(self);
+			}
 				
 			else
 			{
@@ -1355,43 +1355,43 @@ public class patch_Player
 							isTight = false;
 					}
 
-                    //Debug.Log("PATH FINDER:" + bChunk + " X/Y:" + relativeX + "/" + relativeY + " TIGHT: " + isTight + " RECHEK " + (s1 && (s6 && (s7 || s8))));
-                    //I HAVE A BETTER SOLUTION THAT DOESN'T INVOLVE CHECKING OUTSIDE THE BOUNDARIES
-                    if (isTight == false)
+					//Debug.Log("PATH FINDER:" + bChunk + " X/Y:" + relativeX + "/" + relativeY + " TIGHT: " + isTight + " RECHEK " + (s1 && (s6 && (s7 || s8))));
+					//I HAVE A BETTER SOLUTION THAT DOESN'T INVOLVE CHECKING OUTSIDE THE BOUNDARIES
+					if (isTight == false)
 					{
 						
-                        if (s3)
-                        {
-                            if (s4 && (s8 || s9))
-                                return true;
-                            else if (s8 && (s1 || s4))
-                                return true;
-                        }
-                        if (s7)
-                        {
-                            if (s6 && (s1 || s2))
-                                return true;
-                            else if (s2 && (s6 || s9))
-                                return true;
-                        }
+						if (s3)
+						{
+							if (s4 && (s8 || s9))
+								return true;
+							else if (s8 && (s1 || s4))
+								return true;
+						}
+						if (s7)
+						{
+							if (s6 && (s1 || s2))
+								return true;
+							else if (s2 && (s6 || s9))
+								return true;
+						}
 						//TWO OPPOSING CORNERS... THAT SHOULD... PROBABLY COVER IT ALL, RIGHT?
 						//if (!isTight && (s1 || s9))
 						
-                        if (s1)
-                        {
-                            if (s6 && (s7 || s8))
-                                return true;
-                            else if (s8 && (s6 || s3))
-                                return true;
-                        }
-                        if (s9)
-                        {
-                            if (s4 && (s2 || s3))
-                                return true;
-                            else if (s2 && (s4 || s7))
-                                return true;
-                        }
-                        
+						if (s1)
+						{
+							if (s6 && (s7 || s8))
+								return true;
+							else if (s8 && (s6 || s3))
+								return true;
+						}
+						if (s9)
+						{
+							if (s4 && (s2 || s3))
+								return true;
+							else if (s2 && (s4 || s7))
+								return true;
+						}
+						
 					}
 					//WAIT... MAYBE THIS WAS ALL WE NEEDED... LOOK INTO THAT LATER
 				}
@@ -1400,9 +1400,9 @@ public class patch_Player
 			}
 
 			//if (!log2)
-			//	Debug.Log("CHUNK:" + bChunk + " X/Y:" + relativeX + "/" + relativeY + "NON STANDARD RETURN       -  " + isTight);
+			//	Debug.Log("CHUNK:" + bChunk + " X/Y:" + relativeX + "/" + relativeY + "NON STANDARD RETURN	   -  " + isTight);
 
-            return isTight;
+			return isTight;
 		}
 		else
 			return false; //ROOM HASN'T LOADED YET. JUST RETURN FALSE
@@ -1417,8 +1417,8 @@ public class patch_Player
 		float tileSeed = (myTilePos.x + myTilePos.y) + seedKey;
 		float tileSizeMod = sizeMod;
 		float gapVariance = BellyPlus.BPOGapVariance();
-        //Debug.Log("-----TILE SEED!: " + myTilePos.x + "+" + myTilePos.y + " = "+ tileSeed);
-        bool coinFlip = (tileSeed%4 == 0); //25% CHANCE TO BE TRUE ON ANY GIVEN TILE
+		//Debug.Log("-----TILE SEED!: " + myTilePos.x + "+" + myTilePos.y + " = "+ tileSeed);
+		bool coinFlip = (tileSeed%4 == 0); //25% CHANCE TO BE TRUE ON ANY GIVEN TILE
 
 		while (tileSeed > 8)
 		{
@@ -1477,7 +1477,7 @@ public class patch_Player
 
 			if (showLogs)
 				Debug.Log("----SHORTCUT TYPE!: " + shortCutType + " MOD:" + tileSizeMod);
-        }
+		}
 
 		bool zeroG = (self.EffectiveRoomGravity == 0f);
 		float myChub = Math.Max(ObjGetChubValue(self), 0);
@@ -1548,21 +1548,21 @@ public class patch_Player
 
 		
 		if (self is Player)
-        {
+		{
 			//ROOM SPECIFIC!
 			string myRoom = self.room.roomSettings.name.ToString();
 			if (myRoom == "SS_AI" || myRoom == "DM_AI")
 			{
 				tileSizeMod += 14 * Mathf.Max(1, BellyPlus.BPOGapVariance());
-                rainWarning = false;
+				rainWarning = false;
 				gapVariance = 1f;
-            }
+			}
 			else if (myRoom == "SU_A44" || myRoom == "SL_C16") //TUTORIAL BERRY ROOM AND THAT PEBBLES CRACKED ROOM
-            {
+			{
 				tileSizeMod += 8 + myChub;
 			}
 			else if (myRoom =="SH_C12") //SHADED SQUEEZE  -IDEK WHAT THIS ONE WAS || myRoom == "CL_B15"
-            {
+			{
 				tileSizeMod += 6;
 			}
 			//else if ("SU_A41")
@@ -1579,7 +1579,7 @@ public class patch_Player
 		
 		//NEW DYNAMIC SUPER TIGHT!~ RARE OCCURENCES. ONLY 50% OF SIZE 7'S & 8'S, AND ONLY IF THEY'RE NON SHORTCUTS.
 		if (tileSeed >= 7 && !shortcutFlag && coinFlip && !wetHazard && !rainWarning)
-        {
+		{
 			if (self is Player)
 				tileSizeMod += myChub * HardmodeScaling(1f, 2f) + Mathf.Min((GetOverstuffed(self as Player) / 2), 12);
 			else
@@ -1642,7 +1642,7 @@ public class patch_Player
 				Debug.Log("-----LIZARD TO CATCH UP!): " + tileSeed);
 		}
 
-        return -4f + (tileSeed /= 2f) * gapVariance;
+		return -4f + (tileSeed /= 2f) * gapVariance;
 	}
 	
 	
@@ -1652,12 +1652,12 @@ public class patch_Player
 		int pCount = 0;
 		if (self.room != null) //DON'T FORGET THIS. APPARENTLY WEIRDNESS CAN OCCUR IF REVIVED 
 		{
-            for (int i = 0; i < self.room.game.Players.Count; i++)
-            {
-                if (self.room.game.Players[i].realizedCreature != null && !self.room.game.Players[i].realizedCreature.dead)
-                    pCount += 1;
-            }
-        }
+			for (int i = 0; i < self.room.game.Players.Count; i++)
+			{
+				if (self.room.game.Players[i].realizedCreature != null && !self.room.game.Players[i].realizedCreature.dead)
+					pCount += 1;
+			}
+		}
 		return pCount;
 	}
 
@@ -1666,10 +1666,10 @@ public class patch_Player
 	//OKAY WE UPDATED THIS ONE TO INCLUDE SLUGPUPS!... BUT NOT THE REST OF THEM. BUT... WHATEVER IT'S PROBABLY FINE
 	public static Player FindPlayerInRange(Creature self)
 	{
-        if (self.room == null)
-            return null;
+		if (self.room == null)
+			return null;
 
-        Player closestPlayer = null;
+		Player closestPlayer = null;
 		//for (int i = 0; i < self.room.game.Players.Count; i++)
 		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
 		{
@@ -1714,24 +1714,24 @@ public class patch_Player
 				self.room.game.Players[i].realizedCreature != null
 				&& self.room.game.Players[i].realizedCreature != self
 				&& self.room.game.Players[i].realizedCreature.room == self.room
-                && self.room.game.Players[i].realizedCreature.Consious //WE ADDED THIS SO WE DON'T TRY AND FEED US TO OURSELVES
-                && Custom.DistLess(self.bodyChunks[0].pos, self.room.game.Players[i].realizedCreature.bodyChunks[0].pos, range)
+				&& self.room.game.Players[i].realizedCreature.Consious //WE ADDED THIS SO WE DON'T TRY AND FEED US TO OURSELVES
+				&& Custom.DistLess(self.bodyChunks[0].pos, self.room.game.Players[i].realizedCreature.bodyChunks[0].pos, range)
 			)
 			{
 				float myFatness = GetChubValue(self.room.game.Players[i].realizedCreature as Player);
 				float myDist = Custom.Dist(self.bodyChunks[0].pos, self.room.game.Players[i].realizedCreature.bodyChunks[0].pos);
 				if (myFatness > fattest)
 				{
-                    closestPlr = self.room.game.Players[i].realizedCreature as Player;
+					closestPlr = self.room.game.Players[i].realizedCreature as Player;
 					fattest = myFatness;
 					closest = myDist;
 				}
 				else if (myDist < closest)
 				{ //UPDATE SO NOW WE RETURN THE CLOSEST MATCH
 					closest = myDist;
-                    closestPlr = self.room.game.Players[i].realizedCreature as Player;
-                }
-                //return self.room.game.Players[i].realizedCreature as Player;
+					closestPlr = self.room.game.Players[i].realizedCreature as Player;
+				}
+				//return self.room.game.Players[i].realizedCreature as Player;
 				// break;
 			}
 		}
@@ -1747,7 +1747,7 @@ public class patch_Player
 		{
 			float dist = Vector2.Distance(myPos, target.bodyChunks[i].pos);
 			if (dist < closestDist)
-            {
+			{
 				closestDist = dist;
 				closestChunkID = i;
 			}	
@@ -1759,54 +1759,54 @@ public class patch_Player
 	//AND LIZAR!
 	public static Lizard FindLizardInRange(Creature self, int myChunk, int lizChunk)
 	{
-        if (self.room == null)
-            return null;
+		if (self.room == null)
+			return null;
 
-        for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
+		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
 		{
 			if (self.room.abstractRoom.creatures[i].realizedCreature != null 
 				&& self.room.abstractRoom.creatures[i].realizedCreature is Lizard checkLizard
 				&& checkLizard != self
-                && checkLizard.room != null 
+				&& checkLizard.room != null 
 				&& checkLizard.room == self.room
-                && !checkLizard.dead
+				&& !checkLizard.dead
 				&& Custom.DistLess(self.bodyChunks[myChunk].pos, checkLizard.bodyChunks[lizChunk].pos, 35f)
-            )
+			)
 			{
-                return checkLizard;
+				return checkLizard;
 			}
 		}
 		
 		return null;
 	}
 
-    //CheckFattable
-    public static Creature FindFatCreatureInRange(Creature self)
-    {
-        if (self.room == null)
-            return null;
+	//CheckFattable
+	public static Creature FindFatCreatureInRange(Creature self)
+	{
+		if (self.room == null)
+			return null;
 
-        for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
-        {
-            if (self.room.abstractRoom.creatures[i].realizedCreature != null
-                && self.room.abstractRoom.creatures[i].realizedCreature is Creature crit
+		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
+		{
+			if (self.room.abstractRoom.creatures[i].realizedCreature != null
+				&& self.room.abstractRoom.creatures[i].realizedCreature is Creature crit
 				&& patch_MiscCreatures.CheckFattable(crit)
-                && crit != self && !(crit is Player) && !crit.dead
-                && crit.room != null && crit.room == self.room
-                && Custom.DistLess(self.bodyChunks[1].pos, crit.mainBodyChunk.pos, 50f)
-            )
-            {
-                return crit;
-            }
-        }
-        return null;
-    }
+				&& crit != self && !(crit is Player) && !crit.dead
+				&& crit.room != null && crit.room == self.room
+				&& Custom.DistLess(self.bodyChunks[1].pos, crit.mainBodyChunk.pos, 50f)
+			)
+			{
+				return crit;
+			}
+		}
+		return null;
+	}
 
 
-    public static BodyPart GetHead(Player self) //lol
+	public static BodyPart GetHead(Player self) //lol
 	{
 		return (self.graphicsModule as PlayerGraphics).head;
-    }
+	}
 
 
 
@@ -1818,7 +1818,7 @@ public class patch_Player
 	
 	
 	public static bool ObjIsWedged(Creature obj)
-    {
+	{
 		if (obj is Player)
 			return IsWedged((obj as Player));
 		else
@@ -1908,12 +1908,12 @@ public class patch_Player
 		BoostCreature(obj, bst, cap);
 	}
 
-    //squishForce
-    public static void ObjGainSquishForce(Creature obj, int amnt, int max)
-    {
+	//squishForce
+	public static void ObjGainSquishForce(Creature obj, int amnt, int max)
+	{
 		if (obj is Player self && IsStuck(self) && PipeStatus(self) == false)
 		{
-            int newBoost = Math.Min(obj.GetBelly().squishForce + amnt, max);
+			int newBoost = Math.Min(obj.GetBelly().squishForce + amnt, max);
 			
 			//BIG BOOSTS WOULD BENIFIT FROM A DELAY, I THINK.
 			if (amnt > 5)
@@ -1922,21 +1922,21 @@ public class patch_Player
 				obj.GetBelly().squishMemory = newBoost;
 			}
 			
-            if (obj.GetBelly().squishForce >= max || obj.GetBelly().squishDelay > 0)
-                return; //DO NOTHING. WE'RE ALREADY AT THE MAX, AND DON'T WANT TO LOWER IT. OR SQUISH DELAY IS ACTIVE
-            else
-                obj.GetBelly().squishForce = newBoost;
-        }
-    }
+			if (obj.GetBelly().squishForce >= max || obj.GetBelly().squishDelay > 0)
+				return; //DO NOTHING. WE'RE ALREADY AT THE MAX, AND DON'T WANT TO LOWER IT. OR SQUISH DELAY IS ACTIVE
+			else
+				obj.GetBelly().squishForce = newBoost;
+		}
+	}
 
 
-    public static int GetSquishForce(Creature obj)
-    {
+	public static int GetSquishForce(Creature obj)
+	{
 		return obj.GetBelly().squishForce;
-    }
+	}
 
 
-    public static float ObjGetLoosenProg(Creature obj)
+	public static float ObjGetLoosenProg(Creature obj)
 	{
 		return obj.GetBelly().loosenProg;
 	}
@@ -1983,16 +1983,16 @@ public class patch_Player
 		return obj.bodyChunks[ObjGetBodyChunkID(obj, body)].pos;
 	}
 
-    public static float BonusChunkRad(Creature obj, int chunk)
-    {
+	public static float BonusChunkRad(Creature obj, int chunk)
+	{
 		if (obj is Player)
 			return (obj as Player).bodyChunks[chunk].rad - 8f;
 
-        return 0;
-    }
+		return 0;
+	}
 
 
-    public static int ObjGetBodyChunkID(Creature obj, string body)
+	public static int ObjGetBodyChunkID(Creature obj, string body)
 	{
 		int num = 0;
 		if (obj is Yeek)
@@ -2044,28 +2044,28 @@ public class patch_Player
 	}
 
 
-    public static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
-    {
-        bool skipCheck = false;
+	public static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
+	{
+		bool skipCheck = false;
 		if (self.GetBelly().fatDisabled || BellyPlus.VisualsOnly())
 		{
 			skipCheck = true;
 		}
 		
 		if (grasp >= 0 && self.grasps[grasp] != null && !skipCheck)
-        {
-            PhysicalObject item = self.grasps[grasp].grabbed;
-            CheckExternal(self, item);
-        }
-        orig(self, grasp);
-    }
+		{
+			PhysicalObject item = self.grasps[grasp].grabbed;
+			CheckExternal(self, item);
+		}
+		orig(self, grasp);
+	}
 
-    public static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
-    {
-        orig(self);
-        self.abstractCreature.GetAbsBelly().externalMass = 0;
-        UpdateBellySize(self);
-    }
+	public static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
+	{
+		orig(self);
+		self.abstractCreature.GetAbsBelly().externalMass = 0;
+		UpdateBellySize(self);
+	}
 	
 	public static void CheckExternal(Player self, PhysicalObject item)
 	{
@@ -2086,12 +2086,12 @@ public class patch_Player
 	}
 
 
-    //TO FIX BUGS WITH FOOD ON BACK RELATED TO SWALLOWING
-    private static void Creature_Abstractize(On.Creature.orig_Abstractize orig, Creature self)
-    {
+	//TO FIX BUGS WITH FOOD ON BACK RELATED TO SWALLOWING
+	private static void Creature_Abstractize(On.Creature.orig_Abstractize orig, Creature self)
+	{
 		if (self is Player player)
 		{
-            if (self.GetBelly().foodOnBack != null)
+			if (self.GetBelly().foodOnBack != null)
 			{
 				//AbstractPhysicalObject food = self.GetBelly().foodOnBack.spear.abstractPhysicalObject;
 				//food.realizedObject.RemoveFromRoom();
@@ -2099,10 +2099,10 @@ public class patch_Player
 				//food.Room.RemoveEntity(food);
 				//NOO NO THAT'S TOO COMPLICATED. JUST DROP IT
 				self.GetBelly().foodOnBack.DropFood();
-            }
+			}
 		}
 		orig(self);
-    }
+	}
 	
 	//MORE MOD FRIENDLY WAY TO HANDLE TAIL MOVEMENT
 	public static void WagTailSegment(Player self, int segment, Vector2 vel)
@@ -2123,8 +2123,8 @@ public class patch_Player
 	}
 
 
-    //WEIGHTINESS 
-    public static int GetChubValue(Creature self)
+	//WEIGHTINESS 
+	public static int GetChubValue(Creature self)
 	{
 		return Mathf.FloorToInt(self.GetBelly().myChubValue);
 	}
@@ -2211,10 +2211,10 @@ public class patch_Player
 	public static float ScaledBack(float val, float at, float div)
 	{
 		float result = val;
-        if (result > at)
-            result = at + ((result - at) / div);
+		if (result > at)
+			result = at + ((result - at) / div);
 		return result;
-    }
+	}
 
 
 	public static float CalcRunSpeedMod(Player self) //, float chub)
@@ -2224,18 +2224,18 @@ public class patch_Player
 		float reduce = 0f;
 		//NOTE THIS DOES MEAN THAT IF OUR PARTNER DIES AND WE EAT AGAIN OUR SPEED WILL SUDDENLY SHOOT BACK UP... BUT WHATEVER LOL
 		bool extFloor = GetLivingPlayers(self) > 1 || (self.room != null && self.room.game.IsArenaSession || BPOptions.easilyWinded.Value);
-        float minSpd = extFloor ? 333f : 0.5f;
+		float minSpd = extFloor ? 333f : 0.5f;
 		//START EARLIER FOR EASILY WINDED
-        if (BPOptions.easilyWinded.Value)
-            reduce += Mathf.Max(GetChubFloatValue(self) / 20f, 0f); // (0 - 0.2)   -0.2f if 4 chub.  -0.1f at 3 chub
+		if (BPOptions.easilyWinded.Value)
+			reduce += Mathf.Max(GetChubFloatValue(self) / 20f, 0f); // (0 - 0.2)   -0.2f if 4 chub.  -0.1f at 3 chub
 
-        reduce = Mathf.Min(reduce + GetOverstuffed(self) * (0.05f * (1f + (BottomHeavyDiffScale() * 0.15f))), minSpd); //0.5f
+		reduce = Mathf.Min(reduce + GetOverstuffed(self) * (0.05f * (1f + (BottomHeavyDiffScale() * 0.15f))), minSpd); //0.5f
 
 		if (self.slugcatStats?.name?.value == "Cloudtail")
 			reduce = Mathf.Max(0, (reduce - 0.15f) * 0.1f);
 
-        //IF WE'RE IN MULTIPLAUER/ARENA MODE, GO EVEN FURTHER
-        if (extFloor)
+		//IF WE'RE IN MULTIPLAUER/ARENA MODE, GO EVEN FURTHER
+		if (extFloor)
 		{
 			if (BPOptions.easilyWinded.Value)
 				reduce = Mathf.Min(ScaledBack(reduce, 0.5f, 2.5f), 0.9f);
@@ -2243,18 +2243,18 @@ public class patch_Player
 				reduce = Mathf.Min(ScaledBack(reduce, 0.5f, 3f), 0.9f);
 		}
 			
-        spd -= reduce;
+		spd -= reduce;
 
 
 
 		//if (BPOptions.debugLogs.Value)
 			//Debug.Log("NEW RUN SPEED: " + spd);
 
-        //WAIT A MINUTE! THIS IS RUNNING AT A TERRIBLE TIME BECAUSE THIS ONLY CHECKS ONCE WHEN WE EAT AND THEN APPLIES TO A PERMINANT VAR
-        //if (IsPullingOther(self))
-        //	spd /= 3f;
+		//WAIT A MINUTE! THIS IS RUNNING AT A TERRIBLE TIME BECAUSE THIS ONLY CHECKS ONCE WHEN WE EAT AND THEN APPLIES TO A PERMINANT VAR
+		//if (IsPullingOther(self))
+		//	spd /= 3f;
 
-        return spd;
+		return spd;
 	}
 
 
@@ -2265,11 +2265,11 @@ public class patch_Player
 		float baseWeight = (0.7f * self.slugcatStats.bodyWeightFac) / 2f;
 		float radMod = 1f;
 		float oldChub = self.GetBelly().myChubValue;
-        self.GetBelly().myChubValue = GetAdjChubValue(self);
+		self.GetBelly().myChubValue = GetAdjChubValue(self);
 		self.GetBelly().runSpeedMod = CalcRunSpeedMod(self);//, self.GetBelly().myChubValue); //+ (BPOptions.easilyWinded.Value ? 2 : 0)
 
-        //MAKE SURE THE GRAPHICS EXIST FIRST. IN SOME WEIRD SPAWNS THEY WON'T ALWAYS EXIST YET
-        if (self.graphicsModule != null)
+		//MAKE SURE THE GRAPHICS EXIST FIRST. IN SOME WEIRD SPAWNS THEY WON'T ALWAYS EXIST YET
+		if (self.graphicsModule != null)
 			patch_PlayerGraphics.UpdateTailThickness(self.graphicsModule as PlayerGraphics); //, tailThick);
 		
 		if (BellyPlus.VisualsOnly())
@@ -2279,30 +2279,30 @@ public class patch_Player
 		// self.slugcatStats.poleClimbSpeedFac = self.GetBelly().origPoleSpeed * self.GetBelly().runSpeedMod; 
 		self.slugcatStats.poleClimbSpeedFac = self.abstractCreature.GetAbsBelly().origPoleSpeed * Mathf.Lerp(-0.10f, 1f, Mathf.Max(self.GetBelly().runSpeedMod, 0.35f)); //AND THEN TONE IT BACK A BIT... //MAKE POLE CLIMBING SPEED CHANGES MORE NOTICEABLE //-0.35f, 1f,
 
-        float newWeight = baseWeight;
+		float newWeight = baseWeight;
 		float corridorSpeedFact = 1f;
 		switch (GetChubValue(self))
 		{
 			case 4:
 				corridorSpeedFact = 0.7f - 0.025f * Mathf.Min(GetOverstuffed(self), 12); //55
 				newWeight *= 1.5f + (0.1f * GetOverstuffed(self));
-                radMod = 1.4f + Mathf.Min(0.05f * GetOverstuffed(self), 0.5f);
-                break;
+				radMod = 1.4f + Mathf.Min(0.05f * GetOverstuffed(self), 0.5f);
+				break;
 			case 3:
 				corridorSpeedFact = 0.8f; //65
 				newWeight *= 1.3f;
-                radMod = 1.2f;
-                break;
+				radMod = 1.2f;
+				break;
 			case 2:
 				corridorSpeedFact = 0.9f; //85
 				newWeight *= 1.1f;
-                radMod = 1f;
-                break;
+				radMod = 1f;
+				break;
 			case 1:
 				corridorSpeedFact = 1.0f; //85
 				newWeight *= 1f;
-                radMod = 1f;
-                break;
+				radMod = 1f;
+				break;
 			case 0:
 			default:
 				//self.slugcatStats.corridorClimbSpeedFac = 0.75f;
@@ -2320,7 +2320,7 @@ public class patch_Player
 		self.bodyChunks[0].mass = Mathf.Min(newWeight, baseWeight * 3f);
 		self.bodyChunks[1].mass = newWeight;
 
-        self.bodyChunks[0].rad = 9f * (1 + ((radMod - 1) / 3f));
+		self.bodyChunks[0].rad = 9f * (1 + ((radMod - 1) / 3f));
 		self.bodyChunks[0].terrainSqueeze = 1f / (1 + ((radMod - 1) / 3f));
 		self.bodyChunks[1].rad = 8f * radMod;
 		self.bodyChunks[1].terrainSqueeze = 1f / radMod;
@@ -2328,18 +2328,18 @@ public class patch_Player
 		if (BPOptions.debugLogs.Value)
 			Debug.Log("UPDAT BELLY: " + self.GetBelly().myChubValue); //" RAD: NEW MASS: " + self.bodyChunks[0].rad + " - " + self.bodyChunks[0].TerrainRad + " - " + self.bodyChunks[0].terrainSqueeze);
 
-        //FIX THIS AGAIN
-        self.GetBelly().myCooridorSpeed = self.slugcatStats.corridorClimbSpeedFac * corridorSpeedFact;
+		//FIX THIS AGAIN
+		self.GetBelly().myCooridorSpeed = self.slugcatStats.corridorClimbSpeedFac * corridorSpeedFact;
 
 		//MAKE A FUNNY SOUND IF WE'RE NOW FAT ENOUGH TO SLAM
 		if (BPOptions.slugSlams.Value && BPOptions.hudHints.Value && !self.isGourmand && !self.GetBelly().canSlugSlam && ChunkyFallRequirement(self))//&& oldChub < 3 && GetChubValue(self) >= 3)
 		{
 			self.GetBelly().canSlugSlam = true; //THIS IS MOSTLY JUST FOR THE NOISE I GUESS...
-            self.PlayHUDSound(SoundID.HUD_Karma_Reinforce_Bump);
-        }
+			self.PlayHUDSound(SoundID.HUD_Karma_Reinforce_Bump);
+		}
 			
-        //CHECK IF OUR BONUS PIP NEES TO BE SAVED FOR END OF CYCLE
-        CheckBonusFood(self, false);
+		//CHECK IF OUR BONUS PIP NEES TO BE SAVED FOR END OF CYCLE
+		CheckBonusFood(self, false);
 	}
 	
 	
@@ -2350,7 +2350,7 @@ public class patch_Player
 			Vector2 pos3 = self.bodyChunks[chunk].pos;
 			//ALRIGHT/ LETS BE BIG BOYS HERE
 			for (int i = 1; i > -2; i-= 2)
-            {
+			{
 				//WaterDrip drip1 = new WaterDrip(pos3, new Vector2(ObjGetXFlipDirection(self) * xvel * i, Mathf.Lerp(-4f, 8f, UnityEngine.Random.value)), false);
 				WaterDrip drip1 = new WaterDrip(pos3, new Vector2((Mathf.Lerp(0f, 6f, UnityEngine.Random.value) + sparkCount) * i, Mathf.Lerp(-4f, 8f, UnityEngine.Random.value)), false);
 				self.room.AddObject(drip1);
@@ -2416,7 +2416,7 @@ public class patch_Player
 
 	public static void SetPant(Player self, bool set)
 	{
-        self.GetBelly().breathIn = set;
+		self.GetBelly().breathIn = set;
 	}
 
 	public static int GetWideEyes(Player self)
@@ -2462,7 +2462,7 @@ public class patch_Player
 			return true;
 		else
 			return false;
-    }
+	}
 
 	public static bool IsGrabbedByHelper(Creature self)
 	{
@@ -2536,11 +2536,11 @@ public class patch_Player
 
 	public static Creature GetGraspedCreature(Creature self)
 	{
-        for (int j = self.grasps.Length - 1; j >= 0; j--) //CHECK BOTH GRASPS, DUMMY
-        {
-            if (self.grasps[j] != null && self.grasps[j].grabbed is Creature crit && !crit.dead)
-               return crit;
-        }
+		for (int j = self.grasps.Length - 1; j >= 0; j--) //CHECK BOTH GRASPS, DUMMY
+		{
+			if (self.grasps[j] != null && self.grasps[j].grabbed is Creature crit && !crit.dead)
+			   return crit;
+		}
 		return null;
 	}
 
@@ -2549,40 +2549,40 @@ public class patch_Player
 	{
 		//return self.grasps[0] != null && self.grasps[0].grabbed is Creature && ObjIsStuckable(self.grasps[0].grabbed as Creature);
 		Creature crit = GetGraspedCreature(self);
-        return crit != null && ObjIsStuckable(crit);
-    }
+		return crit != null && ObjIsStuckable(crit);
+	}
 
 	public static bool IsGraspingActualSlugcat(Creature self)
 	{
-        Creature crit = GetGraspedCreature(self);
-        return crit != null && crit is Player;
+		Creature crit = GetGraspedCreature(self);
+		return crit != null && crit is Player;
 	}
 
 	public static bool IsGraspingStuckCreature(Creature self)
 	{
-        Creature crit = GetGraspedCreature(self);
-        return crit != null && ObjIsStuckable(crit) && ObjIsStuck(crit);
+		Creature crit = GetGraspedCreature(self);
+		return crit != null && ObjIsStuckable(crit) && ObjIsStuck(crit);
 	}
 
 	//TRUE IF WE ARE STUCK OR GRABBING ONTO A CREATURE THAT IS PULLING SOME OTHER CREATURE
 	public static bool InPullingChain(Creature self)
 	{
-        Creature crit = GetGraspedCreature(self);
-        return IsStuckOrWedged(self) || (IsGraspingStuckable(self) && InPullingChain(crit));
+		Creature crit = GetGraspedCreature(self);
+		return IsStuckOrWedged(self) || (IsGraspingStuckable(self) && InPullingChain(crit));
 	}
 
 	public static void PassDownBenifits(Creature target, float strain, int boost, int cap)
 	{
 		if (IsStuckOrWedged(target))
-        {
+		{
 			ObjGainStuckStrain(target, strain);
 			ObjGainBoostStrain(target, 0, boost, cap);
 		}
 		else if (IsGraspingStuckable(target))
-        {
+		{
 			ObjGainBoostStrain(target, 0, boost / 2, cap);
-            Creature crit = GetGraspedCreature(target);
-            PassDownBenifits(crit, strain, boost, cap);
+			Creature crit = GetGraspedCreature(target);
+			PassDownBenifits(crit, strain, boost, cap);
 		}
 	}
 
@@ -2663,12 +2663,12 @@ public class patch_Player
 					//IF ITS A MEADOW SESSION, ALWAYS JUST CRUSH ON THE SECOND SMEAR. TO AVOID DESYNCING
 					else if (UnityEngine.Random.value < 0.33f || BellyPlus.isMeadowSession) //1 IN 4
 					{
-                        //MOVED THIS HERE FOR THE INVISIBLE FOOD BUG. BUT I DONT THINK WE EVEN NEED THIS
-                        crushFood = true;
+						//MOVED THIS HERE FOR THE INVISIBLE FOOD BUG. BUT I DONT THINK WE EVEN NEED THIS
+						crushFood = true;
 						foodPos = obj.firstChunk.pos;
-                        self.ReleaseGrasp(j);
+						self.ReleaseGrasp(j);
 						obj.Destroy();
-                        BellyPlus.smearHintGiven = true; //THEY ALREADY KNOW HOW TO USE THAT!
+						BellyPlus.smearHintGiven = true; //THEY ALREADY KNOW HOW TO USE THAT!
 					}
 					
 					if (otherCrit is Player)
@@ -2732,40 +2732,40 @@ public class patch_Player
 	}
 
 
-    
+	
 	//THIS SHOULD RETURN THE FATTEST BELLY VALUE OF ALL PEOPLE IN THE GAME (REGARDLESS OF IF THEY ARE DEAD OR GONE OR NOT)
-    public static int FindFattestSlug(Player self)
-    {
+	public static int FindFattestSlug(Player self)
+	{
 		//.abstractCreature.world.game.Players.Count
 		int fattest = 0;
-        for (int i = 0; i < self.abstractCreature.world.game.Players.Count; i++)
-        {
+		for (int i = 0; i < self.abstractCreature.world.game.Players.Count; i++)
+		{
 			if (self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach > fattest)
 				fattest = self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach;
-        }
+		}
 		return fattest;
-    }
+	}
 
 
-    public static Player ReturnFattestSlug(Player self)
-    {
-        int fattest = 0;
+	public static Player ReturnFattestSlug(Player self)
+	{
+		int fattest = 0;
 		Player slug = null;
-        for (int i = 0; i < self.abstractCreature.world.game.Players.Count; i++)
-        {
-            if (self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach > fattest
+		for (int i = 0; i < self.abstractCreature.world.game.Players.Count; i++)
+		{
+			if (self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach > fattest
 				&& self.abstractCreature.world.game.Players[i].realizedCreature != null
-                && self.abstractCreature.world.game.Players[i].realizedCreature.dead == false)
+				&& self.abstractCreature.world.game.Players[i].realizedCreature.dead == false)
 			{
-                fattest = self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach;
+				fattest = self.abstractCreature.world.game.Players[i].GetAbsBelly().myFoodInStomach;
 				slug = self.abstractCreature.world.game.Players[i].realizedCreature as Player;
-            }
-        }
-        return slug;
-    }
+			}
+		}
+		return slug;
+	}
 
 
-    public static void CheckBonusFood(Player self, bool init)
+	public static void CheckBonusFood(Player self, bool init)
 	{
 		//4-7-23 SCRATCH EVERYTHING YOU ONCE KNEW! WE'RE THROWING IT OUT BEACUASE PLAYER FOOD NOW ONLY LOOKS AT THE LARGEST FOOD VALUE IN THE PARTY
 		//BUT ONLY WHEN PAST OUR MAXIMUM... YEA, KINDA WEIRD I KNOW
@@ -2773,13 +2773,13 @@ public class patch_Player
 		{
 			int fattest = FindFattestSlug(self);
 			BellyPlus.bonusHudPip = Math.Max(0, fattest - self.slugcatStats.maxFood) * 2; //EVERY POINT OF FOOD PAST MAXIMUM COUNTS AS TWO BONUS HUD PIPS
-            //Debug.Log("CHECKING BONUS FOOD " + BellyPlus.bonusHudPip + " FATEST:" + fattest);
-        }
+			//Debug.Log("CHECKING BONUS FOOD " + BellyPlus.bonusHudPip + " FATEST:" + fattest);
+		}
 		else
-            Debug.Log("REJECT BONUS FOOD UPDATE! DOOR ALREADY CLOSED " + BellyPlus.bonusHudPip);
+			Debug.Log("REJECT BONUS FOOD UPDATE! DOOR ALREADY CLOSED " + BellyPlus.bonusHudPip);
 
-        //PIPS FOR THE HUD DISPLAY
-        if (!self.isNPC && (BellyPlus.bonusHudPip >= 1 || init))
+		//PIPS FOR THE HUD DISPLAY
+		if (!self.isNPC && (BellyPlus.bonusHudPip >= 1 || init))
 		{
 			//WE'RE REMOVING THE CAP
 			BellyPlus.bonusFood = Mathf.Min(Mathf.FloorToInt(BellyPlus.bonusHudPip / 4f));
@@ -2788,10 +2788,10 @@ public class patch_Player
 		//SOME EXTRA BS FOR INDIVIDUAL FOOD BARS
 		if (BellyPlus.individualFoodEnabled && !self.isNPC && self.abstractCreature.world.game.IsStorySession)
 		{
-            //FOR THE VISUAL VERSION, LOOK AT ONLY P1'S BELLY
+			//FOR THE VISUAL VERSION, LOOK AT ONLY P1'S BELLY
 			int p1MaxBelly = SlugcatStats.SlugcatFoodMeter((self.abstractCreature.world.game.Players[0].state as PlayerState).slugcatCharacter).x;
 			BellyPlus.bonusHudPip = Math.Max(0, self.abstractCreature.world.game.Players[0].GetAbsBelly().myFoodInStomach - p1MaxBelly) * 2; //EVERY POINT OF FOOD PAST MAXIMUM COUNTS AS TWO BONUS HUD PIPS
-        }
+		}
 	}
 	
 
@@ -2806,14 +2806,14 @@ public class patch_Player
 		add *= BPOptions.foodMult.Value;
 
 		//CORRECT EATMEAT() SHENANIGANS
-        if (self.GetBelly().maxFoodOverrideFlag)
-        {
-            self.slugcatStats.maxFood--;
-            self.GetBelly().maxFoodOverrideFlag = false;
-        }
+		if (self.GetBelly().maxFoodOverrideFlag)
+		{
+			self.slugcatStats.maxFood--;
+			self.GetBelly().maxFoodOverrideFlag = false;
+		}
 
-        //SPECIAL EXCEPTIONS FOR SOME CHALLENGE MODE LEVELS 
-        if (ModManager.MSC && self.room != null && self.room.game.IsArenaSession 
+		//SPECIAL EXCEPTIONS FOR SOME CHALLENGE MODE LEVELS 
+		if (ModManager.MSC && self.room != null && self.room.game.IsArenaSession 
 			&& self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.gameType == MoreSlugcatsEnums.GameTypeID.Challenge)
 		{
 			if (add == 5 && (self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.challengeID == 63 || self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.challengeID == 45))
@@ -2832,9 +2832,9 @@ public class patch_Player
 		}
 
 
-        //REDS ILLNESS AFFECTS HOW MUCH FOOD OUR FOOD IS WORTH!
-        int newAdd = add;
-        if (self.redsIllness != null)
+		//REDS ILLNESS AFFECTS HOW MUCH FOOD OUR FOOD IS WORTH!
+		int newAdd = add;
+		if (self.redsIllness != null)
 		{
 			float adjustAdd = add * self.redsIllness.FoodFac;
 
@@ -2842,18 +2842,18 @@ public class patch_Player
 			newAdd = 0;
 			while (adjustAdd > 1)
 			{
-                newAdd += 1;
-				adjustAdd -= 1f;
-            }
-
-            partialPip += adjustAdd;
-
-            if (partialPip >= 1f)
-            {
 				newAdd += 1;
-                partialPip -= 1f;
+				adjustAdd -= 1f;
 			}
-        }
+
+			partialPip += adjustAdd;
+
+			if (partialPip >= 1f)
+			{
+				newAdd += 1;
+				partialPip -= 1f;
+			}
+		}
 
 		
 		//SINCE THE UPDATE, I THINK IT'S SAFE FOR US TO ADD THIS UP HERE
@@ -2862,12 +2862,12 @@ public class patch_Player
 		
 		if (BellyPlus.VisualsOnly())
 		{
-            //WE CAN STILL MAKE THE SOUND THO
-            if (self.FoodInStomach >= self.slugcatStats.maxFood && self.abstractCreature.world.game.IsStorySession)
-                if (self.room?.game?.cameras[0]?.hud?.foodMeter != null)
-                    self.PlayHUDSound(SoundID.HUD_Food_Meter_Fill_Quarter_Plop);
+			//WE CAN STILL MAKE THE SOUND THO
+			if (self.FoodInStomach >= self.slugcatStats.maxFood && self.abstractCreature.world.game.IsStorySession)
+				if (self.room?.game?.cameras[0]?.hud?.foodMeter != null)
+					self.PlayHUDSound(SoundID.HUD_Food_Meter_Fill_Quarter_Plop);
 
-            orig.Invoke(self, add);
+			orig.Invoke(self, add);
 			return;
 		}
 
@@ -2877,8 +2877,8 @@ public class patch_Player
 		if (BellyPlus.fullBellyOverride) //FOR DRONEMASTER SO WE COULD BRIEFLY FAKE A NON-FULL BELLY
 			self.playerState.foodInStomach++;
 
-        //DOWNPOUR FIXED THE AWEFUL JOLLYCOOP MESS SO WE CAN SAFELY DO THINGS NORMALLY
-        if (self.FoodInStomach >= self.slugcatStats.maxFood && self.abstractCreature.world.game.IsStorySession)
+		//DOWNPOUR FIXED THE AWEFUL JOLLYCOOP MESS SO WE CAN SAFELY DO THINGS NORMALLY
+		if (self.FoodInStomach >= self.slugcatStats.maxFood && self.abstractCreature.world.game.IsStorySession)
 		{
 			if (BPOptions.debugLogs.Value)
 				Debug.Log("-----ADDING FOOD PAST FULL " + self + " ADD:" + newAdd + "  CURRENT CHUB:" + GetChubFloatValue(self) + " + " + GetOverstuffed(self) );
@@ -2888,7 +2888,7 @@ public class patch_Player
 			
 			//PUPS DON'T TRACK BONUS FOOD! THEIR FOODINSTOMACH SAVES PROPERLY SO WE CAN JUST TRACK THAT
 			if (self.isNPC && self.isSlugpup)
-            {
+			{
 				self.playerState.foodInStomach += add;
 				skipOrig = true;
 			}
@@ -2906,8 +2906,8 @@ public class patch_Player
 			orig.Invoke(self, add - overflowFood);
 			if (overflowFood > 0)
 			{
-                self.abstractCreature.GetAbsBelly().myFoodInStomach -= overflowFood;//HEY WE'RE ABOUT TO ADD TOO MUCH PERSONAL FOOD BECAUSE WE DIDN'T ACCOUNT FOR OVERFLOW BEFORE RUNNING ADDFOOD AGAIN! JUST SHAVE THE EXTRA OFF THE TOP
-                self.AddFood(overflowFood); //GOTTA DO IT AGAIN CUZ OUR BELLY WILL CUT OFF THE EXTRA.
+				self.abstractCreature.GetAbsBelly().myFoodInStomach -= overflowFood;//HEY WE'RE ABOUT TO ADD TOO MUCH PERSONAL FOOD BECAUSE WE DIDN'T ACCOUNT FOR OVERFLOW BEFORE RUNNING ADDFOOD AGAIN! JUST SHAVE THE EXTRA OFF THE TOP
+				self.AddFood(overflowFood); //GOTTA DO IT AGAIN CUZ OUR BELLY WILL CUT OFF THE EXTRA.
 			}
 		}
 		else
@@ -2953,30 +2953,30 @@ public class patch_Player
 			{
 				Player fatSlug = ReturnFattestSlug(self); //FIND THE FATTEST SLUG THAT ISN'T US
 				if (fatSlug != null && fatSlug != self)
-                    fatSlug.SubtractFood(sub); //MAKE THIS THEIR PROBLEM INSTEAD
+					fatSlug.SubtractFood(sub); //MAKE THIS THEIR PROBLEM INSTEAD
 				return; //AND CUT THE REST
-            }
+			}
 
 			
 			//WE NEED TO CAREFULLY SUBTRACT 1 AT A TIME IF USING THIS METHOD
 			self.abstractCreature.GetAbsBelly().myFoodInStomach -= 1;
-            CheckBonusFood(self, false); //WE FORGOT TO UPDATE THESE INBETWEEN LOOPS! THIS CAN CAUSE ISSUES IF SUBTRACTING MORE THAN 1
+			CheckBonusFood(self, false); //WE FORGOT TO UPDATE THESE INBETWEEN LOOPS! THIS CAN CAUSE ISSUES IF SUBTRACTING MORE THAN 1
 
-            //SUBTRACT FROM THE POINT COUNTER TOO
-            if (self.abstractCreature.world.game.IsStorySession && self.AI == null)
+			//SUBTRACT FROM THE POINT COUNTER TOO
+			if (self.abstractCreature.world.game.IsStorySession && self.AI == null)
 				self.abstractCreature.world.game.GetStorySession.saveState.totFood -= 1;
 			else if (self.abstractCreature.world.game.IsArenaSession)
 				self.room.game.GetArenaGameSession.arenaSitting.players[self.playerState.playerNumber].AddSandboxScore(-1);
 
 			//self.room.game.GetArenaGameSession.arenaSitting.players[self.playerState.playerNumber].AddSandboxScore(1);
 
-            //WE DON'T CURRENTLY DO THIS, BUT IF ANYONE EVER SUBTRACTS MORE THAN ONE, JUST RUN THE SINGLE MULTIPLE TIMES.
-            if (sub > 1)
+			//WE DON'T CURRENTLY DO THIS, BUT IF ANYONE EVER SUBTRACTS MORE THAN ONE, JUST RUN THE SINGLE MULTIPLE TIMES.
+			if (sub > 1)
 				self.SubtractFood(sub -1);
 		}
 		else
 		{
-            self.abstractCreature.GetAbsBelly().myFoodInStomach -= sub;
+			self.abstractCreature.GetAbsBelly().myFoodInStomach -= sub;
 			orig.Invoke(self, sub);
 		}
 
@@ -2984,9 +2984,9 @@ public class patch_Player
 		if (self.abstractCreature.GetAbsBelly().myFoodInStomach < 0)
 			self.abstractCreature.GetAbsBelly().myFoodInStomach = 0;
 
-        CheckBonusFood(self, false); //NOW TRULY SETS OUR BONUS PIP COUNT
+		CheckBonusFood(self, false); //NOW TRULY SETS OUR BONUS PIP COUNT
 
-        UpdateBellySize(self);
+		UpdateBellySize(self);
 	}
 	
 	
@@ -3023,10 +3023,10 @@ public class patch_Player
 			self.AerobicIncrease(0.9f);
 			self.Blink(30 + 5 * Math.Min(GetOverstuffed(self), 4));
 			if (!BellyPlus.VisualsOnly())
-                self.slowMovementStun = 30 + 5 * Math.Min(GetOverstuffed(self), 4);
+				self.slowMovementStun = 30 + 5 * Math.Min(GetOverstuffed(self), 4);
 
-            //SWALLOW!
-            self.mainBodyChunk.vel.y = self.mainBodyChunk.vel.y + 0.5f * Math.Min(GetOverstuffed(self), 4); //2f;
+			//SWALLOW!
+			self.mainBodyChunk.vel.y = self.mainBodyChunk.vel.y + 0.5f * Math.Min(GetOverstuffed(self), 4); //2f;
 			self.room.PlaySound(SoundID.Slugcat_Swallow_Item, self.mainBodyChunk.pos, 0.2f + 0.1f * Math.Min(GetOverstuffed(self), 6), 1f);
 			(self.graphicsModule as PlayerGraphics).swallowing = 5 * Math.Min(GetOverstuffed(self), 4); //20;
 		}
@@ -3043,18 +3043,18 @@ public class patch_Player
 	//NOT NEEDED ANYMORE -OKAY BRINGING IT BACK TO FIX SOMETHING ELSE
 	public static void Player_AddQuarterFood(On.Player.orig_AddQuarterFood orig, Player self)
 	{
-        if (BellyPlus.fullBellyOverride) //FOR DRONEMASTER SO WE COULD BRIEFLY FAKE A NON-FULL BELLY
-            self.playerState.foodInStomach++;
+		if (BellyPlus.fullBellyOverride) //FOR DRONEMASTER SO WE COULD BRIEFLY FAKE A NON-FULL BELLY
+			self.playerState.foodInStomach++;
 
 		if (self.GetBelly().maxFoodOverrideFlag)
 		{
 			self.slugcatStats.maxFood--;
-            self.GetBelly().maxFoodOverrideFlag = false;
-        }
+			self.GetBelly().maxFoodOverrideFlag = false;
+		}
 
-        //JUST A DIRECT COPY OF THE PART THAT SKIPS IF OUR BELLY IS FULL
-        //ACTUALLY, INSTEAD OF RISKING HUD SHENANIGANS WITH THE CIRCLES.... LETS DO IT THE STUPID WAY
-        if (self.FoodInStomach >= self.MaxFoodInStomach)
+		//JUST A DIRECT COPY OF THE PART THAT SKIPS IF OUR BELLY IS FULL
+		//ACTUALLY, INSTEAD OF RISKING HUD SHENANIGANS WITH THE CIRCLES.... LETS DO IT THE STUPID WAY
+		if (self.FoodInStomach >= self.MaxFoodInStomach)
 		{
 			//if (UnityEngine.Random.value <= 0.25)
 			//	self.AddFood(1);
@@ -3062,8 +3062,8 @@ public class patch_Player
 			partialPip += 0.25f;
 			if (partialPip >= 1f)
 			{
-                partialPip -= 1f;
-                self.AddFood(1);
+				partialPip -= 1f;
+				self.AddFood(1);
 			}
 		}
 		else
@@ -3102,8 +3102,8 @@ public class patch_Player
 		{
 			orig.Invoke(self, grasp, eu); //ORIGINAL
 		}
-        self.GetBelly().ignoreSpears = 0; //END ANY REMAINING TIME ON IGNORING SPEAR PICKUPS
-    }
+		self.GetBelly().ignoreSpears = 0; //END ANY REMAINING TIME ON IGNORING SPEAR PICKUPS
+	}
 
 
 	//I THINK THIS ACTUALLY NEEDS TO BE HANDLED IN THE MAIN ADDFOOD, BECAUSE THERE ARE OTHER WAYS TO GAIN FOOD
@@ -3118,23 +3118,23 @@ public class patch_Player
 		//AddPersonalFood(self, edible.FoodPoints); //NOT NEEDED ANYMORE
 		orig.Invoke(self, edible);
 
-        // if (self.stillInStartShelter) //CHECK THIS IN ADDFOOD DUMMY
-        // obj.GetBelly().breakfasted = true;
+		// if (self.stillInStartShelter) //CHECK THIS IN ADDFOOD DUMMY
+		// obj.GetBelly().breakfasted = true;
 
-        //if (BPOptions.debugLogs.Value)
-        //	Debug.Log("-OBJECT EATEN!  CURR:" + self.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " FOOD POINTS:" + edible.FoodPoints);
+		//if (BPOptions.debugLogs.Value)
+		//	Debug.Log("-OBJECT EATEN!  CURR:" + self.CurrentFood + " BONUS:" + BellyPlus.bonusFood + " FOOD POINTS:" + edible.FoodPoints);
 
-        self.GetBelly().frFed = false;
+		self.GetBelly().frFed = false;
 	}
 
 
-    //A STRIPPED DOWN VERSION OF THE EATMEAT FN THAT ONLY ADDS FOOD, PERSONALLY
+	//A STRIPPED DOWN VERSION OF THE EATMEAT FN THAT ONLY ADDS FOOD, PERSONALLY
 	public static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
 	{
 		if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is Creature))
 		{
-            orig(self, graspIndex);
-            return;
+			orig(self, graspIndex);
+			return;
 		}
 		
 		SlugcatStats.Name origClass = self.SlugCatClass;
@@ -3154,10 +3154,10 @@ public class patch_Player
 		//THIS JUST RUNS THE SAME COPY OF EATMEATUPDATE EXCEPT IT RUNS WHEN OUR BELLY IS FULL
 		if (self.eatMeat > 20 && self.FoodInStomach >= self.MaxFoodInStomach && self.slugcatStats?.name?.value != "SprobParasite") //SKIP THIS FOR THE PARASITE!
 		{
-            self.standing = false;
-            self.Blink(5);
-            //CORPSE JIGGLE STUFF PROBABLY
-            if (self.eatMeat % 5 == 0)
+			self.standing = false;
+			self.Blink(5);
+			//CORPSE JIGGLE STUFF PROBABLY
+			if (self.eatMeat % 5 == 0)
 			{
 				Vector2 vector = Custom.RNV() * 3f;
 				self.mainBodyChunk.pos += vector;
@@ -3179,9 +3179,9 @@ public class patch_Player
 				}
 			}
 			vector2 /= num;
-            self.mainBodyChunk.vel += Custom.DirVec(self.mainBodyChunk.pos, vector2) * 0.5f;
-            self.bodyChunks[1].vel -= Custom.DirVec(self.mainBodyChunk.pos, vector2) * 0.6f;
-            if (self.graphicsModule != null && (self.grasps[graspIndex].grabbed as Creature).State.meatLeft > 0)// && self.FoodInStomach < self.MaxFoodInStomach)
+			self.mainBodyChunk.vel += Custom.DirVec(self.mainBodyChunk.pos, vector2) * 0.5f;
+			self.bodyChunks[1].vel -= Custom.DirVec(self.mainBodyChunk.pos, vector2) * 0.6f;
+			if (self.graphicsModule != null && (self.grasps[graspIndex].grabbed as Creature).State.meatLeft > 0)// && self.FoodInStomach < self.MaxFoodInStomach)
 			{
 				if (!Custom.DistLess(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos, self.grasps[graspIndex].grabbedChunk.rad))
 					(self.graphicsModule as PlayerGraphics).head.vel += Custom.DirVec(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos) * (self.grasps[graspIndex].grabbedChunk.rad - Vector2.Distance(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos));
@@ -3193,15 +3193,15 @@ public class patch_Player
 				{
 					self.mainBodyChunk.pos += Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * 4f;
 					self.grasps[graspIndex].grabbedChunk.vel += Custom.DirVec(vector2, self.mainBodyChunk.pos) * 0.9f / self.grasps[graspIndex].grabbedChunk.mass;
-                    for (int k = UnityEngine.Random.Range(0, 3); k >= 0; k--)
+					for (int k = UnityEngine.Random.Range(0, 3); k >= 0; k--)
 					{
 						self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[graspIndex].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[graspIndex].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(vector2, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
 					}
-                    if (self.SessionRecord != null)
-                    {
-                        self.SessionRecord.AddEat(self.grasps[graspIndex].grabbed);
-                    }
-                    (self.grasps[graspIndex].grabbed as Creature).State.meatLeft--;
+					if (self.SessionRecord != null)
+					{
+						self.SessionRecord.AddEat(self.grasps[graspIndex].grabbed);
+					}
+					(self.grasps[graspIndex].grabbed as Creature).State.meatLeft--;
 					if (ModManager.MSC && (self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Sofanthiel || self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand) && !(self.grasps[graspIndex].grabbed is Centipede))
 					{
 						self.AddQuarterFood();
@@ -3228,13 +3228,13 @@ public class patch_Player
 				self.TossObject(graspIndex, false); // ??? eu?
 				self.ReleaseGrasp(graspIndex);
 				self.standing = true;
-                //Debug.Log("-EATA DA MEAT");
-                self.GetBelly().frFed = false;
+				//Debug.Log("-EATA DA MEAT");
+				self.GetBelly().frFed = false;
 			}
 			
 			//THIS IS THE CHECK THE GAME USES TO SEE WHEN WE SHOULD TOSS MEAT IF WE'RE FULL. JUST DON'T LET IT GET TO THIS POINT
 			if (self.eatMeat % 80 == 0)
-            {
+			{
 				self.eatMeat = 20;
 				//Debug.Log("-RESET DA MEAT");
 			}
@@ -3281,51 +3281,51 @@ public class patch_Player
 	}
 	
 
-    //OKAY I MIGHT HAVE A BETTER ONE
+	//OKAY I MIGHT HAVE A BETTER ONE
 	/* -OKAY IT PROBABLY IS BETTER BUT... LETS PLAY IT SAFE FOR THE UPDATE
-    public static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-    {
-        SlugcatStats.Name origClass = self.SlugCatClass;
-        //int origMaxFood = self.slugcatStats.maxFood;
-        bool foodLover = IsFoodLover();
-        //TRICK ORIG INTO THINKING WE AREN'T FULL. DURING ADDFOOD() CALCULATION WE'LL CHANGE IT BACK
+	public static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
+	{
+		SlugcatStats.Name origClass = self.SlugCatClass;
+		//int origMaxFood = self.slugcatStats.maxFood;
+		bool foodLover = IsFoodLover();
+		//TRICK ORIG INTO THINKING WE AREN'T FULL. DURING ADDFOOD() CALCULATION WE'LL CHANGE IT BACK
 		if (self.slugcatStats.maxFood >= self.FoodInStomach)
 		{
-            self.slugcatStats.maxFood = self.FoodInStomach + 1;
+			self.slugcatStats.maxFood = self.FoodInStomach + 1;
 			self.GetBelly().maxFoodOverrideFlag = true;
-        }
+		}
 
-        if (foodLover)
-        {
-            if (SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
-                self.SlugCatClass = MoreSlugcatsEnums.SlugcatStatsName.Artificer; //MAULING IS ALSO HANDLED HERE, SO PRETEND WE'RE ARTI IF WE CAN MAUL
-            else
-                self.SlugCatClass = SlugcatStats.Name.Red;
-        }
+		if (foodLover)
+		{
+			if (SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
+				self.SlugCatClass = MoreSlugcatsEnums.SlugcatStatsName.Artificer; //MAULING IS ALSO HANDLED HERE, SO PRETEND WE'RE ARTI IF WE CAN MAUL
+			else
+				self.SlugCatClass = SlugcatStats.Name.Red;
+		}
 
-        orig(self, graspIndex);
+		orig(self, graspIndex);
 
-        //self.slugcatStats.maxFood = origMaxFood;
+		//self.slugcatStats.maxFood = origMaxFood;
 
-        if (foodLover) //THROW THIS IN HERE
-            self.SlugCatClass = origClass;
+		if (foodLover) //THROW THIS IN HERE
+			self.SlugCatClass = origClass;
 
 
-        //THIS IS THE CHECK THE GAME USES TO SEE WHEN WE SHOULD TOSS MEAT IF WE'RE FULL. JUST DON'T LET IT GET TO THIS POINT
-        if (self.eatMeat % 80 == 0 && self.grasps[graspIndex] != null && (self.grasps[graspIndex].grabbed as Creature).State.meatLeft > 0)
-        {
-            self.eatMeat = 20;
-            //Debug.Log("-RESET DA MEAT");
-            self.GetBelly().frFed = false;
-        }
-    }
+		//THIS IS THE CHECK THE GAME USES TO SEE WHEN WE SHOULD TOSS MEAT IF WE'RE FULL. JUST DON'T LET IT GET TO THIS POINT
+		if (self.eatMeat % 80 == 0 && self.grasps[graspIndex] != null && (self.grasps[graspIndex].grabbed as Creature).State.meatLeft > 0)
+		{
+			self.eatMeat = 20;
+			//Debug.Log("-RESET DA MEAT");
+			self.GetBelly().frFed = false;
+		}
+	}
 	*/
 
-    //IT'S LITERALLY JUST A 3RD COPY OF EATMEATUPDATE BUT FOR CORN... MAN THIS THING SUCKS
-    public static void EatCornUpdate(Player self, int graspIndex)
+	//IT'S LITERALLY JUST A 3RD COPY OF EATMEATUPDATE BUT FOR CORN... MAN THIS THING SUCKS
+	public static void EatCornUpdate(Player self, int graspIndex)
 	{
-        
-        if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is SeedCob))
+		
+		if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is SeedCob))
 		{
 			return;
 		}
@@ -3371,7 +3371,7 @@ public class patch_Player
 				bool eatTimer = self.GetBelly().eatCorn % 21 == 3;
 				if (self.GetBelly().frFed)
 				{
-                    eatTimer = self.GetBelly().eatCorn % 15 == 3; //EAT FASTER IF WE'RE BEING FED
+					eatTimer = self.GetBelly().eatCorn % 15 == 3; //EAT FASTER IF WE'RE BEING FED
 					//OKAY THIS COULD ACTUALLY BE A PROBLEM THOUGH IF SOMEONE WON'T STOP. LETS TRY AND WIGGLE FREE
 					//if (self.input[0].IntVec != new IntVector2(0,0))
 					//{
@@ -3380,11 +3380,11 @@ public class patch_Player
 					//}
 					//OKAY THAT WONT WORK... ANOTHER TIME MAYBE
 						
-                }
+				}
 					
 					
 				if (self.GetBelly().eatCorn > 40 && eatTimer) //15 == 3
-                {
+				{
 					self.mainBodyChunk.pos += Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * 4f;
 					self.grasps[graspIndex].grabbedChunk.vel += Custom.DirVec(vector2, self.mainBodyChunk.pos) * 0.9f / self.grasps[graspIndex].grabbedChunk.mass;
 					for (int k = UnityEngine.Random.Range(0, 3); k >= 0; k--)
@@ -3412,8 +3412,8 @@ public class patch_Player
 	
 
 
-    //OK THE FOOD EATING THING IS REALLY GETTING ON MY NERVES. LETS TRY A DIFFERENT METHOD.
-    public static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
+	//OK THE FOOD EATING THING IS REALLY GETTING ON MY NERVES. LETS TRY A DIFFERENT METHOD.
+	public static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
 	{
 		if (!self.isNPC && !BellyPlus.VisualsOnly())
 		{
@@ -3426,21 +3426,21 @@ public class patch_Player
 		bool crawlFix = false;
 		if (self.bodyMode == Player.BodyModeIndex.Crawl && !BellyPlus.VisualsOnly())
 		{
-            crawlFix = true;
+			crawlFix = true;
 			self.bodyMode = Player.BodyModeIndex.Default; 
 			//THIS IS THE ONLY BODYMODE CHECK VANILLA GRABUPDATE DOES, SO HOPEFULLY THIS IS FINE TO CHANGE FOR SUCH A BIG UPDATE (well except for something something energy cell)
-        }
+		}
 
 		//FOR THE SAKE OF CRAFTING FOOD COSTS, PRETEND OUR FOOD IS OUR ACTUAL PERSONAL FOOD FOR A SEC (SO ATTEMPTING TO CRAFT WITH A PERSONAL FOOD VALUE OF 0 WILL FAIL)
 		int foodFix = 0;
-        if (ModManager.CoopAvailable && !BellyPlus.individualFoodEnabled && self.input[0].pckp && BellyPlus.bonusHudPip > 0 && self.abstractCreature.GetAbsBelly().myFoodInStomach == 0 && !self.isNPC)
+		if (ModManager.CoopAvailable && !BellyPlus.individualFoodEnabled && self.input[0].pckp && BellyPlus.bonusHudPip > 0 && self.abstractCreature.GetAbsBelly().myFoodInStomach == 0 && !self.isNPC)
 		{
 			foodFix = self.playerState.foodInStomach; //MAKE IT A SUBTRACTABLE VALUE INSTEAD OF A BOOL, SO IF WE ADDED VALUE DURING CRAFTING, WE KEEP IT
 			self.playerState.foodInStomach -= foodFix; // !!! DO NOT LEAVE IT LIKE THIS!!!! IT COUNTS AS STARVING IF A PLAYER DOES NOT MEET THE THRESHOLD!!
-        }
+		}
 		
 
-        int preFreeHand = self.FreeHand(); //WE NEED TO KNOW THIS OTHERWISE IT GETS EL WEIRD
+		int preFreeHand = self.FreeHand(); //WE NEED TO KNOW THIS OTHERWISE IT GETS EL WEIRD
 		orig.Invoke(self, eu);
 		//IF WE'VE SUCCESSFULLY INTERACTED WITH SOMETHING (LIKE PICKED UP A FRUIT OR SOMETHING) THEN ANYTHING UNDER THIS WILL BE SKIPPED
 		//RIGHT?... OR WILL IT?  (PSST, I DON'T THINK IT WILL)
@@ -3452,8 +3452,8 @@ public class patch_Player
 				self.playerState.foodInStomach += foodFix;
 				//self.JollyFoodUpdate(); //THIS DOESN'T WORK ON PLAYER 1, DUMMY!! >:(
 
-        if (!self.isNPC && !BellyPlus.VisualsOnly() && self.room != null)
-        {
+		if (!self.isNPC && !BellyPlus.VisualsOnly() && self.room != null)
+		{
 			BP_GrabUpdate2(self, eu);
 			BP_GrabUpdate3(self, eu, preFreeHand);
 			BP_GrabUpdate4(self, eu);
@@ -3466,29 +3466,29 @@ public class patch_Player
 	
 	
 	public static bool BP_GrabUpdate0(Player self, bool eu)
-    {
+	{
 		
 		
 		//FIRST TAP
 		if (IsFeedPressed(self))
 		{
-            if (BPOptions.debugLogs.Value)
+			if (BPOptions.debugLogs.Value)
 				Debug.Log("--TRY AND FEED A PLAYER! ");
-            //MEAT
-            int grsp = 0;
+			//MEAT
+			int grsp = 0;
 			PhysicalObject obj = null; //ModManager.MMF && 
 			//bool twoHanded = false;
 			if (obj == null)
 			{
 				for (int j = self.grasps.Length - 1; j >= 0; j--)
 				{
-                    //IF IT'S AN EDIBLE OBJECT OR A CREATURE
-                    if (self.grasps[j] != null && (self.grasps[j].grabbed is IPlayerEdible || self.grasps[j].grabbed is SeedCob || (self.grasps[j].grabbed is Creature && (self.grasps[j].grabbed as Creature).dead && (self.grasps[j].grabbed as Creature).Template.meatPoints > 0)))
-                    {
-                        obj = self.grasps[j].grabbed;
-                        grsp = j;
-                    }
-                }
+					//IF IT'S AN EDIBLE OBJECT OR A CREATURE
+					if (self.grasps[j] != null && (self.grasps[j].grabbed is IPlayerEdible || self.grasps[j].grabbed is SeedCob || (self.grasps[j].grabbed is Creature && (self.grasps[j].grabbed as Creature).dead && (self.grasps[j].grabbed as Creature).Template.meatPoints > 0)))
+					{
+						obj = self.grasps[j].grabbed;
+						grsp = j;
+					}
+				}
 			}
 			
 			Player myFriend = patch_Player.FindPlayerTopInRange(self, 90f);
@@ -3499,60 +3499,60 @@ public class patch_Player
 				if (!IsVerticalStuck(myFriend))
 					fromBehind = (self.bodyChunks[0].pos.x < myFriend.bodyChunks[0].pos.x) == (myFriend.flipDirection > 0);
 				else
-                    fromBehind = (self.bodyChunks[0].pos.y < myFriend.bodyChunks[0].pos.y) == (myFriend.bodyChunks[0].pos.y > myFriend.bodyChunks[1].pos.y);
-            }
+					fromBehind = (self.bodyChunks[0].pos.y < myFriend.bodyChunks[0].pos.y) == (myFriend.bodyChunks[0].pos.y > myFriend.bodyChunks[1].pos.y);
+			}
 			
 			if (myFriend != null && obj != null && !fromBehind) //CHECK FROMBEHIND INSTEAD. THE OTHER ONE IS FLAWED
-                //&& !(IsCramped(myFriend) && PipeStatus(myFriend) == PipeStatus(self))) //NO YOU CAN'T FEED THEM FROM BEHIND...
-            {
+				//&& !(IsCramped(myFriend) && PipeStatus(myFriend) == PipeStatus(self))) //NO YOU CAN'T FEED THEM FROM BEHIND...
+			{
 				//self.wantToGrab = 0; //WILL ATTEMPT TO REGRAB VIA BUFFER IF WE GRAB AND THROW TOO QUICKLY
 				self.wantToPickUp = 0; //DON'T CONFUSE THIS WITH wantToGrab
 				self.dontGrabStuff = 15; //THESE MIGHT NOT BE NEEDED NOW THAT WE FIXED IT 
-                self.GetBelly().frFeed = myFriend;
+				self.GetBelly().frFeed = myFriend;
 				myFriend.GetBelly().frFed = true;
-                //GUESS WE GOTTA RELEASE IT FIRST
-                self.ReleaseGrasp(grsp);
-                //self.ReleaseObject(grsp, eu);
-                //Debug.Log("- THEIR GRASP! " + myFriend.FreeHand());
+				//GUESS WE GOTTA RELEASE IT FIRST
+				self.ReleaseGrasp(grsp);
+				//self.ReleaseObject(grsp, eu);
+				//Debug.Log("- THEIR GRASP! " + myFriend.FreeHand());
 
-                //obj.firstChunk.HardSetPosition(self.bodyChunks[0].pos); //THIS DOESN'T ALWAYS GET IT CLOSE ENOUGH FOR THEM TO GRAB IT
-                obj.firstChunk.MoveFromOutsideMyUpdate(eu, myFriend.bodyChunks[0].pos);
+				//obj.firstChunk.HardSetPosition(self.bodyChunks[0].pos); //THIS DOESN'T ALWAYS GET IT CLOSE ENOUGH FOR THEM TO GRAB IT
+				obj.firstChunk.MoveFromOutsideMyUpdate(eu, myFriend.bodyChunks[0].pos);
 				obj.firstChunk.vel *= 0f;
 
-                //FORCE THEM TO GRAB OUR OBJECT 
-                // myFriend.Grab(obj, 1, obj.mainBodyChunk, Creature.Grasp.Shareability.CanOnlyShareWithNonExclusive, 0.5f, true, false);
-                myFriend.SlugcatGrab(obj, Math.Abs(myFriend.FreeHand()));
+				//FORCE THEM TO GRAB OUR OBJECT 
+				// myFriend.Grab(obj, 1, obj.mainBodyChunk, Creature.Grasp.Shareability.CanOnlyShareWithNonExclusive, 0.5f, true, false);
+				myFriend.SlugcatGrab(obj, Math.Abs(myFriend.FreeHand()));
 				self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Complete, self.mainBodyChunk, false, 1.3f, 1f); //Slugcat_Regain_Footing
-                self.room.PlaySound(SoundID.Slugcat_Down_On_Fours, self.mainBodyChunk, false, 1.4f, 1f);
-                self.slowMovementStun = 10;
-            }
+				self.room.PlaySound(SoundID.Slugcat_Down_On_Fours, self.mainBodyChunk, false, 1.4f, 1f);
+				self.slowMovementStun = 10;
+			}
 		}
 		
 		if (self.GetBelly().frFeed != null)
 		{
 			Player myFriend = self.GetBelly().frFeed;
-            //Debug.Log("--continue frFeed " + self.input[0].thrw + " - " + self.input[0].pckp + " - " + myFriend.GetBelly().frFed);
+			//Debug.Log("--continue frFeed " + self.input[0].thrw + " - " + self.input[0].pckp + " - " + myFriend.GetBelly().frFed);
 
-            if (IsFeedHeld(self) && myFriend.GetBelly().frFed)
+			if (IsFeedHeld(self) && myFriend.GetBelly().frFed)
 			{
 				myFriend.GetBelly().frFed = true;
 				myFriend.swallowAndRegurgitateCounter = 75;
 				myFriend.Blink(10);
 				if (myFriend.eatCounter > 10)
 					myFriend.eatCounter = 10;
-                //GRAVITATE TOGETHER
-                self.bodyChunks[0].vel.x += 1f * (self.bodyChunks[0].pos.x < myFriend.bodyChunks[0].pos.x ? 1 : -1);
+				//GRAVITATE TOGETHER
+				self.bodyChunks[0].vel.x += 1f * (self.bodyChunks[0].pos.x < myFriend.bodyChunks[0].pos.x ? 1 : -1);
 				myFriend.bodyChunks[0].vel.x -= 1f * (self.bodyChunks[0].pos.x < myFriend.bodyChunks[0].pos.x ? 1 : -1);
-                //MOVE OUR HANDS TOWARDS THEM -NOT EVEN CLOSE BUT WHATEVER IT'S MOVEMENT
-                //WE MOVED THIS TO PATCH_SLUGCATHANDS WHERE IT BELONGS
+				//MOVE OUR HANDS TOWARDS THEM -NOT EVEN CLOSE BUT WHATEVER IT'S MOVEMENT
+				//WE MOVED THIS TO PATCH_SLUGCATHANDS WHERE IT BELONGS
 
-                return true;
+				return true;
 			}
 				//THINGS
 			else //WE STOPPED HOLDING THE KEYS, CANCEL THE STUFF
 			{
-                Debug.Log("--ENDING frFeed " + self.input[0].thrw + " - " + self.input[0].pckp + " - " + myFriend.GetBelly().frFed);
-                self.GetBelly().frFeed = null;
+				Debug.Log("--ENDING frFeed " + self.input[0].thrw + " - " + self.input[0].pckp + " - " + myFriend.GetBelly().frFed);
+				self.GetBelly().frFeed = null;
 				myFriend.GetBelly().frFed = false; //THIS SHOULD TURN OFF BY ITSELF I THINK
 				
 			}
@@ -3562,20 +3562,20 @@ public class patch_Player
 		if (self.input[0].thrw)
 		{
 			if(self.eatCounter > 1)
-                self.eatCounter--;
-            if (self.eatMeat > 1)
-                self.eatMeat--;
-        }
+				self.eatCounter--;
+			if (self.eatMeat > 1)
+				self.eatMeat--;
+		}
 			
 
-        return false; //WE'RE NOT DOING ANY OF THAT. CONTINUE AS USUAL
+		return false; //WE'RE NOT DOING ANY OF THAT. CONTINUE AS USUAL
 	}
 	
 	
 
 
 	public static void BP_GrabUpdate1(Player self, bool eu)
-    {
+	{
 		//SLUGONBACK UPDATE IS RUN HERE, BUT INCRIMENT CHECKS ARE DECIED AFTER
 		//NEVER ALLOW US TO STOW OUR PARTNER TO OUR BACK IF THEY ARE STUCK - OR PULLING!!
 		if (self.slugOnBack != null)
@@ -3603,10 +3603,10 @@ public class patch_Player
 
 	public static void BP_GrabUpdate3(Player self, bool eu, int preFreeHand)
 	{
-        
+		
 
-        //WANTS TO PICKUP WILL ALWAYS BE 0 IF AN ITEM WAS IN RANGE, EVEN IF WE COULDNT PICK IT UP
-        if (BPOptions.backFoodStorage.Value && self.input[0].pckp && !self.input[1].pckp && self.pickUpCandidate != null && self.pickUpCandidate is IPlayerEdible && self.Grabability(self.pickUpCandidate) == Player.ObjectGrabability.OneHand && self.GetBelly().foodOnBack != null) //self.wantToPickUp > 0 
+		//WANTS TO PICKUP WILL ALWAYS BE 0 IF AN ITEM WAS IN RANGE, EVEN IF WE COULDNT PICK IT UP
+		if (BPOptions.backFoodStorage.Value && self.input[0].pckp && !self.input[1].pckp && self.pickUpCandidate != null && self.pickUpCandidate is IPlayerEdible && self.Grabability(self.pickUpCandidate) == Player.ObjectGrabability.OneHand && self.GetBelly().foodOnBack != null) //self.wantToPickUp > 0 
 		{
 			// Debug.Log("--PICKUP CANDIDATE " + preFreeHand);
 			//IF WE'RE HOLDING TWO ITEMS OR ONE BIG TWO HANDED ITEM
@@ -3629,9 +3629,9 @@ public class patch_Player
 		}
 
 
-        //CHECK FOR THE BACK FOOD STOWE
-        bool backFoodBtn = IsBackFoodPressed(self);
-        if (BPOptions.backFoodStorage.Value && self.GetBelly().foodOnBack != null && ((self.input[0].pckp && !self.input[1].pckp && self.pickUpCandidate == null && !IsBackFoodBtnBound(self)) || backFoodBtn)) // && self.switchHandsProcess == 0f)
+		//CHECK FOR THE BACK FOOD STOWE
+		bool backFoodBtn = IsBackFoodPressed(self);
+		if (BPOptions.backFoodStorage.Value && self.GetBelly().foodOnBack != null && ((self.input[0].pckp && !self.input[1].pckp && self.pickUpCandidate == null && !IsBackFoodBtnBound(self)) || backFoodBtn)) // && self.switchHandsProcess == 0f)
 		{
 			bool flag4 = true; // self.grasps[0] != null || self.grasps[1] != null;
 			if (self.grasps[0] != null && (self.Grabability(self.grasps[0].grabbed) == Player.ObjectGrabability.TwoHands || self.Grabability(self.grasps[0].grabbed) == Player.ObjectGrabability.Drag))
@@ -3670,7 +3670,7 @@ public class patch_Player
 					{
 						// Debug.Log("-DOUBLE TAPPED - FOOD TO HAND! ");
 						self.GetBelly().foodOnBack.FoodToHand(eu);
-                        return;
+						return;
 					}
 					else if (IsStuckOrWedged(self) == false)
 					{
@@ -3732,20 +3732,20 @@ public class patch_Player
 					self.swallowAndRegurgitateCounter = 0; //SO GOURMAND DOESNT FABRICATE STUFF WHILE WE'RE OVEREATING
 				}
 
-                //SOME SPECIALTIES FOR THE OUTSIDER
-    //            if (self.slugcatStats?.name?.value == "Outsider") // && self.FoodInStomach >= self.MaxFoodInStomach)
+				//SOME SPECIALTIES FOR THE OUTSIDER
+	//			if (self.slugcatStats?.name?.value == "Outsider") // && self.FoodInStomach >= self.MaxFoodInStomach)
 				//{
-    //                Debug.Log("BP - CAMERA TRIGGER FAILED TO SWITCH " + self.swallowAndRegurgitateCounter);
-    //                if (self.swallowAndRegurgitateCounter >= 29 && self.grasps[num5] != null && (self.grasps[num5].grabbed is FlareBomb || self.grasps[num5].grabbed is FirecrackerPlant || self.grasps[num5].grabbed is FlyLure || self.grasps[num5].grabbed is BubbleGrass || self.grasps[num5].grabbed is PuffBall))
-    //                {
+	//				Debug.Log("BP - CAMERA TRIGGER FAILED TO SWITCH " + self.swallowAndRegurgitateCounter);
+	//				if (self.swallowAndRegurgitateCounter >= 29 && self.grasps[num5] != null && (self.grasps[num5].grabbed is FlareBomb || self.grasps[num5].grabbed is FirecrackerPlant || self.grasps[num5].grabbed is FlyLure || self.grasps[num5].grabbed is BubbleGrass || self.grasps[num5].grabbed is PuffBall))
+	//				{
 				//		self.SwallowObject(num5);
-    //                    self.swallowAndRegurgitateCounter = 0;
-    //                    (self.graphicsModule as PlayerGraphics).swallowing = 20;
+	//					self.swallowAndRegurgitateCounter = 0;
+	//					(self.graphicsModule as PlayerGraphics).swallowing = 20;
 				//		return;
-    //                }
-    //            }
+	//				}
+	//			}
 
-                num5++;
+				num5++;
 			}
 
 			if (num3 > -1 && self.wantToPickUp < 1 && (self.input[0].pckp || self.eatCounter <= 15) && self.Consious && Custom.DistLess(self.mainBodyChunk.pos, self.mainBodyChunk.lastPos, 3.6f))
@@ -3760,19 +3760,19 @@ public class patch_Player
 						|| (self.room.game.session is ArenaGameSession && self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.gameType == MoreSlugcatsEnums.GameTypeID.Challenge && self.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.challengeMeta.ascended)) 
 						&& self.grasps[num3].grabbed is Fly && self.eatCounter < 1
 						&& !self.GetBelly().frFed //FORCE FEEDING US 
-                        && !IsFoodLover()) //SKIP IF FOOD-LOVER IS ENABLED! SAIMNT CAN EAT EM
+						&& !IsFoodLover()) //SKIP IF FOOD-LOVER IS ENABLED! SAIMNT CAN EAT EM
 					{
-                        //ORIG WILL HANDLE THIS NEXT TICK
-                        if (self.room.game.IsArenaSession)
+						//ORIG WILL HANDLE THIS NEXT TICK
+						if (self.room.game.IsArenaSession)
 						{
 							//NO DON'T MAKE US FATTER PLS. UNDO THE UPCOMING FOOD GAIN BUT STILL GIVE US A POINT
 							self.SubtractFood(1);
-                            self.room.game.GetArenaGameSession.arenaSitting.players[self.playerState.playerNumber].AddSandboxScore(1);
-                        }
-                    }
+							self.room.game.GetArenaGameSession.arenaSitting.players[self.playerState.playerNumber].AddSandboxScore(1);
+						}
+					}
 
 
-                    else if (self.eatCounter < 1)
+					else if (self.eatCounter < 1)
 					{
 						//HEY DON'T FORGET THIS PART
 						if (self.spearOnBack != null)
@@ -3792,7 +3792,7 @@ public class patch_Player
 	//MY FOOLISH ATTEMPT TO MAKE SEEDCOBS EDIBLE LIKE MEAT EATERS EATING CORPSES
 	public static void BP_GrabUpdate6(Player self, bool eu)
 	{
-        //SPEARMASTER CAN'T DO THIS
+		//SPEARMASTER CAN'T DO THIS
 		if (BPOptions.detachablePopcorn.Value == false || (ModManager.MSC && self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear && !IsFoodLover()))
 			return;
 
@@ -3838,7 +3838,7 @@ public class patch_Player
 		
 		PhysicalObject myFriend = patch_Player.FindPlayerTopInRange(self, 40f);
 		if (myFriend != null && self.CanIPickThisUp(myFriend) && IsStuckOrWedged(myFriend as Player))
-        {
+		{
 			result = myFriend;
 		}
 		//Debug.Log("ARE YOU FRIEND? " + result + "-" + myFriend + "-" + (myFriend != null && self.CanIPickThisUp(myFriend)));
@@ -3846,109 +3846,109 @@ public class patch_Player
 	}
 
 
-    private static void Player_ReleaseObject(On.Player.orig_ReleaseObject orig, Player self, int grasp, bool eu)
-    {
-        if (self.grasps[grasp].grabbed is Spear)
-            self.GetBelly().ignoreSpears = 40;
+	private static void Player_ReleaseObject(On.Player.orig_ReleaseObject orig, Player self, int grasp, bool eu)
+	{
+		if (self.grasps[grasp].grabbed is Spear)
+			self.GetBelly().ignoreSpears = 40;
 		else
-            self.GetBelly().ignoreSpears = 0;
+			self.GetBelly().ignoreSpears = 0;
 
-        orig(self, grasp, eu);
-    }
+		orig(self, grasp, eu);
+	}
 	
 	
 	public static bool IsFeedPressed(Player player)
-    {
+	{
 		bool pressed = player.input[0].thrw && !player.input[1].thrw && player.input[0].pckp;
-        if (BellyPlus.improvedInputEnabled && !pressed)
-            pressed = player.WantsToFeed();
-        
+		if (BellyPlus.improvedInputEnabled && !pressed)
+			pressed = player.WantsToFeed();
+		
 		return pressed;
-    }
+	}
 
-    public static bool IsFeedHeld(Player player)
-    {
+	public static bool IsFeedHeld(Player player)
+	{
 		bool held = player.input[0].thrw && player.input[0].pckp;
 		if (BellyPlus.improvedInputEnabled && !held)
 			held = player.HoldingFeed();
 
 		return held;
-    }
+	}
 
-    public static bool IsBackFoodPressed(Player player)
-    {
-        if (BellyPlus.improvedInputEnabled)
-            return player.WantsBackFood();
-        else
+	public static bool IsBackFoodPressed(Player player)
+	{
+		if (BellyPlus.improvedInputEnabled)
+			return player.WantsBackFood();
+		else
 			return false;
-    }
+	}
 	
 	public static bool IsBackFoodBtnBound(Player player)
-    {
-        if (BellyPlus.improvedInputEnabled)
-            return CheckFoodBtnBound(player);
-        else
+	{
+		if (BellyPlus.improvedInputEnabled)
+			return CheckFoodBtnBound(player);
+		else
 			return false;
-    }
+	}
 
-    public static bool CheckFoodBtnBound(Player player)
-    {
-        return RWInputMod.BackFoodBound(player);
-    }
+	public static bool CheckFoodBtnBound(Player player)
+	{
+		return RWInputMod.BackFoodBound(player);
+	}
 
 
-    //HAPPENS IN PLACE OF JUMP
-    public static void Heave(Player self)
+	//HAPPENS IN PLACE OF JUMP
+	public static void Heave(Player self)
 	{
 		
 	}
 
-    //   public static void Player_Jump(On.Player.orig_Jump orig, Player self)
-    //{
-    //       Debug.Log("-----JUMP PRESSED!: " + self.canJump);
-    //       orig.Invoke(self);
-    //   }
-    //IF WE'RE STUCK, DON'T JUMP. SPACEBAR IS FOR SOMETHING ELSE NOW
-    //I THINK THIS IS UNUSED NOW THAT WE IL-HOOKED SELF.WANTSTOJUMP FOR BETTER COMPATIBILITY
+	//   public static void Player_Jump(On.Player.orig_Jump orig, Player self)
+	//{
+	//	   Debug.Log("-----JUMP PRESSED!: " + self.canJump);
+	//	   orig.Invoke(self);
+	//   }
+	//IF WE'RE STUCK, DON'T JUMP. SPACEBAR IS FOR SOMETHING ELSE NOW
+	//I THINK THIS IS UNUSED NOW THAT WE IL-HOOKED SELF.WANTSTOJUMP FOR BETTER COMPATIBILITY
 
-    //MAKE FAT PLAYER BOUNCY
-    private static void Player_JumpOnChunk(On.Player.orig_JumpOnChunk orig, Player self)
-    {
+	//MAKE FAT PLAYER BOUNCY
+	private static void Player_JumpOnChunk(On.Player.orig_JumpOnChunk orig, Player self)
+	{
 		//DO THE CALCULATIONS BEFORE ORIG RUNS BECAUSE IT CLEARS THE JUMP CHUNK
 		float bounceMult = 1f;
 		float xMult = 1f;
-        if (!BellyPlus.VisualsOnly() && self.jumpChunk != null && self.jumpChunk.owner is Player trampoline && !trampoline.standing)
-        {
+		if (!BellyPlus.VisualsOnly() && self.jumpChunk != null && self.jumpChunk.owner is Player trampoline && !trampoline.standing)
+		{
 			bounceMult = Custom.LerpMap((GetChubFloatValue(trampoline) - 2f) + (GetOverstuffed(trampoline) / 5f), 0, 6, 0f, 1.5f);
 			if (bounceMult > 0.2)
 				self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1.6f, 0.6f);
-            //Debug.Log("BOUNCE " + bounceMult);
+			//Debug.Log("BOUNCE " + bounceMult);
 			if (IsStuck(trampoline) && trampoline.GetBelly().stuckVector.y == -1)
 			{
 				bounceMult /= 2f;
-                xMult /= 2f;
-                //COPIED AND PASTED FROM THE PUSHING FORMULAS, MOSTLY. WITH EXTRA UMF FOR WEIGHTY PUSHERS
-                float boostAmnt = 35 * Custom.LerpMap((GetChubFloatValue(self) - 2f) + (GetOverstuffed(self) / 5f), 0, 6, 1f, 2.0f); //STRONGER PUSHES FOR HEAVIER SCUGS
-                float loosenAmnt = boostAmnt;
-                ObjGainStuckStrain(trampoline, boostAmnt / 2f);
-                ObjGainLoosenProg(trampoline, (loosenAmnt / 6000f) * (ObjIsSlick(trampoline) ? 3f : 1f));
-                ObjGainBoostStrain(trampoline, 0, 12, 20); 
-                ObjGainSquishForce(trampoline, 17, 22);
-            }
-            TrySplat(trampoline, 1, new Vector2(0, -1), 0.75f, 1f);
-        }
+				xMult /= 2f;
+				//COPIED AND PASTED FROM THE PUSHING FORMULAS, MOSTLY. WITH EXTRA UMF FOR WEIGHTY PUSHERS
+				float boostAmnt = 35 * Custom.LerpMap((GetChubFloatValue(self) - 2f) + (GetOverstuffed(self) / 5f), 0, 6, 1f, 2.0f); //STRONGER PUSHES FOR HEAVIER SCUGS
+				float loosenAmnt = boostAmnt;
+				ObjGainStuckStrain(trampoline, boostAmnt / 2f);
+				ObjGainLoosenProg(trampoline, (loosenAmnt / 6000f) * (ObjIsSlick(trampoline) ? 3f : 1f));
+				ObjGainBoostStrain(trampoline, 0, 12, 20); 
+				ObjGainSquishForce(trampoline, 17, 22);
+			}
+			TrySplat(trampoline, 1, new Vector2(0, -1), 0.75f, 1f);
+		}
 		orig(self);
 
 		self.bodyChunks[0].vel.y *= 1f + bounceMult;
-        self.bodyChunks[1].vel.y *= 1f + bounceMult;
-        self.bodyChunks[0].vel.x *= xMult;
-        self.bodyChunks[1].vel.x *= xMult;
-    }
+		self.bodyChunks[1].vel.y *= 1f + bounceMult;
+		self.bodyChunks[0].vel.x *= xMult;
+		self.bodyChunks[1].vel.x *= xMult;
+	}
 
 
-    public static void Player_Jump(On.Player.orig_Jump orig, Player self)
+	public static void Player_Jump(On.Player.orig_Jump orig, Player self)
 	{
-        if (BellyPlus.VisualsOnly())
+		if (BellyPlus.VisualsOnly())
 		{
 			orig.Invoke(self);
 			return;
@@ -3957,144 +3957,144 @@ public class patch_Player
 		//Debug.Log("-----JUMP PRESSED!: " + self.canJump);
 		
 		if (!(IsStuck(self) || self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther || self.GetBelly().boostCounter > 0) )
-        {
-            //MOVED TO HEAVE() - NEVERMIND IT'S BACK
-            //
+		{
+			//MOVED TO HEAVE() - NEVERMIND IT'S BACK
+			//
 			
-            //Debug.Log("RUN ORIGINAL JUMP!!: " + self.Malnourished + " AEROBIC "+ self.aerobicLevel);
+			//Debug.Log("RUN ORIGINAL JUMP!!: " + self.Malnourished + " AEROBIC "+ self.aerobicLevel);
 			bool onBeamTip = self.animation == Player.AnimationIndex.BeamTip;//WE NEED TO DECLARE THIS EARLY, ITS ABOUT TO CHANGE.
-            bool climbBeam = (self.animation == Player.AnimationIndex.ClimbOnBeam);
-            bool standBeam = (self.animation == Player.AnimationIndex.StandOnBeam);
-            bool specialJump = (self.animation == Player.AnimationIndex.Flip || self.animation == Player.AnimationIndex.Roll || self.animation == Player.AnimationIndex.BellySlide);
-            //TRY TO GUESS IF WE'RE TRYING TO LINE OURSELVES UP WITH A PIPE BELOW US FROM A BEAM TIP
-            if ((onBeamTip || (climbBeam && self.input[0].y < 1)) && self.input[0].x == 0)
-            {
-                //MOVED THIS TO A METHOD
-                DeadFall(self);
+			bool climbBeam = (self.animation == Player.AnimationIndex.ClimbOnBeam);
+			bool standBeam = (self.animation == Player.AnimationIndex.StandOnBeam);
+			bool specialJump = (self.animation == Player.AnimationIndex.Flip || self.animation == Player.AnimationIndex.Roll || self.animation == Player.AnimationIndex.BellySlide);
+			//TRY TO GUESS IF WE'RE TRYING TO LINE OURSELVES UP WITH A PIPE BELOW US FROM A BEAM TIP
+			if ((onBeamTip || (climbBeam && self.input[0].y < 1)) && self.input[0].x == 0)
+			{
+				//MOVED THIS TO A METHOD
+				DeadFall(self);
 
-                //WE NEED TO PRETEND THAT WE WERE HOLDING DOWN THIS FRAME OR THE GAME ADDS RANDOM DRIFT TO OUR JUMP :/
-                if (climbBeam)
-                    self.input[0].y = -1;
-            }
+				//WE NEED TO PRETEND THAT WE WERE HOLDING DOWN THIS FRAME OR THE GAME ADDS RANDOM DRIFT TO OUR JUMP :/
+				if (climbBeam)
+					self.input[0].y = -1;
+			}
 
 			if (onBeamTip)
 				self.GetBelly().weightless = 5; //SO JUMPING FROM BEAM TIPS ISN'T NEARLY AS PUNISHING
 
-            orig.Invoke(self);
+			orig.Invoke(self);
 			//self.Jump();
 
 			//INCREASING THIS VALUE SHOULDN'T CHANGE THE GAME, BUT WILL EXTEND THE RANGE OUR POUNCE SHOVES ARE REGISTERED
 			if (self.simulateHoldJumpButton == 6)
-                self.simulateHoldJumpButton = 10;
+				self.simulateHoldJumpButton = 10;
 
 
-            //IF WE'RE REAL FAT, LOWER OUR JUMP (INCURS WAY EARLY WITH EASILY WINDED. SLIGHTLY EARLIER IN HARD MODE)
-            // float stuffing = GetOverstuffed(self) + ((GetChubFloatValue(self) * (BPOptions.easilyWinded.Value ? 1.5f : 1)) - (BPOptions.hardMode.Value ? 2 : 3) - (self.gourmandExhausted ? 2 : 0));
-            float stuffing = GetOverstuffed(self) + ((GetChubFloatValue(self)) - (BPOptions.easilyWinded.Value ? 1 : 3) - (self.gourmandExhausted ? 2 : 0));
-            //float preStuffing = stuffing;
-            //WITH THIS SETUP, WEIGHT PENALTY CAPS AT 14 (OR LIKE 7+ EXTRA FOOD PIPS)
-            stuffing *= (1 + (Mathf.Min(BottomHeavyDiffScale() * 1.2f, 0) / 10f)); //LET EASY MODE PLAYERS GET UP MUCH EASIER 
-                                                                                         //Debug.Log("-----STUFFING TEST!: " + stuffing + " PRE: " + preStuffing);
+			//IF WE'RE REAL FAT, LOWER OUR JUMP (INCURS WAY EARLY WITH EASILY WINDED. SLIGHTLY EARLIER IN HARD MODE)
+			// float stuffing = GetOverstuffed(self) + ((GetChubFloatValue(self) * (BPOptions.easilyWinded.Value ? 1.5f : 1)) - (BPOptions.hardMode.Value ? 2 : 3) - (self.gourmandExhausted ? 2 : 0));
+			float stuffing = GetOverstuffed(self) + ((GetChubFloatValue(self)) - (BPOptions.easilyWinded.Value ? 1 : 3) - (self.gourmandExhausted ? 2 : 0));
+			//float preStuffing = stuffing;
+			//WITH THIS SETUP, WEIGHT PENALTY CAPS AT 14 (OR LIKE 7+ EXTRA FOOD PIPS)
+			stuffing *= (1 + (Mathf.Min(BottomHeavyDiffScale() * 1.2f, 0) / 10f)); //LET EASY MODE PLAYERS GET UP MUCH EASIER 
+																						 //Debug.Log("-----STUFFING TEST!: " + stuffing + " PRE: " + preStuffing);
 
-            if (self.slugcatStats?.name?.value == "Cloudtail")
-                stuffing = Mathf.Max(0, (stuffing - 5) * 0.8f);
+			if (self.slugcatStats?.name?.value == "Cloudtail")
+				stuffing = Mathf.Max(0, (stuffing - 5) * 0.8f);
 
-            //OR IF WE'RE CARRYING A FAT PARTNER!
-            // if (BellyPlus.jollyCoopEnabled)
-            Player backPlayer = GetHeaviestPlayerOnBack(self); //, playerNum);
-            if (backPlayer != null)
-                stuffing = Mathf.Max(stuffing, GetOverstuffed(backPlayer) + GetChubFloatValue(backPlayer) - 2);
+			//OR IF WE'RE CARRYING A FAT PARTNER!
+			// if (BellyPlus.jollyCoopEnabled)
+			Player backPlayer = GetHeaviestPlayerOnBack(self); //, playerNum);
+			if (backPlayer != null)
+				stuffing = Mathf.Max(stuffing, GetOverstuffed(backPlayer) + GetChubFloatValue(backPlayer) - 2);
 
-            //Debug.Log("-----STUFFING!: " + stuffing);
-            //DON'T LOWER OUR JUMP IF IT'S FROM A BEAM TIP. IT'S REALLY EASY TO SOFTLOCK PEOPLE THAT WAY
-            if (stuffing > 0 && !onBeamTip && self.simulateHoldJumpButton <= 0)
-            {
-                //OKAY JUST SO OUR MODIFIERS AREN'T MADE OBSOLETE, LET'S CAP THINGS AT THE TOP HERE INSTEAD OF AT THE END
-                stuffing = Mathf.Min(stuffing, 14); //THIS SCALES, SO LOWER DIFFICULTIES STILL HAVE A HIGHER RANGE
-                                                    //WAIT BUT WE SHOULD STILL ALSO CAP AT THE BOTTOM TOO, IN CASE EASILY WINDED ADDED A TON OF PENALTY. THAT'S FINE
+			//Debug.Log("-----STUFFING!: " + stuffing);
+			//DON'T LOWER OUR JUMP IF IT'S FROM A BEAM TIP. IT'S REALLY EASY TO SOFTLOCK PEOPLE THAT WAY
+			if (stuffing > 0 && !onBeamTip && self.simulateHoldJumpButton <= 0)
+			{
+				//OKAY JUST SO OUR MODIFIERS AREN'T MADE OBSOLETE, LET'S CAP THINGS AT THE TOP HERE INSTEAD OF AT THE END
+				stuffing = Mathf.Min(stuffing, 14); //THIS SCALES, SO LOWER DIFFICULTIES STILL HAVE A HIGHER RANGE
+													//WAIT BUT WE SHOULD STILL ALSO CAP AT THE BOTTOM TOO, IN CASE EASILY WINDED ADDED A TON OF PENALTY. THAT'S FINE
 				
 				//5-24-23 POLE AND BEAM JUMPING STILL TOO HARD... RAISE THE MINIMUM INSTEAD OF CONTINUING THE DECLINE
 				float poleLn = 1f;
 				if (climbBeam || standBeam)
 					poleLn = 1.5f;
 				
-                float powerMod = 1f;
-                if (!(self.isNPC && self.isSlugpup))
-                    self.GetBelly().corridorExhaustion += Mathf.CeilToInt(Mathf.Min(20 + (stuffing * poleLn) * 3f, 45f));
-                float exMod = GetExhaustionMod(self, 45); //60
-                if (exMod > 0.5f || self.lungsExhausted)
-                    MakeStrainSparks(self, 7);
+				float powerMod = 1f;
+				if (!(self.isNPC && self.isSlugpup))
+					self.GetBelly().corridorExhaustion += Mathf.CeilToInt(Mathf.Min(20 + (stuffing * poleLn) * 3f, 45f));
+				float exMod = GetExhaustionMod(self, 45); //60
+				if (exMod > 0.5f || self.lungsExhausted)
+					MakeStrainSparks(self, 7);
 
-                if (self.lungsExhausted && stuffing > 2 && UnityEngine.Random.value < 0.3f)
-                {
-                    powerMod = 0.8f;
-                    self.standing = false;
-                }
-                else
-                    self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, exMod / 1f, 0.6f);
+				if (self.lungsExhausted && stuffing > 2 && UnityEngine.Random.value < 0.3f)
+				{
+					powerMod = 0.8f;
+					self.standing = false;
+				}
+				else
+					self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, exMod / 1f, 0.6f);
 
-                if (self.input[0].x == 0)
-                    stuffing *= 0.5f;
-                if (standBeam || specialJump) //IF FLIPPING, ROLLING, OR BELLY SLIDING
-                    stuffing *= 0.5f;
+				if (self.input[0].x == 0)
+					stuffing *= 0.5f;
+				if (standBeam || specialJump) //IF FLIPPING, ROLLING, OR BELLY SLIDING
+					stuffing *= 0.5f;
 
-                //IF WE'RE SPENDING THE LAST OF OUR STAM... GO ALL OUT!
-                if (!self.lungsExhausted)
-                {
-                    if (exMod >= 1f)
-                        stuffing *= 0.1f;
-                    // else if (self.input[0].x == 0)
-                    // stuffing *= 0.5f;
-                    //else
-                    //	stuffing *= Mathf.Clamp(1.65f - exMod, 0.7f, 1f);
-                    //LETS LET THEM STACK
+				//IF WE'RE SPENDING THE LAST OF OUR STAM... GO ALL OUT!
+				if (!self.lungsExhausted)
+				{
+					if (exMod >= 1f)
+						stuffing *= 0.1f;
+					// else if (self.input[0].x == 0)
+					// stuffing *= 0.5f;
+					//else
+					//	stuffing *= Mathf.Clamp(1.65f - exMod, 0.7f, 1f);
+					//LETS LET THEM STACK
 
 
-                    stuffing *= Mathf.InverseLerp(1f, 0.2f, exMod);
-                }
+					stuffing *= Mathf.InverseLerp(1f, 0.2f, exMod);
+				}
 
-                //LOWER THE JUMPING MODIFIER I THINK...
-                if (BPOptions.easilyWinded.Value)
-                    stuffing *= 2f;
+				//LOWER THE JUMPING MODIFIER I THINK...
+				if (BPOptions.easilyWinded.Value)
+					stuffing *= 2f;
 
-                //POLE JUMPING IS WAY TOO HARD
-                if (climbBeam)
-                    stuffing /= 2f;
+				//POLE JUMPING IS WAY TOO HARD
+				if (climbBeam)
+					stuffing /= 2f;
 				
 
-                //IF THEY'RE POLE CLIMBING,WE NEED THIS. POLES ARE WONKY
-                if (stuffing > 3 && climbBeam)
-                    self.noGrabCounter = 15; // + Mathf.CeilToInt(stuffing);
+				//IF THEY'RE POLE CLIMBING,WE NEED THIS. POLES ARE WONKY
+				if (stuffing > 3 && climbBeam)
+					self.noGrabCounter = 15; // + Mathf.CeilToInt(stuffing);
 
-                //RIVULET IS GENERALLY DOUBLE OUR JUMP HEIGHT AND ABILITIES, BUT THIS IS GOOD ENOUGH
-                float rivScale = self.isRivulet ? 1.5f : 1f;
-                stuffing *= rivScale;
+				//RIVULET IS GENERALLY DOUBLE OUR JUMP HEIGHT AND ABILITIES, BUT THIS IS GOOD ENOUGH
+				float rivScale = self.isRivulet ? 1.5f : 1f;
+				stuffing *= rivScale;
 
-                if (self.jumpBoost > 0f)
-                    self.jumpBoost = Mathf.Max(self.jumpBoost - (stuffing / 4f), 4f * poleLn * rivScale) * powerMod;
-                else
-                {
-                    //float cap = (self.input[0].x == 0) ? 0.7f : 0.5f;
-                    float dampen = Mathf.Max(1f - (0.05f * stuffing), 0.30f * poleLn * rivScale) * powerMod;
-                    self.bodyChunks[0].vel *= dampen;
-                    self.bodyChunks[1].vel *= dampen;
-                }
-            }
-        }
-        else
-        {
-            //IN THE VERY RARE CASE THAT WE ARE CLIMBING A POLE AND ALSO STANDING ON TOP OF A PIPE ENTRANCE...
-            if (IsStuck(self) && self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && self.GetBelly().inPipeStatus == false && self.GetBelly().stuckVector.y == -1 && self.input[0].y == 0)
-            {
-                //self.noGrabCounter = Math.Max(2, self.noGrabCounter);
-                //Debug.Log("---SITTING ON PIPE? " + IsStuck(self) + " - " + self.bodyMode + " - " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().stuckVector.y);
-                //THIS STRAIGHT UP DOESN'T WOOOOORK WKY TH NOT!?!?!
-                orig.Invoke(self);
-            }
+				if (self.jumpBoost > 0f)
+					self.jumpBoost = Mathf.Max(self.jumpBoost - (stuffing / 4f), 4f * poleLn * rivScale) * powerMod;
+				else
+				{
+					//float cap = (self.input[0].x == 0) ? 0.7f : 0.5f;
+					float dampen = Mathf.Max(1f - (0.05f * stuffing), 0.30f * poleLn * rivScale) * powerMod;
+					self.bodyChunks[0].vel *= dampen;
+					self.bodyChunks[1].vel *= dampen;
+				}
+			}
+		}
+		else
+		{
+			//IN THE VERY RARE CASE THAT WE ARE CLIMBING A POLE AND ALSO STANDING ON TOP OF A PIPE ENTRANCE...
+			if (IsStuck(self) && self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && self.GetBelly().inPipeStatus == false && self.GetBelly().stuckVector.y == -1 && self.input[0].y == 0)
+			{
+				//self.noGrabCounter = Math.Max(2, self.noGrabCounter);
+				//Debug.Log("---SITTING ON PIPE? " + IsStuck(self) + " - " + self.bodyMode + " - " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().stuckVector.y);
+				//THIS STRAIGHT UP DOESN'T WOOOOORK WKY TH NOT!?!?!
+				orig.Invoke(self);
+			}
 
-            //Debug.Log("JUMP DISABLED! ");
-            return;
-        }
+			//Debug.Log("JUMP DISABLED! ");
+			return;
+		}
 	}
 	
 	
@@ -4124,31 +4124,31 @@ public class patch_Player
 	
 	public static Player GetHeaviestPlayerOnBack(Player self)
 	{
-        //TIME FOR A MAKEOVER
+		//TIME FOR A MAKEOVER
 		return GetHeaviestOnStack(self, false);
 	}
 	
 	public static Player GetHeaviestOnStack(Player self, bool includeSelf)
 	{
 		Player slug = self;
-        Player heaviestPlayer = slug;
-        float heaviestWeight = GetChubFloatValue(slug) + GetOverstuffed(slug);
+		Player heaviestPlayer = slug;
+		float heaviestWeight = GetChubFloatValue(slug) + GetOverstuffed(slug);
 		//LOOP THROUGH ANY SLUGCATS ON OUR BACK
-        while (slug != null && slug.slugOnBack != null && slug.slugOnBack.slugcat != null)
-        {
-            slug = slug.slugOnBack.slugcat;  //IS... THIS LEGAL?
-            if ((GetChubFloatValue(slug) + GetOverstuffed(slug)) >= heaviestWeight)
-            {
-                heaviestWeight = GetChubFloatValue(slug) + GetOverstuffed(slug);
-                heaviestPlayer = slug;
-            }
-        }
+		while (slug != null && slug.slugOnBack != null && slug.slugOnBack.slugcat != null)
+		{
+			slug = slug.slugOnBack.slugcat;  //IS... THIS LEGAL?
+			if ((GetChubFloatValue(slug) + GetOverstuffed(slug)) >= heaviestWeight)
+			{
+				heaviestWeight = GetChubFloatValue(slug) + GetOverstuffed(slug);
+				heaviestPlayer = slug;
+			}
+		}
 		
 		//IF THE ANSWER WAS OURSELF, RETURN NULL I GUESS
 		if (heaviestPlayer == self && !includeSelf)
 			heaviestPlayer = null;
 
-        return heaviestPlayer;
+		return heaviestPlayer;
 	}
 	
 
@@ -4163,15 +4163,15 @@ public class patch_Player
 			return Player.ObjectGrabability.BigOneHand;
 		}
 		else if (obj is Lizard && !(obj as Lizard).dead && patch_Lizard.IsStuck(obj as Lizard))
-        {
+		{
 			return Player.ObjectGrabability.TwoHands;
 		}
 		else if (obj is SeedCob && BPOptions.detachablePopcorn.Value && !self.isNPC)
-        {
+		{
 			return Player.ObjectGrabability.TwoHands;
 		}
 		else if (obj is Deer der && der.dead && self.CanEatMeat(der) && !self.isNPC)
-        {
+		{
 			return Player.ObjectGrabability.TwoHands;
 		}
 		else
@@ -4246,19 +4246,19 @@ public class patch_Player
 			//	PhysicalObject myItem;
 			//	if (self.grasps[0] != null && self.grasps[0].grabbed is PhysicalObject)
 			//	{
-            //        myItem = self.grasps[0].grabbed;
-            //        self.ReleaseGrasp(0); //DROP OUR FIRST GRASP 
-            //        Debug.Log("TAKE MY ITEM " + targPlayer.FreeHand());
-            //        targPlayer.SlugcatGrab(myItem, targPlayer.FreeHand()); //MAKE THEM TAKE IT (IF THEY CAN)
-            //    }
-            //}
+			//		myItem = self.grasps[0].grabbed;
+			//		self.ReleaseGrasp(0); //DROP OUR FIRST GRASP 
+			//		Debug.Log("TAKE MY ITEM " + targPlayer.FreeHand());
+			//		targPlayer.SlugcatGrab(myItem, targPlayer.FreeHand()); //MAKE THEM TAKE IT (IF THEY CAN)
+			//	}
+			//}
 
 			//SET OUR HELD ITEM INTO OUR OFF-HAND SO THAT THROWING WILL THROW THE PLAYER FIRST
 			if (self.FreeHand() == 1 && graspUsed == 1)
 			{
 				self.SwitchGrasps(0, 1);
 				graspUsed = 0;
-            }
+			}
 
 			self.GetBelly().targetStuck = 40; //SO WE DON'T LET GO RIGHT AWAY
 
@@ -4269,7 +4269,7 @@ public class patch_Player
 			int chunkGrabbed = 0; //ACCORDING TO JOLLYCOOP, THIS IS SOMETIMES SOMETHING ELSE, BUT IT LOOKS COMPLICATED SO IM SKIPPING IT...
 			//UNLESS...
 			if (obj is Player && (IsStuck(obj as Player) == false && InPullingChain(obj as Creature)) && (obj as Player).standing == false) //
-            {
+			{
 				chunkGrabbed = GetClosestBodyChunk(self.bodyChunks[0].pos, (obj as Creature)); //INSTEAD OF JUST GRABBING THEIR BOTTOM, LETS GRAB WHATS CLOSEST!
 				// Debug.Log("FIND THE CLOSEST CHUNK! ");
 			}
@@ -4286,7 +4286,7 @@ public class patch_Player
 				self.GetBelly().landLocked = true;
 		}
 		else
-        {
+		{
 			orig.Invoke(self, obj, graspUsed);
 		}
 		
@@ -4337,7 +4337,7 @@ public class patch_Player
 		
 
 		if (!self.dead) //DON'T DO ANY OF THIS IF WE'RE DEAD. WE DON'T CARE
-        {
+		{
 			
 			self.GetBelly().inPipeStatus = true;
 
@@ -4363,7 +4363,7 @@ public class patch_Player
 
 			//MAYBE THIS WILL STOP HELPERS FROM TELEPORTING THROUGH US OUT OF PIPES?
 			if (GetChubValue(self) >= 3)
-            {
+			{
 				self.bodyChunks[1].pos += newRoom.ShorcutEntranceHoleDirection(pos).ToVector2() * 5f;
 				self.bodyChunks[0].pos += newRoom.ShorcutEntranceHoleDirection(pos).ToVector2() * 5f;
 
@@ -4434,7 +4434,7 @@ public class patch_Player
 		
 		//VISUAL OOMF TO LANDING IMPACT
 		if (firstContact && direction.y < 0)
-        {
+		{
 			float velBoost = 1 + Mathf.Min(((GetChubValue(self) + GetScaledOverstuffed(self)) * 0.1f), 2.5f);
 			float newSpd = speed * velBoost;
 			//DON'T PUSH US INTO THE NEXT TIER OF FALL PUNISHMENTS
@@ -4443,8 +4443,8 @@ public class patch_Player
 			
 			//FUNNY FALLING SOUNDS
 			if (chunk == 1 && newSpd >= 30 && GetOverstuffed(self) > 6)
-                self.room.PlaySound(SoundID.Lizard_Heavy_Terrain_Impact, self.mainBodyChunk, false, 1, 1);
-            
+				self.room.PlaySound(SoundID.Lizard_Heavy_Terrain_Impact, self.mainBodyChunk, false, 1, 1);
+			
 			if (speed < stunVel && newSpd >= stunVel)
 				speed = stunVel - 2f;
 			else if (speed < deathVel && newSpd >= deathVel)
@@ -4468,12 +4468,12 @@ public class patch_Player
 		
 		Vector2 initVel = self.mainBodyChunk.vel;
 		// Player.AnimationIndex initAnim = self.animation;
-        SlugcatStats.Name origClass = self.SlugCatClass;// == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
-        bool slugSlammed = false;
-        bool transformed = false;
+		SlugcatStats.Name origClass = self.SlugCatClass;// == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
+		bool slugSlammed = false;
+		bool transformed = false;
 
-        //CHECK FOR THE WRECKING BALL COMBO
-        if (BPOptions.slugSlams.Value && self.tongue != null)
+		//CHECK FOR THE WRECKING BALL COMBO
+		if (BPOptions.slugSlams.Value && self.tongue != null)
 		{
 			if (self.tongue.Attached && Mathf.Abs(initVel.x) > 6f && otherObject is Creature && !(otherObject as Creature).dead && self.SlugSlamConditions(otherObject) && (otherObject as Creature).abstractCreature.creatureTemplate.smallCreature == false)
 			{
@@ -4550,15 +4550,15 @@ public class patch_Player
 			else if (otherObject is Player && (otherObject as Player).GetBelly().rollingOther > 0)
 				return; //DON'T FLATTEN OUR ROLLER
 			else if (!CheckFriendlyFire(self) && (self.animation == Player.AnimationIndex.Roll || self.animation == Player.AnimationIndex.BellySlide)
-                 && (otherObject is Player || (otherObject is Lizard && patch_Lizard.IsTamed(otherObject as Lizard))))
+				 && (otherObject is Player || (otherObject is Lizard && patch_Lizard.IsTamed(otherObject as Lizard))))
 			{
-                return; //FRIENDLY FIRE!
-            }
-            
-        }
+				return; //FRIENDLY FIRE!
+			}
+			
+		}
 
 		//SPECIAL CASE FOR EVERGREEN
-        if (ChunkyEvergreen(self) && ModManager.MSC)
+		if (ChunkyEvergreen(self) && ModManager.MSC)
 		{
 			if (otherObject is Creature && !(otherObject as Creature).dead
 				&& self.animation == Player.AnimationIndex.Roll
@@ -4566,8 +4566,8 @@ public class patch_Player
 				)
 			{
 				self.SlugCatClass = MoreSlugcatsEnums.SlugcatStatsName.Gourmand;
-                transformed = true;
-            }
+				transformed = true;
+			}
 		 }
 
 
@@ -4582,8 +4582,8 @@ public class patch_Player
 			// self.animation = initAnim;
 		}
 
-        //MAKE SURE A SLUGSLAM ISN'T ABOUT TO SQUASH US WITH GRAVITY
-        if (slugSlammed && self.mainBodyChunk.vel.magnitude >= 40f) //initVel.magnitude < 40f && 
+		//MAKE SURE A SLUGSLAM ISN'T ABOUT TO SQUASH US WITH GRAVITY
+		if (slugSlammed && self.mainBodyChunk.vel.magnitude >= 40f) //initVel.magnitude < 40f && 
 		{
 			//self.mainBodyChunk.vel.Scale(new Vector2(-0.5f, -0.5f)); //TOO BOUNCY!
 			self.mainBodyChunk.vel = initVel * -0.5f;
@@ -4600,13 +4600,13 @@ public class patch_Player
 			//this.AI.CollideWithMouse(otherObject as LanternMouse);
 			
 			if (!IsVerticalStuck(otherObject as Player))
-            {
+			{
 				
 				//RAMMING SPEED BONUS
 				if (otherChunk == 1 && Mathf.Abs(self.bodyChunks[myChunk].vel.x) > 10f)
 				{
-                    ramSpeed = Mathf.Abs(self.bodyChunks[myChunk].vel.x);
-                    patch_Player.ObjGainStuckStrain(otherObject as Player, ramSpeed * 5f);
+					ramSpeed = Mathf.Abs(self.bodyChunks[myChunk].vel.x);
+					patch_Player.ObjGainStuckStrain(otherObject as Player, ramSpeed * 5f);
 					//PlayExternalSound(self, BellyPlus.Fwump1, 0.11f, 1f);
 				}
 
@@ -4621,14 +4621,14 @@ public class patch_Player
 					bodyChunk.vel.x += 0.05f;
 				}
 			}
-            
+			
 			else
-            {
+			{
 				//Debug.Log("FOUL! " + self.bodyChunks[myChunk].vel.y + " ABS: " + Mathf.Abs(self.bodyChunks[myChunk].vel.y) + " REAL" + realRamSpeed.y);
 				if (otherChunk == 1 && self.bodyChunks[myChunk].vel.y < -10f)
 				{
-                    ramSpeed = Mathf.Abs(self.bodyChunks[myChunk].vel.y);
-                    patch_Player.ObjGainStuckStrain(otherObject as Player, ramSpeed * 5f);
+					ramSpeed = Mathf.Abs(self.bodyChunks[myChunk].vel.y);
+					patch_Player.ObjGainStuckStrain(otherObject as Player, ramSpeed * 5f);
 					//PlayExternalSound(self, BellyPlus.Fwump1, 0.11f, 1f);
 				}
 				
@@ -4643,9 +4643,9 @@ public class patch_Player
 					bodyChunk.vel.y += 0.05f;
 				}
 			}
-            
+			
 			if (ramSpeed != 0f)
-            {
+			{
 				ObjGainBoostStrain(otherObject as Player, 5, 15, 22);
 				ObjGainSquishForce(otherObject as Player, 17, 22);
 				//1/5 OF FALL SPEED PROGRESS GAIN
@@ -4669,27 +4669,27 @@ public class patch_Player
 				//STICK TOGETHER INTERACTION - OK WE CAN'T LET THEM KEEP THE DRILL OF DEATH
 				if (self.enteringShortCut != null)
 				{
-                    self.enteringShortCut = null;
-                    self.GetBelly().corridorExhaustion = 125;
-                }
+					self.enteringShortCut = null;
+					self.GetBelly().corridorExhaustion = 125;
+				}
 					
-            }
+			}
 			
 
-            //AND QUIT DRY HUMPING THEM >:( GEEZ
-            if (self.GetBelly().holdJump > 5)
-            {
+			//AND QUIT DRY HUMPING THEM >:( GEEZ
+			if (self.GetBelly().holdJump > 5)
+			{
 				self.GetBelly().holdJump -= 1f;
 				//3-14-23 //THIS MIGHT BE CAUSING ISSUES
 				// otherObject.bodyChunks[otherChunk].vel -= self.bodyChunks[myChunk].vel * 3f;
 				if (!IsVerticalStuck(otherObject as Player))
-                {
+				{
 					//self.bodyChunks[myChunk].vel.x -= self.GetBelly().myFlipValX * 0.2f;
 					self.bodyChunks[0].vel.x -= self.GetBelly().myFlipValX * 0.4f;
 					self.bodyChunks[1].vel.x -= self.GetBelly().myFlipValX * 0.5f;
 				}
 				else
-                {
+				{
 					self.bodyChunks[0].vel.y -= self.GetBelly().myFlipValY * 0.2f;
 					//self.bodyChunks[1].vel.y -= self.GetBelly().myFlipValY * 0.2f;
 				}
@@ -4711,46 +4711,46 @@ public class patch_Player
 			}
 		}
 
-        //SLUGBED 
-        else if (otherObject is Player bedge && (bedge.emoteSleepCounter > 0.1 || bedge.GetBelly().slugBed != 0 || (bedge.touchedNoInputCounter > 6 && bedge.bodyMode == Player.BodyModeIndex.Crawl) || (GetChubValue(self) > GetChubValue(bedge) && bedge.bodyMode == Player.BodyModeIndex.Crawl)) 
+		//SLUGBED 
+		else if (otherObject is Player bedge && (bedge.emoteSleepCounter > 0.1 || bedge.GetBelly().slugBed != 0 || (bedge.touchedNoInputCounter > 6 && bedge.bodyMode == Player.BodyModeIndex.Crawl) || (GetChubValue(self) > GetChubValue(bedge) && bedge.bodyMode == Player.BodyModeIndex.Crawl)) 
 			&& !self.standing && self.bodyChunks[1].ContactPoint.y != -1 && self.bodyChunks[0].ContactPoint.y != -1 && !bedge.isNPC && !self.isNPC && !self.input[0].jmp //THIS IS A GOOD ONE TO MAKE SURE WE AREN'T TRYING TO GET OFF
-            && !IsCramped(bedge) && !IsCramped(self) && !bedge.dead && self.bodyChunks[myChunk].pos.y > bedge.bodyChunks[otherChunk].pos.y) //(GetChubValue(self) >= 3 || GetChubValue(bedge) >= 3 || bedge.GetBelly().slugBed != 0) && 
-        {
-            int targChunk = (self.flipDirection == bedge.flipDirection) ? 1 : 0;
+			&& !IsCramped(bedge) && !IsCramped(self) && !bedge.dead && self.bodyChunks[myChunk].pos.y > bedge.bodyChunks[otherChunk].pos.y) //(GetChubValue(self) >= 3 || GetChubValue(bedge) >= 3 || bedge.GetBelly().slugBed != 0) && 
+		{
+			int targChunk = (self.flipDirection == bedge.flipDirection) ? 1 : 0;
 			float strgt = (self.input[0].x == 0 || self.input[5].x == 0) ? 0.25f : 0f;
-            self.bodyChunks[1].pos.x = Mathf.Lerp(self.bodyChunks[1].pos.x, bedge.bodyChunks[targChunk].pos.x, strgt);
-            self.bodyChunks[1].vel.x *= 0.1f;
-            self.bodyChunks[1].vel.y = Mathf.Max(-1, self.bodyChunks[1].vel.y);
+			self.bodyChunks[1].pos.x = Mathf.Lerp(self.bodyChunks[1].pos.x, bedge.bodyChunks[targChunk].pos.x, strgt);
+			self.bodyChunks[1].vel.x *= 0.1f;
+			self.bodyChunks[1].vel.y = Mathf.Max(-1, self.bodyChunks[1].vel.y);
 			if (myChunk == 1)
 				self.bodyChunks[1].pos.y += 3;
 			else
-                self.bodyChunks[1].pos.y += 1;
+				self.bodyChunks[1].pos.y += 1;
 			
-            //DON'T SLIDE THE OTHER OBJECT AROUND. A LITTLE CHEESY BUT LETS TRY IT
-            bedge.bodyChunks[0].vel.x *= 0.1f;
-            bedge.bodyChunks[1].vel.x *= 0.1f;
+			//DON'T SLIDE THE OTHER OBJECT AROUND. A LITTLE CHEESY BUT LETS TRY IT
+			bedge.bodyChunks[0].vel.x *= 0.1f;
+			bedge.bodyChunks[1].vel.x *= 0.1f;
 
-            self.GetBelly().slugBed = 2;
-            
+			self.GetBelly().slugBed = 2;
+			
 			if (self.graphicsModule != null) //BRING OUR GRAPHICS TO FRONT
-                self.graphicsModule.BringSpritesToFront();
+				self.graphicsModule.BringSpritesToFront();
 
-            //IF THE TOP IS HEAVIER THAN THE BOTTOM
-            int myChub = GetChubValue(self) + (GetOverstuffed(self) / 4);
-            if (myChub >= 3 && myChub > (GetChubValue(bedge) + 3))
+			//IF THE TOP IS HEAVIER THAN THE BOTTOM
+			int myChub = GetChubValue(self) + (GetOverstuffed(self) / 4);
+			if (myChub >= 3 && myChub > (GetChubValue(bedge) + 3))
 			{
-                bedge.GetBelly().slugBed = -2; //SQUASH THE BEDGE
-                //self.bodyChunks[0].vel.y = Mathf.Max(-1, self.bodyChunks[0].vel.y);
-                //self.bodyChunks[0].pos.y += 1;
-            }
+				bedge.GetBelly().slugBed = -2; //SQUASH THE BEDGE
+				//self.bodyChunks[0].vel.y = Mathf.Max(-1, self.bodyChunks[0].vel.y);
+				//self.bodyChunks[0].pos.y += 1;
+			}
 
-            //self.emoteSleepCounter > 1.4f
-            if (self.slugcatStats?.name?.value == "NoirCatto" && bedge.slugcatStats?.name?.value == "Friend" && self.emoteSleepCounter > 1.4f)
-                patch_PlayerGraphics.SolaceUpdate(self);
-        }
+			//self.emoteSleepCounter > 1.4f
+			if (self.slugcatStats?.name?.value == "NoirCatto" && bedge.slugcatStats?.name?.value == "Friend" && self.emoteSleepCounter > 1.4f)
+				patch_PlayerGraphics.SolaceUpdate(self);
+		}
 
-        //ROLLY POLY!!
-        if (otherObject is Player && !self.isSlugpup && !IsCramped(otherObject as Player) && (otherObject as Player).Consious
+		//ROLLY POLY!!
+		if (otherObject is Player && !self.isSlugpup && !IsCramped(otherObject as Player) && (otherObject as Player).Consious
 			&& (GetOverstuffed(otherObject as Player) > 4 || ((otherObject as Player).isGourmand && GetChubValue(otherObject as Player) >= 3))// && self.flipDirection == (otherObject as Player).flipDirection
 			&& ((otherObject as Player).rollCounter > 0 || (otherObject as Player).bodyMode == Player.BodyModeIndex.Crawl || (otherObject as Player).bodyMode == Player.BodyModeIndex.Stand)
 			&& !IsPushingOther(otherObject as Player)
@@ -4764,31 +4764,31 @@ public class patch_Player
 			if (self.input[0].x == myPartner.input[0].x) //WILL THIS LOOP ITSELF DUE TO US FALSIFYING THE X INPUT?
 				myPartner.GetBelly().beingRolled++;
 
-            //THIS SUGGESTS WE'RE TRYING TO GO DOWN INTO A PIPE. DON'T ROLL US
-            if (myPartner.input[0].IntVec == new IntVector2(0, -1))
-                myPartner.GetBelly().beingRolled = 0;
+			//THIS SUGGESTS WE'RE TRYING TO GO DOWN INTO A PIPE. DON'T ROLL US
+			if (myPartner.input[0].IntVec == new IntVector2(0, -1))
+				myPartner.GetBelly().beingRolled = 0;
 			
 			int delay = (self.input[0].x == (otherObject as Player).flipDirection) ? 16 : 26;
-            if (myPartner.GetBelly().beingRolled >= delay)
+			if (myPartner.GetBelly().beingRolled >= delay)
 			{
 				if (myPartner.rollCounter == 0 || myPartner.animation != Player.AnimationIndex.Roll)
 					myPartner.animation = Player.AnimationIndex.Roll;
 				myPartner.standing = false;
 				myPartner.slowMovementStun = 20;
 				(otherObject as Player).flipDirection = self.flipDirection;
-            }
+			}
 			
-            myPartner.rollCounter = 8;
+			myPartner.rollCounter = 8;
 			myPartner.rollDirection = self.flipDirection;
 			myPartner.stopRollingCounter = 0;
-            self.GetBelly().rollingOther = 10;
-            //Debug.Log("ROLLY POLLY! " + myPartner.animation);
+			self.GetBelly().rollingOther = 10;
+			//Debug.Log("ROLLY POLLY! " + myPartner.animation);
 			
-            //MOVE OUR HANDS TOWARDS THEM -NOT EVEN CLOSE BUT WHATEVER IT'S MOVEMENT
-            if (self.graphicsModule != null && (self.graphicsModule as PlayerGraphics).hands.Length >= 2)
+			//MOVE OUR HANDS TOWARDS THEM -NOT EVEN CLOSE BUT WHATEVER IT'S MOVEMENT
+			if (self.graphicsModule != null && (self.graphicsModule as PlayerGraphics).hands.Length >= 2)
 			{
-                (self.graphicsModule as PlayerGraphics).hands[0].absoluteHuntPos = myPartner.bodyChunks[otherChunk].pos - Custom.DirVec(self.bodyChunks[0].pos, myPartner.bodyChunks[otherChunk].pos) * 8f;
-                (self.graphicsModule as PlayerGraphics).hands[1].absoluteHuntPos = myPartner.bodyChunks[otherChunk].pos - Custom.DirVec(self.bodyChunks[0].pos, myPartner.bodyChunks[otherChunk].pos) * 8f;
+				(self.graphicsModule as PlayerGraphics).hands[0].absoluteHuntPos = myPartner.bodyChunks[otherChunk].pos - Custom.DirVec(self.bodyChunks[0].pos, myPartner.bodyChunks[otherChunk].pos) * 8f;
+				(self.graphicsModule as PlayerGraphics).hands[1].absoluteHuntPos = myPartner.bodyChunks[otherChunk].pos - Custom.DirVec(self.bodyChunks[0].pos, myPartner.bodyChunks[otherChunk].pos) * 8f;
 			}
 		}
 
@@ -4808,7 +4808,7 @@ public class patch_Player
 
 
 	public static void PipeExitCollide(Creature self, Creature otherObject, int myChunk, int otherChunk)
-    {
+	{
 		//
 		float critMass = (otherObject as Creature).TotalMass;
 		// if (self.TotalMass >= critMass * 3) //THIS DOESNT WORK SINCE LIZARDS WOULD NEVER BE BUDGED BY SLUGCATS!
@@ -4834,12 +4834,12 @@ public class patch_Player
 		else
 		{
 			if (self is Player)
-            {
+			{
 				self.GetBelly().stuckStrain = 0;
-                self.GetBelly().isStuck = false;
+				self.GetBelly().isStuck = false;
 			}
 			else
-            {
+			{
 				patch_Lizard.PopFree(self, 10, true);
 			}
 				
@@ -4849,7 +4849,7 @@ public class patch_Player
 			launchVect.y = Mathf.Clamp(launchVect.y, -20f, 20f);
 			self.Stun(5);
 			for (int i = 0; i < self.bodyChunks.Length; i++)
-            {
+			{
 				self.bodyChunks[i].vel = launchVect;
 			}
 			if (BPOptions.debugLogs.Value)
@@ -4860,8 +4860,8 @@ public class patch_Player
 		}
 	}
 
-    public static void Player_JollyEmoteUpdate(On.Player.orig_JollyEmoteUpdate orig, Player self)
-    {
+	public static void Player_JollyEmoteUpdate(On.Player.orig_JollyEmoteUpdate orig, Player self)
+	{
 		//LET US SLEEP EMOTE IF WE ARE USING A SLUGBED
 		if (self.GetBelly().slugBed > 0 && self.input[0].y < 0 && !self.input[0].jmp && !self.input[0].pckp && self.input[0].x == 0)
 		{
@@ -4873,12 +4873,12 @@ public class patch_Player
 		}
 		else
 			orig(self);
-    }
+	}
 
 
 
-    public static void BP_CheckInput(On.Player.orig_checkInput orig, Player self)
-    {
+	public static void BP_CheckInput(On.Player.orig_checkInput orig, Player self)
+	{
 		if (BellyPlus.VisualsOnly())
 		{
 			orig.Invoke(self);
@@ -4912,7 +4912,7 @@ public class patch_Player
 			self.GetBelly().pilotTimer--;
 
 
-        if (self.input[0].pckp && !self.input[1].pckp && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther || self.GetBelly().isStuck) && self.input[0].IntVec != new IntVector2(0, 0))
+		if (self.input[0].pckp && !self.input[1].pckp && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther || self.GetBelly().isStuck) && self.input[0].IntVec != new IntVector2(0, 0))
 			self.GetBelly().autoPilot = self.input[0].IntVec;
 
 		//if (self.animation == Player.AnimationIndex.HangFromBeam)
@@ -4922,7 +4922,7 @@ public class patch_Player
 		//THIS IS THE ONLY PLACE THIS CAN REALLY HAPPEN WITHOUT TOUCHINPUT BEING RESET
 		//IF WE'RE HANGING UNDER A VERTICAL BEAM FOR A LONG TIME... GIVE US A STAMINA BONUS SO WE CAN GET UP EVENTUALLY!!!
 		if (self.animation == Player.AnimationIndex.HangFromBeam && ((self.input[0].y == 1 && self.input[1].y == 0) || (self.input[0].jmp && !self.input[1].jmp)) && GetOverstuffed(self) > 0 && !self.lungsExhausted)
-        {
+		{
 			self.GetBelly().corridorExhaustion -= Mathf.Clamp(self.touchedNoInputCounter - 30, 0, 400);
 			//Debug.Log("TOUCHED  HERE WE GO! " + self.touchedNoInputCounter);
 		}
@@ -4939,9 +4939,9 @@ public class patch_Player
 		//self.GetBelly().stuckStrain = 0;
 		self.GetBelly().landLocked = false;
 
-        if (self.GetBelly().foodOnBack != null)
+		if (self.GetBelly().foodOnBack != null)
 		{
-            self.GetBelly().foodOnBack.DropFood();
+			self.GetBelly().foodOnBack.DropFood();
 			//self.GetBelly().foodOnBack = null; //THIS HAS BEEN FIXED NOW, WE DON'T NEED THIS
 		}
 			
@@ -4991,16 +4991,16 @@ public class patch_Player
 				}
 			}
 
-            //OKAY NOW APPLY PLAYER STUN RESISTANCE HERE
-            if (self is Player player && !BellyPlus.VisualsOnly() && BPOptions.fatArmor.Value)
-            {
-                float fbase = Mathf.Max(GetChubValue(self) - 1f, 0) / 15f; // (0.1 - 0.2)
-                float fptwo = (fbase + (GetOverstuffed(player) / 50f)) * (1 + ((BellyPlus.BPODifficulty() * 1.2f) / 10f));  //(hits 0.50 at 7 overstuffed)
-                float stunResist = Mathf.Max(1f - fptwo, 0.5f); //0.5 //ISN'T THIS BACKWARDS?? SHOULDN'T THE MIN BE 1?
-                //Debug.Log("STUN AMNT " + stunResist + " - " + fptwo + " - " + stunResist);
+			//OKAY NOW APPLY PLAYER STUN RESISTANCE HERE
+			if (self is Player player && !BellyPlus.VisualsOnly() && BPOptions.fatArmor.Value)
+			{
+				float fbase = Mathf.Max(GetChubValue(self) - 1f, 0) / 15f; // (0.1 - 0.2)
+				float fptwo = (fbase + (GetOverstuffed(player) / 50f)) * (1 + ((BellyPlus.BPODifficulty() * 1.2f) / 10f));  //(hits 0.50 at 7 overstuffed)
+				float stunResist = Mathf.Max(1f - fptwo, 0.5f); //0.5 //ISN'T THIS BACKWARDS?? SHOULDN'T THE MIN BE 1?
+				//Debug.Log("STUN AMNT " + stunResist + " - " + fptwo + " - " + stunResist);
 				player.stun = Mathf.CeilToInt(player.stun * stunResist);
-            }
-        }
+			}
+		}
 	}
 	
 	
@@ -5027,7 +5027,7 @@ public class patch_Player
 	{
 		//Debug.Log("BASE STUN AMNT " + st);
 
-        if (!BellyPlus.VisualsOnly() && BPOptions.fatArmor.Value && st > 20)
+		if (!BellyPlus.VisualsOnly() && BPOptions.fatArmor.Value && st > 20)
 		{
 			float fbase = Mathf.Max(GetChubValue(self) - 1f, 0) / 15f; // (0.1 - 0.2)
 			float fptwo = (fbase + (GetOverstuffed(self) / 50f)) * (1 + ((BellyPlus.BPODifficulty() * 1.2f) / 10f));  //(hits 0.50 at 7 overstuffed)
@@ -5068,29 +5068,29 @@ public class patch_Player
 	// }
 	
 
-    public static bool BPSpear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
-    {
-        if (result.obj == null || BellyPlus.VisualsOnly() || !BPOptions.fatArmor.Value)
-            return orig.Invoke(self, result, eu);
+	public static bool BPSpear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
+	{
+		if (result.obj == null || BellyPlus.VisualsOnly() || !BPOptions.fatArmor.Value)
+			return orig.Invoke(self, result, eu);
 
-        //WE CAN JUST EDIT THE SPEAR DAMAGE, IT'S NOT AN ISSUE. IT RESETS ITSELF EVERYT TIME IT'S PICKED UP OR THROWN
-        if ((result.obj is Player) && (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
-        {
-            Player myTarget = result.obj as Player;
+		//WE CAN JUST EDIT THE SPEAR DAMAGE, IT'S NOT AN ISSUE. IT RESETS ITSELF EVERYT TIME IT'S PICKED UP OR THROWN
+		if ((result.obj is Player) && (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
+		{
+			Player myTarget = result.obj as Player;
 
-            float myFat = (GetOverstuffed(myTarget) + Mathf.Max(GetChubValue(myTarget) - 1f, 0)) * (1 + ((BellyPlus.BPODifficulty() * 1.2f) / 10f));
-            float saveChance = Mathf.Lerp(0f, 0.65f, Mathf.InverseLerp(0, 15, myFat));
-            if (UnityEngine.Random.value < saveChance)
-            {
-                self.spearDamageBonus /= 10f;
-                Debug.Log("LECHONK SAVE! " + saveChance);
-            }
-        }
-        return orig.Invoke(self, result, eu);
-    }
+			float myFat = (GetOverstuffed(myTarget) + Mathf.Max(GetChubValue(myTarget) - 1f, 0)) * (1 + ((BellyPlus.BPODifficulty() * 1.2f) / 10f));
+			float saveChance = Mathf.Lerp(0f, 0.65f, Mathf.InverseLerp(0, 15, myFat));
+			if (UnityEngine.Random.value < saveChance)
+			{
+				self.spearDamageBonus /= 10f;
+				Debug.Log("LECHONK SAVE! " + saveChance);
+			}
+		}
+		return orig.Invoke(self, result, eu);
+	}
 
 
-    public static void BPdecreaseRopeLength(On.Player.Tongue.orig_decreaseRopeLength orig, Player.Tongue self, float amount)
+	public static void BPdecreaseRopeLength(On.Player.Tongue.orig_decreaseRopeLength orig, Player.Tongue self, float amount)
 	{
 		if (BellyPlus.VisualsOnly())
 		{
@@ -5111,50 +5111,50 @@ public class patch_Player
 		//OKAY ELASTICITY IS NOT WHAT WE THOUGHT IT WAS. IT'S JUST LIKE A NUMBER THAT STARTS AT 1 AND QUICKLY SHRINKS TO 0 AFTER CONNECTING TO SOMETHING
 		bool stretch = false;
 		float totalLength = self.rope.totalLength;
-        float num2 = Custom.LerpMap(Mathf.Abs(0.5f - self.onRopePos), 0.5f, 0.4f, 1.1f, 0.7f);
-        float num3 = self.RequestRope() * Mathf.Lerp(num2, 1f, self.elastic);
-        //if (totalLength > num3)
-        if (totalLength - num3 > 2f) //MATH!.... OR SOMETHING
-        {
+		float num2 = Custom.LerpMap(Mathf.Abs(0.5f - self.onRopePos), 0.5f, 0.4f, 1.1f, 0.7f);
+		float num3 = self.RequestRope() * Mathf.Lerp(num2, 1f, self.elastic);
+		//if (totalLength > num3)
+		if (totalLength - num3 > 2f) //MATH!.... OR SOMETHING
+		{
 			stretch = true;
-            
-        }
-        //Debug.Log("ELASTIC! " + stretch + " - " + (totalLength - num3));
+			
+		}
+		//Debug.Log("ELASTIC! " + stretch + " - " + (totalLength - num3));
 
-        //CHECK IF WE'RE HOLDING A STUCK PLAYER
-        bool pulling = false;
+		//CHECK IF WE'RE HOLDING A STUCK PLAYER
+		bool pulling = false;
 		if (IsGraspingStuckCreature(self.player)) //self.elastic < -0.8f)
 		{
-            self.player.bodyChunkConnections[0].distance /= 2f;
-            
+			self.player.bodyChunkConnections[0].distance /= 2f;
+			
 			//BRO. BE CHILL YOUR BODY
-            self.player.bodyChunks[0].vel /= 2f;
-            self.player.bodyChunks[1].vel /= 4f;
-            self.player.bodyChunks[1].vel.x -= self.player.input[0].x;
+			self.player.bodyChunks[0].vel /= 2f;
+			self.player.bodyChunks[1].vel /= 4f;
+			self.player.bodyChunks[1].vel.x -= self.player.input[0].x;
 
-            if (stretch)
+			if (stretch)
 			{
-                mod = 0f;
-                pulling = true;
-                //self.player.standing = false; //GET THOSE FEET OFF THE GROUND
-                //self.player.bodyMode = Player.BodyModeIndex.Default;
-                if (!self.player.lungsExhausted)
-                {
-                    Creature myPartner = GetGraspedCreature(self.player);
-                    if (ObjIsStuck(myPartner))
-                    {
-                        ObjGainStuckStrain(myPartner, 2);
-                        ObjGainBoostStrain(myPartner, 0, 2, 12);
-                        ObjGainLoosenProg(myPartner, 0.0003f * (ObjIsSlick(myPartner) ? 3f : 1f));
-                    }
-                    MakeStrainSparks(self.player, 1);
-                    if (UnityEngine.Random.value < 0.5f)
+				mod = 0f;
+				pulling = true;
+				//self.player.standing = false; //GET THOSE FEET OFF THE GROUND
+				//self.player.bodyMode = Player.BodyModeIndex.Default;
+				if (!self.player.lungsExhausted)
+				{
+					Creature myPartner = GetGraspedCreature(self.player);
+					if (ObjIsStuck(myPartner))
+					{
+						ObjGainStuckStrain(myPartner, 2);
+						ObjGainBoostStrain(myPartner, 0, 2, 12);
+						ObjGainLoosenProg(myPartner, 0.0003f * (ObjIsSlick(myPartner) ? 3f : 1f));
+					}
+					MakeStrainSparks(self.player, 1);
+					if (UnityEngine.Random.value < 0.5f)
 						self.player.GetBelly().corridorExhaustion += 1;
-                }
+				}
 
-                //BACK IT UP A LITTLE BIT 
-                self.increaseRopeLength(amount / 5f);
-            }
+				//BACK IT UP A LITTLE BIT 
+				self.increaseRopeLength(amount / 5f);
+			}
 			
 		}
 		
@@ -5181,7 +5181,7 @@ public class patch_Player
 
 		bool backedOut = false;
 		if (self.GetBelly().isStuck && self.GetBelly().stuckCoords != new Vector2(0,0)) //&& self.GetBelly().stuckStrain > 0  
-        {
+		{
 			Vector2 newCoords = self.GetBelly().stuckCoords;
 			if (!self.GetBelly().verticalStuck)
 			{
@@ -5255,62 +5255,62 @@ public class patch_Player
 
 
 
-    public static void DoNoirSounds(Player player, bool alt)
-    {
+	public static void DoNoirSounds(Player player, bool alt)
+	{
 		if (player.GetBelly().miscTimer > 0)
 			return; //TOO MUCH MEOWING! WAIT A BIT
 
 		PlaySolaceFiles(player, alt);
-    }
+	}
 
-    public static void PlaySolaceFiles(Player player, bool alt)
-    {
-        float mass = TheFriend.CharacterThings.NoirThings.NoirCatto.DefaultFirstChunkMass;
-        SoundID sound = alt ? TheFriend.CharacterThings.NoirThings.NoirCatto.Meow2SND : TheFriend.CharacterThings.NoirThings.NoirCatto.MeowFrustratedSND;
-        PlayNoirMeow(player, alt, mass, sound);
-    }
+	public static void PlaySolaceFiles(Player player, bool alt)
+	{
+		float mass = TheFriend.CharacterThings.NoirThings.NoirCatto.DefaultFirstChunkMass;
+		SoundID sound = alt ? TheFriend.CharacterThings.NoirThings.NoirCatto.Meow2SND : TheFriend.CharacterThings.NoirThings.NoirCatto.MeowFrustratedSND;
+		PlayNoirMeow(player, alt, mass, sound);
+	}
 
-    public static void PlayNoirMeow(Player player, bool alt, float bodyMass, SoundID sound)
-    {
-        float pitch = Mathf.Max(1f - (player.bodyChunks[1].mass - bodyMass) * 0.65f, 0.15f) - 0.1f;
-        pitch += (UnityEngine.Random.value * 0.2f);
-        if (alt)
-        {
-            player.room?.PlaySound(sound, player.firstChunk, false, 0.9f, pitch + 0.1f);
-        }
-        else
-        {
-            player.room?.PlaySound(sound, player.firstChunk, false, 0.7f, pitch * 0.6f);
-        }
+	public static void PlayNoirMeow(Player player, bool alt, float bodyMass, SoundID sound)
+	{
+		float pitch = Mathf.Max(1f - (player.bodyChunks[1].mass - bodyMass) * 0.65f, 0.15f) - 0.1f;
+		pitch += (UnityEngine.Random.value * 0.2f);
+		if (alt)
+		{
+			player.room?.PlaySound(sound, player.firstChunk, false, 0.9f, pitch + 0.1f);
+		}
+		else
+		{
+			player.room?.PlaySound(sound, player.firstChunk, false, 0.7f, pitch * 0.6f);
+		}
 
-        player.GetBelly().miscTimer = 40;
-    }
+		player.GetBelly().miscTimer = 40;
+	}
 
 
-    //SPLATCAT STUFF
-    //TrySplat(myObject.bodyChunks[0].pos + myObject.bodyChunks[0].vel.normalized * myObject.bodyChunks[0].rad, myObject.GetBelly().stuckVector, 0.5f, 1f);
-    public static void TrySplat(Player player, int chunk, Vector2 normal, float magnitude, float duration)
+	//SPLATCAT STUFF
+	//TrySplat(myObject.bodyChunks[0].pos + myObject.bodyChunks[0].vel.normalized * myObject.bodyChunks[0].rad, myObject.GetBelly().stuckVector, 0.5f, 1f);
+	public static void TrySplat(Player player, int chunk, Vector2 normal, float magnitude, float duration)
 	{
 		if (BellyPlus.splatCatEnabled)
 			DoSplat(player, chunk, normal, magnitude, duration);
 	}
 
-    public static void DoSplat(Player player, int chunk, Vector2 normal, float magnitude, float duration)
-    {
-        //SplatCat.SplatCat.Sq
-        //float magnitude = Mathf.Pow(speed / 20f, 2f);
-        SplatCat.SplatCat.DeformContainer deformContainer;
-        bool flag2 = SplatCat.SplatCat.TryGetDeform(player, out deformContainer);
-        if (flag2)
-        {
-            BodyChunk bodyChunk = player.bodyChunks[chunk];
-            deformContainer.Squish(bodyChunk.pos + bodyChunk.vel.normalized * bodyChunk.rad, normal, magnitude, duration);
-        }
-    }
+	public static void DoSplat(Player player, int chunk, Vector2 normal, float magnitude, float duration)
+	{
+		//SplatCat.SplatCat.Sq
+		//float magnitude = Mathf.Pow(speed / 20f, 2f);
+		SplatCat.SplatCat.DeformContainer deformContainer;
+		bool flag2 = SplatCat.SplatCat.TryGetDeform(player, out deformContainer);
+		if (flag2)
+		{
+			BodyChunk bodyChunk = player.bodyChunks[chunk];
+			deformContainer.Squish(bodyChunk.pos + bodyChunk.vel.normalized * bodyChunk.rad, normal, magnitude, duration);
+		}
+	}
 
 
-    //WHY ARE YOU WAY UP HERE?? - OH, IT'S BECAUSE WE'RE HOPING WE CAN STILL REFERENCE YOU AGAIN IN LIKE 3 FRAMES...
-    public static float crashVel = 0f;
+	//WHY ARE YOU WAY UP HERE?? - OH, IT'S BECAUSE WE'RE HOPING WE CAN STILL REFERENCE YOU AGAIN IN LIKE 3 FRAMES...
+	public static float crashVel = 0f;
 	public static float bonusMomentum = 0f;
 	
 	public static void CheckStuckage(Player self, bool eu)
@@ -5321,7 +5321,7 @@ public class patch_Player
 		
 		//CHECK FOR GRACE PERIOD
 		if (self.GetBelly().noStuck > 0)
-        {
+		{
 			self.GetBelly().noStuck--;
 			self.GetBelly().isStuck = false;
 			self.GetBelly().verticalStuck = false;
@@ -5332,7 +5332,7 @@ public class patch_Player
 		//IF WE'RE BEING PIGGYBACKED, USE OUR PARTNERS INPUT TEMPORARILY...
 		IntVector2 myInputVec = self.input[0].IntVec;
 		if (IsPiggyBacked(self))
-        {
+		{
 			myInputVec = self.onBack.input[0].IntVec;
 		}
 
@@ -5370,7 +5370,7 @@ public class patch_Player
 			vertRearInCorridor = IsTileNarrowFloat(self.onBack, 0, 0, myyB);
 		}
 		else
-        {
+		{
 			frontInCorridor = IsTileNarrowFloat(self, 1, myxF, 0);
 			rearInCorridor = IsTileNarrowFloat(self, 1, myxB, 0);
 			vertFrontInCorridor = IsTileNarrowFloat(self, 1, 0, myyF);
@@ -5427,7 +5427,7 @@ public class patch_Player
 			if (RedirectStuckage(self, false, eu))
 				return; 
 			else
-            {
+			{
 				if (!self.GetBelly().verticalStuck)
 					wedgedInFront = true;
 				else
@@ -5468,10 +5468,10 @@ public class patch_Player
 			case 1f:
 				myChub = 3f + naturalChub * 2;
 				break;
-            case 0f:
-                myChub = 1.5f + (naturalChub * 2f) + (self.GetBelly().bigBelly ? 1 : 0);
-                break;
-            default:
+			case 0f:
+				myChub = 1.5f + (naturalChub * 2f) + (self.GetBelly().bigBelly ? 1 : 0);
+				break;
+			default:
 				myChub = 0f + (naturalChub * 2f) + (self.GetBelly().bigBelly ? 2 : 0);
 				break;
 		}
@@ -5491,8 +5491,8 @@ public class patch_Player
 		float preTileSize = tileSize;
 		
 		float diff = (GapDifficulty() * 1.5f) - (Mathf.Max(0, BellyPlus.BPOGapVariance() - 1) * 5f); //SCALE GAP TIGHTNESS BY VARIANCE SLIGHTLY
-        //AND THEN THIS ONES FOR THE DIFFICULTY MODIFIER. BUT LETS LEAVE THE FIRST 5 STACKS OF THIS ALONE...
-        if (tileSize > 3)
+		//AND THEN THIS ONES FOR THE DIFFICULTY MODIFIER. BUT LETS LEAVE THE FIRST 5 STACKS OF THIS ALONE...
+		if (tileSize > 3)
 			tileSize = 3 + ((tileSize - 3) * (1 + (diff / 10f)));
 		tileSize -= Mathf.Lerp(3, 0, (5 + diff) /5f); // -3 - 0  from easiest to default. HARDER DOESNT INCREASE IT I GUESS
 		
@@ -5500,7 +5500,7 @@ public class patch_Player
 		if (self.GetBelly().bloated && GetChubValue(self) >= -2)
 			tileSize += 1;
 
-        float squeezeThresh = 30 * (tileSize);
+		float squeezeThresh = 30 * (tileSize);
 		// int scaleCap = 260; //HOW HIGH WE GET BEFORE THE REST IS SCALED DOWN
 		// if (squeezeThresh > scaleCap)
 			// squeezeThresh = scaleCap + ((squeezeThresh - scaleCap) / (BPOptions.hardMode.Value ? 1 : 2));
@@ -5537,7 +5537,7 @@ public class patch_Player
 		
 		//WE JUST NOW GOT STUCK --- PREPARE STUCK BWOMP!
 		if (!self.GetBelly().isStuck &&  (vertStuck || wedgedInFront || wedgedBehind))
-        {
+		{
 			//WHAT DIRECTION ARE WE STUCK?
 			if (isVertical)
 			{
@@ -5558,17 +5558,17 @@ public class patch_Player
 			//INTERACTION WITH STICK TOGETHER! IF WE GET STUCK VIA TELEPORT, MAKE IT AN AUTOPILOT! FINALLY A USE FOR THIS THING...
 			if (self.enteringShortCut != null)
 			{
-                self.GetBelly().autoPilot = new IntVector2((int)self.GetBelly().stuckVector.x, (int)self.GetBelly().stuckVector.y);
-                self.GetBelly().pilotTimer = 15;
-            }
+				self.GetBelly().autoPilot = new IntVector2((int)self.GetBelly().stuckVector.x, (int)self.GetBelly().stuckVector.y);
+				self.GetBelly().pilotTimer = 15;
+			}
 				
 
-            //CHECK IF THIS IS THE SAME GAP WE'VE ALREADY TRIED (SO WE DON'T CHEEZE PROGRESS) //WAIT THIS DOESN'T MATTER WE SHOULD DO THIS EVERY TIME
-            //bool sameGap = false;
-            //if (self.room.MiddleOfTile(self.bodyChunks[1].pos) == self.GetBelly().stuckCoords)
-            //	sameGap = true;
+			//CHECK IF THIS IS THE SAME GAP WE'VE ALREADY TRIED (SO WE DON'T CHEEZE PROGRESS) //WAIT THIS DOESN'T MATTER WE SHOULD DO THIS EVERY TIME
+			//bool sameGap = false;
+			//if (self.room.MiddleOfTile(self.bodyChunks[1].pos) == self.GetBelly().stuckCoords)
+			//	sameGap = true;
 
-            self.GetBelly().stuckCoords = self.room.MiddleOfTile(self.bodyChunks[1].pos);
+			self.GetBelly().stuckCoords = self.room.MiddleOfTile(self.bodyChunks[1].pos);
 			self.GetBelly().stuckStrain += 10; //TO START THEM OFF
 			if (BPOptions.debugLogs.Value)
 				Debug.Log("NEW PLAYER STUCK VECTOR! " + self.GetBelly().stuckVector + " ----BASE TILE SIZE: " + preTileSize + " ADJ: " + tileSize + "---- ADJ CHUB:" + myChub);
@@ -5579,7 +5579,7 @@ public class patch_Player
 				crashVel = Mathf.Max(crashVel, 12);
 
 			if (self.animation == Player.AnimationIndex.BellySlide)
-            {
+			{
 				crashVel = Mathf.Max(crashVel, 12);
 				self.animation = Player.AnimationIndex.None;
 				self.room.AddObject(new ExplosionSpikes(self.room, self.bodyChunks[1].pos - new Vector2(0f, -self.bodyChunks[1].rad), 8, 8f, 4f, 5.0f, 20f, new Color(1f, 1f, 1f, 0.5f)));
@@ -5613,8 +5613,8 @@ public class patch_Player
 			if (crashVel > 6f) //ADD MOMENTUM TO THE STUCK
 			{
 				float progBoost = ((crashVel * 0.05f) * (1f + GetScaledOverstuffed(self) * 0.05f)) * (ObjIsSlick(self) ? 3f : 1f) - 0.25f;
-                if (BPOptions.debugLogs.Value)
-                    Debug.Log("BOOST PROGRESS! " + progBoost + " CRASH VEL:" + crashVel );
+				if (BPOptions.debugLogs.Value)
+					Debug.Log("BOOST PROGRESS! " + progBoost + " CRASH VEL:" + crashVel );
 				float oldLoosenProg = self.GetBelly().loosenProg;
 				self.GetBelly().loosenProg = 0f; //BACK TO 0 SO WE CAN CHOOSE THE HIGHER OF THE TWO
 				ObjGainLoosenProg(self, progBoost);
@@ -5624,14 +5624,14 @@ public class patch_Player
 				ObjGainSquishForce(self, Mathf.CeilToInt(6 + crashVel), 22);
 				//ADJUST OUR HEAD PLEASE GOD
 				if (!inPipe && !topInCorridor && self.GetBelly().stuckVector.y == -1)
-                {
+				{
 					self.bodyChunks[0].pos.x = self.bodyChunks[1].pos.x;
 					self.bodyChunks[0].pos.y = self.bodyChunks[1].pos.y - 5f;
 				}
-                
-                if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < ((crashVel - 5f) / 10f))
-                    DoNoirSounds(self, true);
-            }
+				
+				if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < ((crashVel - 5f) / 10f))
+					DoNoirSounds(self, true);
+			}
 			//ONLY DO THE JOLT IF OUR HEAD IS IN A TUNNEL 
 			if (!inPipe && (topInCorridor))// && (wedgedInFront || wedgedBehind)))
 			{
@@ -5639,39 +5639,39 @@ public class patch_Player
 			}
 			else if (crashVel > 6f)
 			{
-                self.room.PlaySound(BellyPlus.Fwump2, self.mainBodyChunk, false, Mathf.Min(crashVel / 20f, 0.7f), 1.1f);
-            }
+				self.room.PlaySound(BellyPlus.Fwump2, self.mainBodyChunk, false, Mathf.Min(crashVel / 20f, 0.7f), 1.1f);
+			}
 
-            //DISMOUNT IF WE'RE ON SOMEONE SHOULDERS
-            if (self.onBack != null)
-            {
-                self.onBack.slugOnBack.DropSlug();
-                self.input[0].x = (int)self.GetBelly().stuckVector.x;
-                self.input[0].y = (int)self.GetBelly().stuckVector.y;
+			//DISMOUNT IF WE'RE ON SOMEONE SHOULDERS
+			if (self.onBack != null)
+			{
+				self.onBack.slugOnBack.DropSlug();
+				self.input[0].x = (int)self.GetBelly().stuckVector.x;
+				self.input[0].y = (int)self.GetBelly().stuckVector.y;
 				RedirectStuckage(self, true, eu);
-                self.GetBelly().stuckStrain += 10; //JUST TO KEEP US WEDGED
+				self.GetBelly().stuckStrain += 10; //JUST TO KEEP US WEDGED
 				self.GetBelly().autoPilot = new IntVector2((int)self.GetBelly().stuckVector.x, (int)self.GetBelly().stuckVector.y);
 				self.GetBelly().stuckLock = 15; //HOLD THEM IN PLACE FOR THIS LONG
 				self.GetBelly().pilotTimer = 15;
-            }
-        }
+			}
+		}
 
 
 		if ((vertStuck || wedgedInFront || wedgedBehind))
 			self.GetBelly().stuckCoords = self.room.MiddleOfTile(self.bodyChunks[1].pos);
 
 		//DON'T LET PIGGYBACKING PHYSICS JANK CHEAT US THROUGH GAPS! LOCK THEM IN PLACE BRIEFLY WHEN THE DISMOUNT HAPPENS
-        if (self.GetBelly().stuckLock > 0)
-        {
-            self.bodyChunks[1].pos = self.room.MiddleOfTile(self.GetBelly().stuckCoords);
+		if (self.GetBelly().stuckLock > 0)
+		{
+			self.bodyChunks[1].pos = self.room.MiddleOfTile(self.GetBelly().stuckCoords);
 			self.GetBelly().stuckLock--;
 			if (self.GetBelly().stuckLock == 0) //DISABLE THE AUTO PILOT AFTER A TIME
 				self.GetBelly().autoPilot = new IntVector2(0, 0);
-        }
+		}
 
-        //STUCK BWOMP!
-        if (self.GetBelly().fwumpDelay == 1 && self.graphicsModule != null)
-        {
+		//STUCK BWOMP!
+		if (self.GetBelly().fwumpDelay == 1 && self.graphicsModule != null)
+		{
 			//THE SLUGCAT'S TAIL WILL GO INVISIBLE IF CRASHVEL IS NEGATIVE
 			float velMag = 0.0f + Mathf.Sqrt(crashVel);
 			float vol = Mathf.Min((velMag / 5f), 0.25f);  //(velMag / 8f), 0.2f
@@ -5702,20 +5702,20 @@ public class patch_Player
 			}
 			// Debug.Log("-----BWOMP! JUST GOT STUCK " + velMag);
 			MakeSparks(self, 1, Mathf.CeilToInt(velMag));
-            if (BellyPlus.splatCatEnabled)
-                TrySplat(self, 0, self.GetBelly().stuckVector, vol, 2f);
-        }
+			if (BellyPlus.splatCatEnabled)
+				TrySplat(self, 0, self.GetBelly().stuckVector, vol, 2f);
+		}
 
-        //FROM THE DELAYED SHOVE
-        if (self.GetBelly().fwumpDelay == 8)
-        {
+		//FROM THE DELAYED SHOVE
+		if (self.GetBelly().fwumpDelay == 8)
+		{
 			self.GetBelly().stuckStrain += (130f + bonusMomentum + HardmodeScaling(30f, 0f)) * (ObjIsSlick(self) ? 1.25f : 1f);
 			self.GetBelly().corridorExhaustion += 40;
 			self.AerobicIncrease(2f);
 			self.GetBelly().fwumpDelay = 0;
 			bonusMomentum = 0f;
 			if (ObjIsSlick(self))
-            {
+			{
 				for (int n = 0; n < 12; n++)
 				{
 					Vector2 pos3 = ObjGetBodyChunkPos(self, "middle");
@@ -5723,7 +5723,7 @@ public class patch_Player
 				}
 				self.room.PlaySound(SoundID.Swollen_Water_Nut_Terrain_Impact, self.mainBodyChunk, false, 1.5f, 1f);
 			}
-        }
+		}
 
 
 		//ASSISTED SQUEEZES VISUAL BOOST
@@ -5775,7 +5775,7 @@ public class patch_Player
 						WagTailSegment(self, 1, new Vector2(0, GetCappedBoostStrain(self) / 4f) * (1f - GetExhaustionMod(self, 80)));
 					}
 					if (inPipe || (!inPipe && topInCorridor)) //SO WE DON'T SLIDE UP WALLS WHEN BOOSTING
-                    {
+					{
 						//self.graphicsModule.bodyParts[6].vel.y += Mathf.Min(Mathf.Sqrt(self.GetBelly().boostStrain / 10f), 0.1f - 0.2f * GetExhaustionMod(self, 50)); //SNOUT UP
 						//THIS DOESN'T PAIR WELL WITH THE STRETCHED TORSO...
 					}
@@ -5791,18 +5791,18 @@ public class patch_Player
 					}
 					else
 					{
-                        PopFree(self, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
-                        pushBack = 0;
-                    }
+						PopFree(self, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
+						pushBack = 0;
+					}
 				}
 			}
-            else
-            {
-                self.GetBelly().stuckStrain = 0;
-            }
+			else
+			{
+				self.GetBelly().stuckStrain = 0;
+			}
 
 			//THIS GETS HANDLED RIGHT ABOVE US
-            //IF WE'RE FIGHTING THE PUSH DIRECION WITH OUR PARTNER, CANCEL THIS. OTHERWISE WEIRD THINGS HAPPEN IF THEY STOP PUSHING WHILE WE WERE SWITCHING DIRECTIONS
+			//IF WE'RE FIGHTING THE PUSH DIRECION WITH OUR PARTNER, CANCEL THIS. OTHERWISE WEIRD THINGS HAPPEN IF THEY STOP PUSHING WHILE WE WERE SWITCHING DIRECTIONS
 			//if (self.input[0].x == -self.GetBelly().stuckVector.x)
 				//self.GetBelly().stuckStrain = 0;
 			
@@ -5857,28 +5857,28 @@ public class patch_Player
 				{
 					//HIGHER BOOST VALUE IF LAUNCHING UPWARDS
 					float boostVel = (self.bodyChunks[0].pos.y > self.bodyChunks[1].pos.y) ? self.GetBelly().stuckStrain : self.GetBelly().stuckStrain / 2f;
-                    if (BellyPlus.isMeadowSession)
-                    {
-                        MeadowPopFree(self as Creature, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
-                    }
-                    else
-                    {
-                        PopFree(self, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
-                        pushBack = 0;
-                    }
-                }
+					if (BellyPlus.isMeadowSession)
+					{
+						MeadowPopFree(self as Creature, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
+					}
+					else
+					{
+						PopFree(self, self.GetBelly().stuckStrain, self.GetBelly().inPipeStatus);
+						pushBack = 0;
+					}
+				}
 			}
-            else
-            {
-                self.GetBelly().stuckStrain = 0; //OK BUT WE SHOULD STOP STRAINING WHEN NOBODY IS PUSHING
-            }
+			else
+			{
+				self.GetBelly().stuckStrain = 0; //OK BUT WE SHOULD STOP STRAINING WHEN NOBODY IS PUSHING
+			}
 
-            //IF WE'RE FIGHTING THE PUSH DIRECION WITH OUR PARTNER, CANCEL THIS. OTHERWISE WEIRD THINGS HAPPEN IF THEY STOP PUSHING WHILE WE WERE SWITCHING DIRECTIONS
-            //if (self.GetBelly().assistedSqueezing && self.input[0].y != 0 && self.input[0].y != self.GetBelly().myFlipValY)
+			//IF WE'RE FIGHTING THE PUSH DIRECION WITH OUR PARTNER, CANCEL THIS. OTHERWISE WEIRD THINGS HAPPEN IF THEY STOP PUSHING WHILE WE WERE SWITCHING DIRECTIONS
+			//if (self.GetBelly().assistedSqueezing && self.input[0].y != 0 && self.input[0].y != self.GetBelly().myFlipValY)
 
 			//REPURPOSING. GRAVITY WANTS TO KEEP US DOWN WHEN BACKING OUT OF A DOWNWARDS SQUEEZE INTO THE FLOOR. SO BRING US UP A BIT TO UNSTUCK US
-            if (self.GetBelly().stuckVector.y == -1 && self.input[0].y == -self.GetBelly().stuckVector.y)
-            {
+			if (self.GetBelly().stuckVector.y == -1 && self.input[0].y == -self.GetBelly().stuckVector.y)
+			{
 				self.GetBelly().stuckStrain = 0;
 				self.bodyChunks[1].vel.y += 2;
 			}
@@ -5886,8 +5886,8 @@ public class patch_Player
 			//CENTER US IN THE PIPE A BIT...
 			self.bodyChunks[1].pos.x = Vector2.Lerp(self.bodyChunks[1].pos, self.room.MiddleOfTile(self.bodyChunks[1].pos), 0.5f).x;
 
-            //OK WE NEED A FORMULA WHERE THAT, WHEN OUR X >= 9.5 FROM MID, VOL APPROACHES 0
-            self.bodyChunks[1].vel.y += pushBack + (GetCappedBoostStrain(self) * self.GetBelly().myFlipValY / 6f);
+			//OK WE NEED A FORMULA WHERE THAT, WHEN OUR X >= 9.5 FROM MID, VOL APPROACHES 0
+			self.bodyChunks[1].vel.y += pushBack + (GetCappedBoostStrain(self) * self.GetBelly().myFlipValY / 6f);
 			//CHECK IF WE'RE MOVING BACKWARDS WHILE PUSHING. IF WE ARE, CUT THE VEL IN HALF. WE DON'T WANT TO BE MOVING BACKWARDS
 			if (self.bodyChunks[1].vel.y < 0 != self.input[0].y < 0)
 				self.bodyChunks[1].vel.y /= 2; //THIS PREVENTS THE HEAVY JITTER WHILE STRUGGLING
@@ -5914,7 +5914,7 @@ public class patch_Player
 			float loosenAmnt = Mathf.Sqrt(Mathf.Max(Mathf.Min(self.GetBelly().stuckStrain, 280) - 200f, 0)) / ((GetLivingPlayers(self) > 1) ? 2000f : 1500f);
 			//RESISTANCE TO SNOWBALLING PROGRESS (DISABLED IN EASY MODE)
 			if (HardmodeScaling(0f, 1f) > 0f)
-            {
+			{
 				float loosenResist = Mathf.Max(1f, self.GetBelly().loosenProg / 3);
 				self.GetBelly().loosenProg += (loosenAmnt / loosenResist);
 			}
@@ -5931,11 +5931,11 @@ public class patch_Player
 
 
 	public static void BPUUpdatePass1(Player self, bool eu)
-    {
-        //Debug.Log("-POLE CLIMBIN " + self.abstractCreature.GetAbsBelly().origPoleSpeed + " " + self.slugcatStats.poleClimbSpeedFac);
+	{
+		//Debug.Log("-POLE CLIMBIN " + self.abstractCreature.GetAbsBelly().origPoleSpeed + " " + self.slugcatStats.poleClimbSpeedFac);
 
-        //IF WE'RE PUSHING SOMEONE, PAUSE OUR RUN ANIMATION SO OUR LEGS DON'T MOVE
-        if (self.bodyMode == Player.BodyModeIndex.Stand && self.input[0].x != 0 && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther) && self.animationFrame > 0 && self.slowMovementStun < 8)
+		//IF WE'RE PUSHING SOMEONE, PAUSE OUR RUN ANIMATION SO OUR LEGS DON'T MOVE
+		if (self.bodyMode == Player.BodyModeIndex.Stand && self.input[0].x != 0 && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther) && self.animationFrame > 0 && self.slowMovementStun < 8)
 			self.animationFrame--; //REDUCE THE RUN ANIMATION TICK BY 1 SO IT LOOKS LIKE WE'RE STANDING STILL
 		
 
@@ -5945,39 +5945,39 @@ public class patch_Player
 		//SLOW DOWN OUR RUNNING ANIMATION!
 		else if (self.bodyMode == Player.BodyModeIndex.Stand && eu && self.input[0].x != 0 && self.animationFrame > 0 && UnityEngine.Random.value > self.GetBelly().runSpeedMod)
 		{
-            self.animationFrame--;
+			self.animationFrame--;
 			float runMod = self.GetBelly().runSpeedMod;
-            Player backPlayer = GetHeaviestPlayerOnBack(self);
-            if (backPlayer != null)
-                runMod = Mathf.Min(runMod, backPlayer.GetBelly().runSpeedMod);
+			Player backPlayer = GetHeaviestPlayerOnBack(self);
+			if (backPlayer != null)
+				runMod = Mathf.Min(runMod, backPlayer.GetBelly().runSpeedMod);
 			
-            if (runMod < (BPOptions.easilyWinded.Value ? 0.5f : 0.4f) && !self.isGourmand)
+			if (runMod < (BPOptions.easilyWinded.Value ? 0.5f : 0.4f) && !self.isGourmand)
 			{
-                MakeStrainSparks(self, 1);
-                if (!self.lungsExhausted)
+				MakeStrainSparks(self, 1);
+				if (!self.lungsExhausted)
 				{
-                    self.GetBelly().corridorExhaustion += 5;
-                    if (GetExhaustionMod(self, 0) > 0.6f)
+					self.GetBelly().corridorExhaustion += 5;
+					if (GetExhaustionMod(self, 0) > 0.6f)
 						self.Blink(6);
 				}
 				else
 				{
-                    self.GetBelly().corridorExhaustion += 2;
-                    if (runMod < 0.2f)
+					self.GetBelly().corridorExhaustion += 2;
+					if (runMod < 0.2f)
 						self.standing = false;
 				}
-            }
-        }
-            
+			}
+		}
+			
 
-        //DON'T ENTER SHORTCUTS WHILE STUCK (OR WHILE PULLING SOMEONE WHO IS STUCK!)
-        if (IsStuck(self) || IsGraspingStuckCreature(self))
+		//DON'T ENTER SHORTCUTS WHILE STUCK (OR WHILE PULLING SOMEONE WHO IS STUCK!)
+		if (IsStuck(self) || IsGraspingStuckCreature(self))
 		{
-            self.shortcutDelay = (Math.Max(self.shortcutDelay, 2));
+			self.shortcutDelay = (Math.Max(self.shortcutDelay, 2));
 			//HEY IF WE'VE BEEN CAPTURED BY A PREDATOR THAT IS STRUGGLING TO PULL US THROUGH A GAP, WE SHOULD TRY AND FIX THAT
 			if (self.dangerGraspTime > 30)
 				ObjGainLoosenProg(self, 0.05f);
-        }
+		}
 			
 		//Debug.Log("-----MY INPUT!: " + playerNum + " " + (self.bodyMode == Player.BodyModeIndex.Stand) + "-" + (self.input[0].x != 0) + "-" + (self.GetBelly().pushingOther || self.GetBelly().pullingOther) + "-" + (self.animationFrame > 0) + "-" + (self.slowMovementStun < 8));
 		//Debug.Log("-----MY INPUT2!: " + playerNum );
@@ -6004,25 +6004,25 @@ public class patch_Player
 		if (self.GetBelly().smearTimer > 0)
 			self.GetBelly().smearTimer--;
 
-        if (self.GetBelly().miscTimer > 0)
-            self.GetBelly().miscTimer--;
+		if (self.GetBelly().miscTimer > 0)
+			self.GetBelly().miscTimer--;
 
-        if (self.GetBelly().weightless > 0)
-            self.GetBelly().weightless--;
+		if (self.GetBelly().weightless > 0)
+			self.GetBelly().weightless--;
 		
 		if (self.GetBelly().ignoreSpears > 0)
 			self.GetBelly().ignoreSpears--;
 
-        //DON'T DO THE CLIMBUPONBEAM ANIMATION IF WE'RE PUSHING SOMEONE
-        if (self.animation == Player.AnimationIndex.GetUpOnBeam && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther))
+		//DON'T DO THE CLIMBUPONBEAM ANIMATION IF WE'RE PUSHING SOMEONE
+		if (self.animation == Player.AnimationIndex.GetUpOnBeam && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther))
 			self.animation = Player.AnimationIndex.HangFromBeam;
 
 		//ADJUST RUNSPEED ANIM - I DON'T ACTUALLY KNOW IF THIS EVEN WORKED.....
 		if (self.animation == Player.AnimationIndex.StandUp && Mathf.Abs(self.input[0].x) > 0 && GetOverstuffed(self) > 0 && (self.GetBelly().pushingOther > 0 || self.GetBelly().pullingOther) && Mathf.Abs(self.bodyChunks[0].vel.x) > 2f)
-        {
+		{
 			if (UnityEngine.Random.value > self.GetBelly().runSpeedMod && self.animationFrame > 0)
 				self.animationFrame--;
-        }
+		}
 
 		//1-9-23 HEAVY SLUGCATS SHOULD STRUGGLE WITH GETUPONBEAM!
 		if (self.animation == Player.AnimationIndex.GetUpOnBeam) // && self.straightUpOnHorizontalBeam == false)
@@ -6044,8 +6044,8 @@ public class patch_Player
 			if (stuffing > 4 && self.input[0].x != 0)
 				self.flipDirection = self.input[0].x;
 
-            //WE WTILL WANT TO BE ABLE TO PULL UP AS GOURMAND IF WE'RE GOURMAND EXHAUSTED. BUT MAKE IT HARDER
-            if ((self.lungsExhausted && !self.gourmandExhausted) || (self.gourmandExhausted && self.GetBelly().corridorExhaustion >= 80) && !(self.input[0].jmp && !self.input[1].jmp))
+			//WE WTILL WANT TO BE ABLE TO PULL UP AS GOURMAND IF WE'RE GOURMAND EXHAUSTED. BUT MAKE IT HARDER
+			if ((self.lungsExhausted && !self.gourmandExhausted) || (self.gourmandExhausted && self.GetBelly().corridorExhaustion >= 80) && !(self.input[0].jmp && !self.input[1].jmp))
 			{
 				MakeStrainSparks(self, 8);
 				self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1.2f, 0.6f);
@@ -6067,7 +6067,7 @@ public class patch_Player
 					
 					
 					if (self.input[0].jmp && !self.input[1].jmp)
-                    {
+					{
 						if (self.GetBelly().boostCounter <= 0)
 							stuffing /= 4f; //ONLY GET BOTH FRAMES OF BOOST IF WE WERE PATIENT
 						else
@@ -6094,7 +6094,7 @@ public class patch_Player
 				self.pullupSoftlockSafety = 0; //YOU KNOW WHAT, WHO EVEN NEEDS IT
 
 
-                if (self.pullupSoftlockSafety > 60)
+				if (self.pullupSoftlockSafety > 60)
 					self.gourmandExhausted = false;
 				
 				self.bodyChunks[0].vel /= (1 + (stuffing / 12));
@@ -6134,7 +6134,7 @@ public class patch_Player
 			RedirectStuckage(self, true, eu);
 			self.GetBelly().autoPilot = new IntVector2((int)self.GetBelly().stuckVector.x, (int)self.GetBelly().stuckVector.y);
 			self.GetBelly().pilotTimer = 15;
-        }
+		}
 		
 		
 		//LETS GET A BIT MORE TOASTY WARM
@@ -6150,11 +6150,11 @@ public class patch_Player
 		//IF WE'RE SUBMERGED MAKE US SLICK (AND WASH OFF PREVIOUS SLICKNESS)
 		if (self.bodyChunks[1].submersion > 0.5)
 		{
-            self.GetBelly().slicked = 450;
-            //THE GUIDE IS AQUATIC AND CAN BE EXTRA SLIPPERY!
-            if (self.slugcatStats?.name?.value == "Guide")
-                self.GetBelly().slicked = 450 * 5;
-        }
+			self.GetBelly().slicked = 450;
+			//THE GUIDE IS AQUATIC AND CAN BE EXTRA SLIPPERY!
+			if (self.slugcatStats?.name?.value == "Guide")
+				self.GetBelly().slicked = 450 * 5;
+		}
 			
 
 
@@ -6184,7 +6184,7 @@ public class patch_Player
 			}
 
 			if (wigInp != 0)
-            {
+			{
 				if (self.GetBelly().verticalStuck)
 					self.GetBelly().wiggleMem = new IntVector2(wigInp, 0);
 				else
@@ -6220,7 +6220,7 @@ public class patch_Player
 	
 	//SQUEEZE CHECKS
 	public static void BPUUpdatePass2(Player self, bool eu)
-    {
+	{
 		//AT THIS PPINT, EVERYTHING IN THIS METHOD IS SO OLD I DON'T KNOW IF ANY OF IT IS EVEN RELEVANT ANYMORE. BUT IM TOO AFRAID TO CHANGE IT
 		
 		
@@ -6235,54 +6235,54 @@ public class patch_Player
 		//-----THE MAIN SQUEEZE CHECK-----  -12-4-23 QUICK QUESTION; WHY DOES THIS HAPPEN OUTSIDE OF OUR NORMAL STUCKAGECHECK?...
 		if (GetChubValue(self) >= -1 || self.GetBelly().bigBelly)
 		{
-            if (IsGrabbedByHelper(self) || self.GetBelly().beingPushed > 0 || self.LickedByPlayer != null)
-            {
-                //FIRST CHECK IF WE'RE BEING GRABBED BY A HELPER
-                if (IsCramped(self as Creature)) //(self.room.aimap.getAItile(self.mainBodyChunk.pos).narrowSpace)
-                {
-                    self.GetBelly().isSqueezing = true;
-                    self.GetBelly().assistedSqueezing = true;
-                    self.touchedNoInputCounter = 12; //SO SCAVS WILL CHILL TF OUT
-                                                     //WE INCREASE STRAIN DIRECTLY HERE BECAUSE THE MOVEMENT UPDATE ISN'T RUNNING WHILE GRABBED
-                    self.GetBelly().squeezeStrain = Math.Min(self.GetBelly().squeezeStrain + 1, 60);
-                    if (IsGrabbedByPlayer(self) && self.graphicsModule != null)
-                        self.grabbedBy[0].grabber.graphicsModule.BringSpritesToFront(); //SO WE CAN SEE THEIR HANDS :)
-                    if (self.LickedByPlayer != null && self.GetBelly().isStuck)
-                    {
-                        ObjGainBoostStrain(self, 1, 3, 15);
-                        ObjGainStuckStrain(self, 2f);
-                    }
-                }
-                else
-                {
-                    self.GetBelly().isSqueezing = false;
-                    self.GetBelly().assistedSqueezing = false;
-                }
-            }
-            //IF WE HAVE ANY STUCK STRAIN AT ALL
-            else if (IsStuck(self) && self.GetBelly().stuckStrain > 0)
-            {
-                self.GetBelly().isSqueezing = true;
-                self.touchedNoInputCounter = 12; //SO SCAVS WILL CHILL TF OUT
-            }
-            else if ((self.bodyMode == Player.BodyModeIndex.CorridorClimb) && ((self.input[0].x == self.flipDirection) || (self.input[0].y != 0)))
-            {
-                self.GetBelly().isSqueezing = true;
-            }
-            else
-            {
-                self.GetBelly().isSqueezing = false;
-                self.GetBelly().assistedSqueezing = false;
-                //Debug.Log("-----NOT IN TUNNEL: " + GetPlayerNum(self));
-            }
-        }
+			if (IsGrabbedByHelper(self) || self.GetBelly().beingPushed > 0 || self.LickedByPlayer != null)
+			{
+				//FIRST CHECK IF WE'RE BEING GRABBED BY A HELPER
+				if (IsCramped(self as Creature)) //(self.room.aimap.getAItile(self.mainBodyChunk.pos).narrowSpace)
+				{
+					self.GetBelly().isSqueezing = true;
+					self.GetBelly().assistedSqueezing = true;
+					self.touchedNoInputCounter = 12; //SO SCAVS WILL CHILL TF OUT
+													 //WE INCREASE STRAIN DIRECTLY HERE BECAUSE THE MOVEMENT UPDATE ISN'T RUNNING WHILE GRABBED
+					self.GetBelly().squeezeStrain = Math.Min(self.GetBelly().squeezeStrain + 1, 60);
+					if (IsGrabbedByPlayer(self) && self.graphicsModule != null)
+						self.grabbedBy[0].grabber.graphicsModule.BringSpritesToFront(); //SO WE CAN SEE THEIR HANDS :)
+					if (self.LickedByPlayer != null && self.GetBelly().isStuck)
+					{
+						ObjGainBoostStrain(self, 1, 3, 15);
+						ObjGainStuckStrain(self, 2f);
+					}
+				}
+				else
+				{
+					self.GetBelly().isSqueezing = false;
+					self.GetBelly().assistedSqueezing = false;
+				}
+			}
+			//IF WE HAVE ANY STUCK STRAIN AT ALL
+			else if (IsStuck(self) && self.GetBelly().stuckStrain > 0)
+			{
+				self.GetBelly().isSqueezing = true;
+				self.touchedNoInputCounter = 12; //SO SCAVS WILL CHILL TF OUT
+			}
+			else if ((self.bodyMode == Player.BodyModeIndex.CorridorClimb) && ((self.input[0].x == self.flipDirection) || (self.input[0].y != 0)))
+			{
+				self.GetBelly().isSqueezing = true;
+			}
+			else
+			{
+				self.GetBelly().isSqueezing = false;
+				self.GetBelly().assistedSqueezing = false;
+				//Debug.Log("-----NOT IN TUNNEL: " + GetPlayerNum(self));
+			}
+		}
 		else //SOMEHOW WE'VE REVOKED OUR STUCKAGE THRESHOLD, AND VALUES WON'T RESET CORRECTLY IF WE DON'T CORRECT THEM OURSELVES
 		{
 			self.GetBelly().isSqueezing = false;
 			self.GetBelly().assistedSqueezing = false;
 			self.GetBelly().stuckStrain = 0;
-            self.GetBelly().isStuck = false;
-        }
+			self.GetBelly().isStuck = false;
+		}
 		
 		
 		//OKAY BUT THIS STUFF CAN BE NEW
@@ -6290,14 +6290,14 @@ public class patch_Player
 		if (eu && self.playerState.playerNumber == 0 && !self.isNPC)
 		{
 			if (BPOptions.hardMode.Value && BellyPlus.AllPlayersInStartShelter(self.room) && self.room.world.rainCycle.AmountLeft > 0f)
-            {
+			{
 				self.room.world.rainCycle.Update();
 				// Debug.Log("-----SPEED UP THE RAIN TICKS!: ");
 			}
 		}
 		
 		if (self.GetBelly().slicked > 0 && self.bodyChunks[1].submersion < 0.5f && !IsPiggyBacked(self) && self.graphicsModule != null)
-        {
+		{
 			//BODY DRIPS
 			if (UnityEngine.Random.value < 0.25f)
 			{
@@ -6306,16 +6306,16 @@ public class patch_Player
 				self.room.AddObject(new WaterDrip(pos3, new Vector2(0, 1), false));
 			}
 
-            //MAYBE SOME TAIL DRIPS TOO
-            foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>()) //for (int i = 0; i < 4; i++)
-            {
-                if (UnityEngine.Random.value < 0.08f)
-                {
-                    Vector2 pos3 = bodyPart.pos + new Vector2(Mathf.Lerp(-4f, 4f, UnityEngine.Random.value), 2f + Mathf.Lerp(-2f, 2f, UnityEngine.Random.value));
-                    self.room.AddObject(new WaterDrip(pos3, new Vector2(0, 1), false));
-                }
-            }
-        }
+			//MAYBE SOME TAIL DRIPS TOO
+			foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>()) //for (int i = 0; i < 4; i++)
+			{
+				if (UnityEngine.Random.value < 0.08f)
+				{
+					Vector2 pos3 = bodyPart.pos + new Vector2(Mathf.Lerp(-4f, 4f, UnityEngine.Random.value), 2f + Mathf.Lerp(-2f, 2f, UnityEngine.Random.value));
+					self.room.AddObject(new WaterDrip(pos3, new Vector2(0, 1), false));
+				}
+			}
+		}
 		
 		
 		//CHECK FOR ATTEMPTS TO STRUGGLE OUT OF DANGER
@@ -6331,26 +6331,26 @@ public class patch_Player
 				// self.grabbedBy[0].grabber.Stun(Random.Range(8, 16));
 		}
 
-        //EVERGREEN ROLLING
-        if (ChunkyEvergreen(self))
-        {
-            if (self.bodyMode == Player.BodyModeIndex.Crawl && self.input[0].jmp && self.input[0].IntVec == new IntVector2(0, -1) && self.gourmandAttackNegateTime <= 0)
-            {
-                self.rollCounter = 8;
-                self.rollDirection = self.flipDirection;
-                self.stopRollingCounter = 0;
-                self.canJump = 0;
-                self.wantToJump = 0;
+		//EVERGREEN ROLLING
+		if (ChunkyEvergreen(self))
+		{
+			if (self.bodyMode == Player.BodyModeIndex.Crawl && self.input[0].jmp && self.input[0].IntVec == new IntVector2(0, -1) && self.gourmandAttackNegateTime <= 0)
+			{
+				self.rollCounter = 8;
+				self.rollDirection = self.flipDirection;
+				self.stopRollingCounter = 0;
+				self.canJump = 0;
+				self.wantToJump = 0;
 				self.animation = Player.AnimationIndex.Roll;
 				self.input[1].jmp = true; //PRETEND WE WERE ALWAYS HOLDING THIS DOWN
-            }
-        }
-    }
+			}
+		}
+	}
 
 
 
 	public static void BPUUpdatePass3(Player self)
-    {
+	{
 		//MAKING THIS LIZARD CHANGE TO PLAYERS AS WELL SO SOUND DOESN'T CUT OUT WHEN RE-ENTERING A ROOM ANOTHER PLAYER IS STUCK IN
 		bool offscreen = true;
 		//if (self.graphicsModule == null)
@@ -6364,9 +6364,9 @@ public class patch_Player
 		if (offscreen)
 		{
 			//Debug.Log("NO GRAPHICS MODULE! END THE SOUND");
-            //offscreen = true;
+			//offscreen = true;
 			if (self.GetBelly().stuckLoop != null) //OTHERWISE WE CRASH
-            {
+			{
 				self.GetBelly().stuckLoop.alive = false;
 				self.GetBelly().stuckLoop = null;
 			}
@@ -6437,16 +6437,16 @@ public class patch_Player
 				speedVar += speedMod;
 				float volMod = 0;
 				float myWedgeStrain = self.GetBelly().wedgeStrain;
-                if (myWedgeStrain > 0f)
-                {
+				if (myWedgeStrain > 0f)
+				{
 					speedVar = ((myVel * 1f) + (GetCappedBoostStrain(self) / 50f)) / 1f; //+ self.GetBelly().wedgeStrain
 					volMod = Mathf.Max(myWedgeStrain - 0.3f, 0) * 1.3f;
 					if (GetAxisMagnitude(self) < 0.04f && self.GetBelly().boostStrain < 1)
-                    {
+					{
 						volMod = -1f;
 					}
 					 // Debug.Log("-----MATH CHECK!:" + GetAxisMagnitude(self));
-                }
+				}
 				//SAFETY CHECK IN CASE WE DEVIDED BY 0 UP THERE SOMEWHERE
 				if (Double.IsNaN(speedVar))
 					speedVar = 0f;
@@ -6457,7 +6457,7 @@ public class patch_Player
 				if ((self.GetBelly().stuckStrain > (120 - self.GetBelly().tileTightnessMod / 4) || self.lungsExhausted) && self.GetBelly().tileTightnessMod > 300 && GetStuckPercent(self) < 0.5f && self.GetBelly().boostStrain < (self.GetBelly().assistedSqueezing ? 8 : 1))
 					volMod = -1f;// 1f - (16f - GetCappedBoostStrain(self))/16f;//-1f;
 
-                float pitchMod = (ObjIsSlick(self) ? 0.1f : 0f);
+				float pitchMod = (ObjIsSlick(self) ? 0.1f : 0f);
 				float sfxVol = BPOptions.sfxVol.Value;
 				//Debug.Log("SQUEEZE SFX" + (Mathf.Lerp(0.4f, maxVol, speedVar) + pitchMod));
 
@@ -6482,7 +6482,7 @@ public class patch_Player
 
 	//STUCK CHECK
 	public static void BPUUpdatePass4(Player self, bool eu)
-    {
+	{
 		//SET OUR FLIP VALUES!
 		//THIS NEEDS TO HAPPEN OUTSIDE OF CHECK STUCKAGE BECAUSE OF OUR PUSHERS
 		//HOLD IT! LETS DO THIS A BIT MORE SMART... IF INP.X = 0, DEFAULT TO THE LAST USED VALUE, SO IT CONTINUES TO CALCULATE FOR OUR POSITION WE ARE STUCK IN UNTIL WE PUSH THE OTHER DIRECTION.
@@ -6490,18 +6490,18 @@ public class patch_Player
 		if (!IsStuck(self)) //OK BUT ALSO... DON'T SWAP THEM WHILE STUCK, I GUESS.
 		{
 
-            //IF WE'RE WEDGED, IT SHOULD ALWAYS BE THIS
-            if (ObjIsWedged(self))
-            {
+			//IF WE'RE WEDGED, IT SHOULD ALWAYS BE THIS
+			if (ObjIsWedged(self))
+			{
 				//ALSO APPARENTLY OUR FLIP VALUES ARENT ALWAYS CORRECT SO LETS CORRECT THAT
 				IntVector2 myVec = GetCreatureVector(self);
 				if (myVec.x != 0)
-                {
+				{
 					self.GetBelly().myFlipValX = myVec.x;
 					self.GetBelly().verticalStuck = false;
 				}
 				else if (myVec.y != 0)
-                {
+				{
 					self.GetBelly().myFlipValY = myVec.y;
 					self.GetBelly().verticalStuck = true;
 				}
@@ -6510,11 +6510,11 @@ public class patch_Player
 			//IF WE'RE ON SOMEONE BACK, IT SHOULD ALWAYS BE THIS
 			if (self.onBack != null)
 			{
-                if (self.onBack.input[0].x != 0)
-                    self.GetBelly().myFlipValX = self.onBack.input[0].x;
-                if (self.onBack.input[0].y != 0)
-                    self.GetBelly().myFlipValY = self.onBack.input[0].y;
-            }
+				if (self.onBack.input[0].x != 0)
+					self.GetBelly().myFlipValX = self.onBack.input[0].x;
+				if (self.onBack.input[0].y != 0)
+					self.GetBelly().myFlipValY = self.onBack.input[0].y;
+			}
 			
 			//IF WE'RE CORRIDOR-FLIPPING, IT SHOULD BE THE OPPOSITE OF THE NONZERO NUMBER
 			else if (self.corridorTurnDir != null)
@@ -6526,7 +6526,7 @@ public class patch_Player
 				
 			}
 			else
-            {
+			{
 				if (self.input[0].x != 0)
 					self.GetBelly().myFlipValX = self.input[0].x;
 				else if (self.bodyMode == Player.BodyModeIndex.Crawl)
@@ -6540,11 +6540,11 @@ public class patch_Player
 				bool specialMode = self.bodyMode == Player.BodyModeIndex.CorridorClimb || self.bodyMode == Player.BodyModeIndex.ClimbIntoShortCut || self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam;
 				float gravMod = 0f;
 				//HOLDING CORPSES WEIGHS US DOWN WHICH CAN BE USED TO CHEAT!
-                if (specialMode)
+				if (specialMode)
 				{
-                    if ((self.grasps[0] != null && self.HeavyCarry(self.grasps[0].grabbed)) || (self.grasps[1] != null && self.HeavyCarry(self.grasps[1].grabbed)))
-                         gravMod = specialMode ? 1.0f : 0f;//FOR FIXING HEAVY CORPSES BEING ABLE TO VERY SLOWLY PULL US DOWN THROUGH GAPS
-                }
+					if ((self.grasps[0] != null && self.HeavyCarry(self.grasps[0].grabbed)) || (self.grasps[1] != null && self.HeavyCarry(self.grasps[1].grabbed)))
+						 gravMod = specialMode ? 1.0f : 0f;//FOR FIXING HEAVY CORPSES BEING ABLE TO VERY SLOWLY PULL US DOWN THROUGH GAPS
+				}
 				
 				if (self.input[0].y != 0 && specialMode)
 					self.GetBelly().myFlipValY = self.input[0].y;
@@ -6556,16 +6556,16 @@ public class patch_Player
 		}
 
 		if (self.GetBelly().beingPushed <= 0)
-            self.GetBelly().tailPushedAngle = 0;
+			self.GetBelly().tailPushedAngle = 0;
 
-        //Debug.Log("---BODY WEIGHT CHECK: " + self.slugcatStats.bodyWeightFac + " - " + self.slugcatStats.name);
-        //------------MAKE PIPE ENTRANCES MORE DIFFICULT TO GET INTO-------
-        if ((GetChubValue(self) >= -1 || (self.slugcatStats.bodyWeightFac > 1.3 && self.GetBelly().bigBelly)) && self.room != null) //ALRIGHT, I GUESS THIS SHOULD RUN FOR EVERYONE...
+		//Debug.Log("---BODY WEIGHT CHECK: " + self.slugcatStats.bodyWeightFac + " - " + self.slugcatStats.name);
+		//------------MAKE PIPE ENTRANCES MORE DIFFICULT TO GET INTO-------
+		if ((GetChubValue(self) >= -1 || (self.slugcatStats.bodyWeightFac > 1.3 && self.GetBelly().bigBelly)) && self.room != null) //ALRIGHT, I GUESS THIS SHOULD RUN FOR EVERYONE...
 		{
-            
+			
 
-            //IF WE ENDED UP IN A SHORTCUT WAY TOO FAST, MAKE A FORCED SQUINCH SOUND
-            if (self.enteringShortCut != null && self.GetBelly().noStuck <= 0 && self.bodyChunks[0].vel.magnitude > 7f && GetChubValue(self) >= 2)
+			//IF WE ENDED UP IN A SHORTCUT WAY TOO FAST, MAKE A FORCED SQUINCH SOUND
+			if (self.enteringShortCut != null && self.GetBelly().noStuck <= 0 && self.bodyChunks[0].vel.magnitude > 7f && GetChubValue(self) >= 2)
 			{
 				self.room.PlaySound(BellyPlus.Squinch1, self.mainBodyChunk, false, 0.15f, 1.3f);
 				PlayExternalSound(self, BellyPlus.Fwump1, 0.12f, 1f);
@@ -6582,7 +6582,7 @@ public class patch_Player
 				//OKAY THIS ISN'T WORKING. THEIR VERSION OF NARROWSPACE DOESN'T WORK. WE NEED TO USE OURS
 				//Vector2 tChk = new Vector2(self.GetBelly().myFlipValX, self.GetBelly().myFlipValY - 0.5f) * -0.5f; //self.input[0].IntVec.ToVector2() 
 				Vector2 tChk = new Vector2(0, 0); //FINE... THIS IS TOO BUGGY TO TRY AND GET IT FRAME PERFECT. WE'LL HAVE TO LEAVE IT IMPERFECT AND GIVE IT A FEW FRAMES
-                bool hipsInNarrow = IsTileNarrowFloat(self, 1, tChk.x, tChk.y);
+				bool hipsInNarrow = IsTileNarrowFloat(self, 1, tChk.x, tChk.y);
 				bool torsoInNarrow = self.room.aimap.getAItile(self.mainBodyChunk.pos).narrowSpace;
 				postHipCheck = hipsInNarrow; //SOME OPTIMIZATION I GUESS
 				if (hipsInNarrow && !self.GetBelly().inPipeStatus) // || self.GetBelly().assistedSqueezing) //self.bodyMode == Player.BodyModeIndex.CorridorClimb
@@ -6591,8 +6591,8 @@ public class patch_Player
 						self.GetBelly().inPipeStatus = true;
 					else if (self.GetBelly().timeInNarrowSpace > 5) //ATTEMPT TO FIX CHEATING INTO PIPES!
 						FixStuckCheat(self);
-                    self.GetBelly().timeInNarrowSpace++; //WE'RE CHANGING THIS SO THAT ONLY OUR HIPS DETERMINE THIS
-                }
+					self.GetBelly().timeInNarrowSpace++; //WE'RE CHANGING THIS SO THAT ONLY OUR HIPS DETERMINE THIS
+				}
 				else if (!hipsInNarrow && !torsoInNarrow)
 				{
 					self.GetBelly().inPipeStatus = false;
@@ -6600,8 +6600,8 @@ public class patch_Player
 						self.GetBelly().timeInNarrowSpace = 0;
 				}
 			}
-            //Debug.Log("-CHECKCHECK!: " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().myFlipValY + " - " + self.bodyChunks[1].vel.y);
-            CheckStuckage(self, eu);
+			//Debug.Log("-CHECKCHECK!: " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().myFlipValY + " - " + self.bodyChunks[1].vel.y);
+			CheckStuckage(self, eu);
 			
 			//A SPECIFIC CHECK TO CATCH CASES WHERE WE MIGHT BE FALLING INTO A PIPE SO FAST THAT WE DON'T REGISTER IT AT ALL
 			if (postHipCheck && !self.GetBelly().isStuck && self.GetBelly().inPipeStatus == false && self.input[0].IntVec == new IntVector2(0, -1) && self.bodyChunks[1].vel.y < -8 && GetChubValue(self) >= 4 && self.GetBelly().noStuck <= 0)
@@ -6618,7 +6618,7 @@ public class patch_Player
 			}
 		}
 		else if (self.room != null && self.room.aimap != null)
-        {
+		{
 			//FOR SKINNIES THAT DON'T RUN THAT UPDATE, CHANGE THIS VALUE SO WE DONT COUNT AS "CRAMPED" FOR THE REST OF OUR LIFE
 			self.GetBelly().inPipeStatus = self.room.aimap.getAItile(self.mainBodyChunk.pos).narrowSpace;
 		}
@@ -6627,16 +6627,16 @@ public class patch_Player
 		//IF WE ARE STUCK, HOLDING A POLE, AND SITTING ON A DOWNWARDS PIPE ENTRANCE, LET GO THE POLE. NO GRABBING. OR ELSE PRESSING JUMP HERE WILL DO NOTHING
 		if (IsStuck(self) && self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && self.GetBelly().inPipeStatus == false && self.GetBelly().stuckVector.y == -1)
 		{
-            self.noGrabCounter = Math.Max(2, self.noGrabCounter);
-            //Debug.Log("---SITTING ON PIPE? " + IsStuck(self) + " - " + self.bodyMode + " - " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().stuckVector.y);
+			self.noGrabCounter = Math.Max(2, self.noGrabCounter);
+			//Debug.Log("---SITTING ON PIPE? " + IsStuck(self) + " - " + self.bodyMode + " - " + self.GetBelly().inPipeStatus + " - " + self.GetBelly().stuckVector.y);
 			//THIS STRAIGHT UP DOESN'T WOOOOORK WKY TH NOT!?!?!
-        }
+		}
 
 
-        //ACNHOR THE STRETCHING TO OUR LOWER BODY CHUNK WHILE STUCK
-        //LETS TRY IT SLIGHTLY DIFFERENTLY...
-        if (self.corridorTurnDir == null) //THE GAME NEEDS TO HANDLE THIS IF WE'RE FLIPPING DIRECTIONS
-        {
+		//ACNHOR THE STRETCHING TO OUR LOWER BODY CHUNK WHILE STUCK
+		//LETS TRY IT SLIGHTLY DIFFERENTLY...
+		if (self.corridorTurnDir == null) //THE GAME NEEDS TO HANDLE THIS IF WE'RE FLIPPING DIRECTIONS
+		{
 			if (IsStuck(self) || (self.GetBelly().slugBed > 0 && self.input[0].x != 0)) //FOR SLUGBED ANIMATION STUFF
 			{
 				self.bodyChunkConnections[0].type = PhysicalObject.BodyChunkConnection.Type.Pull;
@@ -6647,7 +6647,7 @@ public class patch_Player
 
 		//PREVENT THE WEIRD GLITCHY STRETCHING SLUGCAT WHEN LIZARDS GRAB US
 		if (self.dangerGrasp != null || self.Stunned)
-        {
+		{
 			self.bodyChunkConnections[0].type = PhysicalObject.BodyChunkConnection.Type.Normal;
 			return; //AND THEN RETURN BEFORE ANY OF OUR BODY STRETCH STUFF CAN RUN, I THINK
 		}
@@ -6663,57 +6663,57 @@ public class patch_Player
 			{
 				//IF WE'RE TRYING TO PULL OURSELVES UP ONTO A LEDGE WHILE OUR HIPS HAPPEN TO BE PRESSED AGAINST AN ENTRANCE BELOW IT, DON'T GET STUCK ON IT
 				if (self.animation == Player.AnimationIndex.LedgeGrab
-                    && (self.bodyChunks[0].pos.y - self.GetBelly().stuckCoords.y > 10)) //AND OUR HEAD IS WAY ABOVE OUR STUCK POINT)
-                {
+					&& (self.bodyChunks[0].pos.y - self.GetBelly().stuckCoords.y > 10)) //AND OUR HEAD IS WAY ABOVE OUR STUCK POINT)
+				{
 					self.bodyChunks[1].pos.y += 5;
 					self.bodyChunks[1].pos.x -= 1 * self.GetBelly().stuckVector.x;
 					self.GetBelly().isStuck = false;
 					self.GetBelly().verticalStuck = false;
-                    //Debug.Log("--PIPE UN-SUCTION?");
-                }
-                
+					//Debug.Log("--PIPE UN-SUCTION?");
+				}
+				
 				//ALSO FIX THIS WEIRDNESS WITH GRAVITY SOMETIMES PULLING US OUT FROM THE CORNER. BUT NOT IF WE'RE TRYING TO JUMP PAST/OUT OF IT
-                else if (!(self.input[0].x != 0 && self.input[0].x == -self.GetBelly().stuckVector.x) //AND WE'RE NOT TRYING TO BACK OUT
-                && !(self.bodyChunks[0].pos.y - self.bodyChunks[1].pos.y > 10) //AND OUR HEAD ISN'T HIGH ABOVE OUR TORSO
-                && (self.bodyChunks[0].pos.x > self.bodyChunks[1].pos.x) == (self.GetBelly().stuckVector.x > 0)) //AND HEAD IS IN THE TUNNEL
-                {
-                    self.bodyChunks[1].pos.y = Mathf.Lerp(self.bodyChunks[1].pos.y, self.GetBelly().stuckCoords.y, 0.25f);
-                    //Debug.Log("--PIPE SUCTION?");
+				else if (!(self.input[0].x != 0 && self.input[0].x == -self.GetBelly().stuckVector.x) //AND WE'RE NOT TRYING TO BACK OUT
+				&& !(self.bodyChunks[0].pos.y - self.bodyChunks[1].pos.y > 10) //AND OUR HEAD ISN'T HIGH ABOVE OUR TORSO
+				&& (self.bodyChunks[0].pos.x > self.bodyChunks[1].pos.x) == (self.GetBelly().stuckVector.x > 0)) //AND HEAD IS IN THE TUNNEL
+				{
+					self.bodyChunks[1].pos.y = Mathf.Lerp(self.bodyChunks[1].pos.y, self.GetBelly().stuckCoords.y, 0.25f);
+					//Debug.Log("--PIPE SUCTION?");
 				}
 
-                //BONUS ANIMATION TO SQUISH TAIL UPWARDS IF BEING PUSHED FROM BELOW
+				//BONUS ANIMATION TO SQUISH TAIL UPWARDS IF BEING PUSHED FROM BELOW
 				if (self.GetBelly().beingPushed > 0 && self.GetBelly().tailPushedAngle > 0 && self.graphicsModule != null)
 				{
-                    int i = 1;
-                    //REAL FAR UNDER
-                    if (self.GetBelly().tailPushedAngle == 1)
+					int i = 1;
+					//REAL FAR UNDER
+					if (self.GetBelly().tailPushedAngle == 1)
 					{
-                        foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>())
-                        {
-                            bodyPart.vel.y = 4f / i;
-                            i++;
+						foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>())
+						{
+							bodyPart.vel.y = 4f / i;
+							i++;
 							if (i == 3)
 								break; //LOOK IDK HOW ELSE TO DO IT OK
-                        }
-                    }
+						}
+					}
 					else
 					{  //UP CLOSE
-                        foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>())
-                        {
-                            bodyPart.vel.y = 4f / (i);
-                            i++;
-                        }
-                    }
+						foreach (var bodyPart in self.graphicsModule.bodyParts.OfType<TailSegment>())
+						{
+							bodyPart.vel.y = 4f / (i);
+							i++;
+						}
+					}
 					
-                }
-            }
-        }
+				}
+			}
+		}
 
-        //STRETCH OUT BASED ON STRAIN!
-        //self.bodyChunkConnections[0].distance += Mathf.Min(self.GetBelly().boostStrain / 1.5f, 8f);
-        float bodyStretch = Mathf.Min(GetCappedBoostStrain(self), 15f) * ((self.bodyMode == Player.BodyModeIndex.CorridorClimb) ? 2f : 0.7f);
-        if (self.GetBelly().beingPushed > 0 || (self.GetBelly().verticalStuck && self.GetBelly().myFlipValY < 0))
-            bodyStretch *= 0.6f;
+		//STRETCH OUT BASED ON STRAIN!
+		//self.bodyChunkConnections[0].distance += Mathf.Min(self.GetBelly().boostStrain / 1.5f, 8f);
+		float bodyStretch = Mathf.Min(GetCappedBoostStrain(self), 15f) * ((self.bodyMode == Player.BodyModeIndex.CorridorClimb) ? 2f : 0.7f);
+		if (self.GetBelly().beingPushed > 0 || (self.GetBelly().verticalStuck && self.GetBelly().myFlipValY < 0))
+			bodyStretch *= 0.6f;
 
 		//GRAVITY IS TOO STRETCHY!
 		if (self.GetBelly().verticalStuck && self.GetBelly().myFlipValY < 0)
@@ -6735,33 +6735,33 @@ public class patch_Player
 		
 		//IF WE'RE GETTING GIGANTIC, LET'S LET IMAGINATION TAKE HOLD
 		float stuffing = GetOverstuffed(self) - (self.playerState.isPup ? 5 : 10);
-        if (stuffing > 0f && !BellyPlus.VisualsOnly() && (self.animation != Player.AnimationIndex.GetUpToBeamTip))// || self.animation != Player.AnimationIndex.BeamTip)) //BeamTip
-        {
-            //if (stuffing > 10) //STUFFING PAST 10 WILL ONLY COUNT AS A THIRD OF IT'S NORMAL SIZE
-            stuffing = 10 + ((stuffing - 10) / 2);
+		if (stuffing > 0f && !BellyPlus.VisualsOnly() && (self.animation != Player.AnimationIndex.GetUpToBeamTip))// || self.animation != Player.AnimationIndex.BeamTip)) //BeamTip
+		{
+			//if (stuffing > 10) //STUFFING PAST 10 WILL ONLY COUNT AS A THIRD OF IT'S NORMAL SIZE
+			stuffing = 10 + ((stuffing - 10) / 2);
 
 			if (IsCramped(self) || self.animation == Player.AnimationIndex.ClimbOnBeam || self.animation == Player.AnimationIndex.HangFromBeam) //CLIMBONBEAM NEEDS A SHRUNKEN TORSO TOO OR ELSE WE FALL OFF POLE TIPS
 				stuffing /= 2f;
-            if (self.GetBelly().inPipeStatus)
+			if (self.GetBelly().inPipeStatus)
 				stuffing = Mathf.Min(stuffing, 10f);
-            self.bodyChunkConnections[0].distance += 0.25f * stuffing;
+			self.bodyChunkConnections[0].distance += 0.25f * stuffing;
 
-            //CAP THIS VALUE WHEN TRYING TO GET UP, IT CAUSES ISSUES!
-            if (self.animation == Player.AnimationIndex.GetUpOnBeam && self.straightUpOnHorizontalBeam || self.animation == Player.AnimationIndex.GetUpToBeamTip)
-                self.bodyChunkConnections[0].distance = Mathf.Min(20, self.bodyChunkConnections[0].distance); 
-        }
+			//CAP THIS VALUE WHEN TRYING TO GET UP, IT CAUSES ISSUES!
+			if (self.animation == Player.AnimationIndex.GetUpOnBeam && self.straightUpOnHorizontalBeam || self.animation == Player.AnimationIndex.GetUpToBeamTip)
+				self.bodyChunkConnections[0].distance = Mathf.Min(20, self.bodyChunkConnections[0].distance); 
+		}
 		//Debug.Log("---SITTING ON PIPE? " + self.bodyChunkConnections[0].distance);
-        
+		
 
-    }
+	}
 
 
-    public static void FixStuckCheat(Player self)
+	public static void FixStuckCheat(Player self)
 	{
-        //Debug.Log("FIXING PIPE STATUS! " + self.GetBelly().timeInNarrowSpace);
+		//Debug.Log("FIXING PIPE STATUS! " + self.GetBelly().timeInNarrowSpace);
 		//FLIP PIPE STATUS FOR THESE CHECKS, ELSE SOLID TILES WILL COUNT AS TIGHT
 		self.GetBelly().inPipeStatus = !self.GetBelly().inPipeStatus;
-        Vector2 setPos = self.bodyChunks[1].pos;
+		Vector2 setPos = self.bodyChunks[1].pos;
 		if (!IsTileNarrowFloat(self, 1, 0f, -1.2f)) //CHECK 0.2 FARTHER OUT IN HOPES THAT WILL COVER OUR ROUGHLY 1.0 HEIGHT TORSO
 			self.bodyChunks[1].HardSetPosition(setPos + new Vector2(0, -20f));
 		else if (!IsTileNarrowFloat(self, 1, 0f, 1.2f))
@@ -6773,13 +6773,13 @@ public class patch_Player
 		else
 			//Debug.Log("UNABLE TO FIX!");
 		self.GetBelly().inPipeStatus = !self.GetBelly().inPipeStatus;
-    }
+	}
 
 
 
 
-    public static float GetSweetSpotPerc(Player self)
-    {
+	public static float GetSweetSpotPerc(Player self)
+	{
 		
 		float stuckPerc = GetProgress(self) / Mathf.Max(((self.GetBelly().tileTightnessMod) / 30) - 6, 0.1f);
 		int boostCnt = self.GetBelly().boostCounter;
@@ -6802,16 +6802,16 @@ public class patch_Player
 
 	//PUSHING AND STRAINING
 	public static void BPUUpdatePass5(Player self)
-    {
+	{
 		//----- MOVING SOME OF THE PUSHING CHECKS FROM SLUGCATHANDS IN HERE WHERE THEY BELONG-----
 		
 		//OKAY NO DON'T DO THIS IF WE'RE PIGGYBACKED. THAT MAKES WEIRD THINGS HAPPEN
 		if (IsPiggyBacked(self))
 			return;
 
-        //----- CHECK IF WE'RE PUSHING ANOTHER CREATURE.------
+		//----- CHECK IF WE'RE PUSHING ANOTHER CREATURE.------
 
-        Player myPartner = FindPlayerInRange(self);
+		Player myPartner = FindPlayerInRange(self);
 		LanternMouse mousePartner = patch_LanternMouse.FindMouseInRange(self);
 		Cicada cicadaPartner = patch_Cicada.FindCicadaInRange(self);
 		//Yeek yeekPartner = patch_Yeek.FindYeekInRange(self);
@@ -6819,11 +6819,11 @@ public class patch_Player
 		Scavenger scavPartner = patch_Scavenger.FindScavInRange(self);
 		
 		//DON'T HELP LIZARDS THAT ARE TRYING TO EAT YOUR FRIENDS
-        if (lizardPartner != null)
-        {
-            if (lizardPartner.grasps[0] != null && lizardPartner.grasps[0].grabbed is Player)
-                lizardPartner = null; //NOT VALID IF THE LIZARD IS CARRYING OUR FRIEND
-        }
+		if (lizardPartner != null)
+		{
+			if (lizardPartner.grasps[0] != null && lizardPartner.grasps[0].grabbed is Player)
+				lizardPartner = null; //NOT VALID IF THE LIZARD IS CARRYING OUR FRIEND
+		}
 
 		Creature myObject = null;
 		if (myPartner != null)
@@ -6842,7 +6842,7 @@ public class patch_Player
 		}
 		
 		//RESET BEFORE EACH CALCULATION IS RUN
-        // self.GetBelly().pushingOther = false;
+		// self.GetBelly().pushingOther = false;
 
 		//WTF??? FOR SOME REASON, WHEN PUSHING A STUCK PLAYER 2 TILES ABOVE US WITH SOMEONE PIGGYBACKING ON US, THE TARGETOBJECT BRIEFLY SWITCHES TO THE PIGGYBACKED PLAYER, EVEN THOUGH THEY AREN'T STUCK...
 		
@@ -6857,9 +6857,9 @@ public class patch_Player
 			if (!vertStuck && self.input[0].x == ObjGetXFlipDirection(myObject)
 				|| (vertStuck && self.input[0].y == ObjGetYFlipDirection(myObject))
 				|| self.simulateHoldJumpButton > 0 || self.isNPC)
-            {
+			{
 				//Debug.Log("-----PUSHING PLAYER!: " + vertStuck); //+ self.input[0].y + "_" + GetYFlipDirection(myObject));
-                ObjPushedOn(myObject);
+				ObjPushedOn(myObject);
 				self.GetBelly().pushingOther = 3; // PushedOther(self);
 				if (myObject.GetBelly().tailPushedAngle == 0)
 				{
@@ -6867,13 +6867,13 @@ public class patch_Player
 					if (tailHeight < 5)
 						myObject.GetBelly().tailPushedAngle = -1;
 					else if (tailHeight < 15)
-                        myObject.GetBelly().tailPushedAngle = 3;
+						myObject.GetBelly().tailPushedAngle = 3;
 					else
-                        myObject.GetBelly().tailPushedAngle = 1;
-                    //myObject.GetBelly().tailPushedAngle = self.bodyChunks[0].pos.y < ObjGetBodyChunkPos(myObject, "middle").y ? 1 : -1;
-                }
+						myObject.GetBelly().tailPushedAngle = 1;
+					//myObject.GetBelly().tailPushedAngle = self.bodyChunks[0].pos.y < ObjGetBodyChunkPos(myObject, "middle").y ? 1 : -1;
+				}
 					
-            }
+			}
 		}
 		else
 			self.GetBelly().pushingCreature = null;
@@ -6898,7 +6898,7 @@ public class patch_Player
 
 				//IF WE'RE AN NPC, TRY AND PUSH THE RIGHT DIRECTIONAL BUTTONS
 				if (self.isNPC)
-                {
+				{
 					if (ObjIsVerticalStuck(myObject))
 						self.input[0].y = (int)ObjGetStuckVector(myObject).y;
 					else
@@ -6906,16 +6906,16 @@ public class patch_Player
 				}
 
 				if (!self.lungsExhausted && matchingShoveDir)
-                    ObjGainSquishForce(myObject, 2, 2);
+					ObjGainSquishForce(myObject, 2, 2);
 
-                if (!self.lungsExhausted && matchingShoveDir)
+				if (!self.lungsExhausted && matchingShoveDir)
 				{
 					ObjGainStuckStrain(myObject, 0.5f);
-                    ObjGainSquishForce(myObject, 2, 4);
+					ObjGainSquishForce(myObject, 2, 4);
 
-                    // Debug.Log("---SHOVE STATS!: " + slouch + " _ " + self.GetBelly().holdJump);
+					// Debug.Log("---SHOVE STATS!: " + slouch + " _ " + self.GetBelly().holdJump);
 
-                    if (PipeStatus(self) == false)
+					if (PipeStatus(self) == false)
 					{
 						//OR FULL BODY SHOVES. RUN SPECIFICALLY ON THE FIRST FRAME OUR PARTNER RECEIVES A PUSH I GUESS
 						if (slouch > 0 && ObjBeingPushed(myObject) == 4)
@@ -6949,8 +6949,8 @@ public class patch_Player
 							//bellyStats[FindPlayerInRange(self).playerState.playerNumber].stuckStrain += 1; //WAIT, WHY NOT?... MM MAYBE THAT WAS AN OOPSIE
 							ObjGainStuckStrain(myObject, 0.5f);
 							ObjGainBoostStrain(myObject, 1, 1, 10);
-                            ObjGainSquishForce(myObject, 1, 5);
-                            ObjGainLoosenProg(myObject, 0.0003f * (ObjIsSlick(self) ? 3f : 1f));
+							ObjGainSquishForce(myObject, 1, 5);
+							ObjGainLoosenProg(myObject, 0.0003f * (ObjIsSlick(self) ? 3f : 1f));
 							if (UnityEngine.Random.value < 0.2f && self.graphicsModule != null)
 							{
 								Vector2 pos = GetHead(self).pos;
@@ -6967,8 +6967,8 @@ public class patch_Player
 							}
 
 							if (self.graphicsModule != null)
-                            {
-                                GetHead(self).vel += self.input[0].IntVec.ToVector2();
+							{
+								GetHead(self).vel += self.input[0].IntVec.ToVector2();
 								//self.graphicsModule.objectLooker.LookAtPoint(self.bodyChunks[0].pos + self.input[0].IntVec.ToVector2() * 60, 10);
 							}
 						}
@@ -6978,7 +6978,7 @@ public class patch_Player
 				//IF IT'S A PUSHING/PULLING LINE, PASS FORWARD THE BENEFITS!
 				//MORE LIKE; IF WE, THE PUSHER, IS ALSO BEING PUSHED, INCREASE THE STRENGTHH OF OUR PUSHING!
 				if (self.GetBelly().beingPushed > 0)
-                {
+				{
 					ObjGainStuckStrain(myObject, 0.35f);
 					//SO THENNN I GUESS EVERY HELPER AFTER THE SECOND PUSHER IS NOT REALLY RELEVANT. BUT OH WELL
 					// Debug.Log("---OBJ BEING PUSHED?: ");
@@ -7001,25 +7001,25 @@ public class patch_Player
 					{
 						if (self.bodyChunks[1].pos.x < ObjGetBodyChunkPos(myObject, "middle").x)
 						{
-                            self.GetBelly().myFlipValX = 1;
+							self.GetBelly().myFlipValX = 1;
 							self.flipDirection = 1;
-                        }
+						}
 						else
 						{
-                            self.GetBelly().myFlipValX = -1;
-                            self.flipDirection = -1;
-                        }
+							self.GetBelly().myFlipValX = -1;
+							self.flipDirection = -1;
+						}
 					}
 
 					
 					//DON'T LET THIS WEIRDNESS HAPPEN IF WE DON'T COLLIDE WITH PLAYERS (TO FIX PUSHING DOWNWARD UPROOTING OUR STUCK PLAYERS
 					if (ObjGetStuckVector(myObject).y == -1 && self.bodyChunks[0].pos.y < ObjGetBodyChunkPos(myObject, pushLocation).y )
-                    {
+					{
 						//self.bodyChunks[0].pos.y = ObjGetBodyChunkPos(myObject, pushLocation).y + 3f;
 						//self.bodyChunks[0].pos.y = ObjGetBodyChunkPos(myObject, pushLocation).y + myObject.bodyChunks[ObjGetBodyChunkID(myObject, pushLocation)].rad + self.bodyChunks[0].rad;
 						self.bodyChunks[0].pos.y += 2; //IDK MAN...
-                        self.bodyChunks[0].vel.y = 0;
-                    }
+						self.bodyChunks[0].vel.y = 0;
+					}
 					
 					float pushBack = 22f - Mathf.Abs(ObjGetBodyChunkPos(myObject, pushLocation).y - self.bodyChunks[0].pos.y) + (vertPushLine ? 10 : 0); // + (self.GetBelly().boostStrain / 5f);
 					pushBack -= pushBoostStrn; // (self.GetBelly().boostStrain / 2); //BOOST STRAIN VISUALS
@@ -7027,10 +7027,10 @@ public class patch_Player
 					pushBack = Mathf.Max(pushBack, 0);
 					pushBack *= self.GetBelly().myFlipValY * gravMod;
 
-                    if (self.GetBelly().pushingCreature == null || self.GetBelly().pushingOther < 2)
-                        pushBack = 0f; //A SAFETY BACKUP WHILE OUR TARGET CREATURE IS NO LONGER IN RANGE OR SOMETHING
+					if (self.GetBelly().pushingCreature == null || self.GetBelly().pushingOther < 2)
+						pushBack = 0f; //A SAFETY BACKUP WHILE OUR TARGET CREATURE IS NO LONGER IN RANGE OR SOMETHING
 
-                    self.bodyChunks[0].vel.y -= pushBack;
+					self.bodyChunks[0].vel.y -= pushBack;
 					
 					//CHECK IF WE'RE MOVING BACKWARDS WHILE PUSHING. IF WE ARE, CUT THE VEL IN HALF. WE DON'T WANT TO BE MOVING BACKWARDS
 					if (self.bodyChunks[0].vel.y < 0 != self.input[0].y < 0)
@@ -7046,18 +7046,18 @@ public class patch_Player
 				else if (horzPushLine || !ObjIsVerticalStuck(myObject) && (matchingShoveDir  || slouch > 0))
 				{
 					float pushBack = Mathf.Max((25f - pushBoostStrn + (horzPushLine ? 1 : 0) - Mathf.Abs(ObjGetBodyChunkPos(myObject, "rear").x - self.bodyChunks[0].pos.x - (BonusChunkRad(myObject, 1) * self.GetBelly().myFlipValX))) * (self.GetBelly().inPipeStatus ? 0.5f : 1f), 0f);
-                    pushBack *= self.GetBelly().myFlipValX * gravMod;
+					pushBack *= self.GetBelly().myFlipValX * gravMod;
 
-                    //IF THEYRE A TILE ABOVE US, REDUCE ALL THIS
-                    if (Mathf.Abs(ObjGetBodyChunkPos(myObject, "middle").y - self.bodyChunks[0].pos.y) > 10)
-                        pushBack /= 5f;
+					//IF THEYRE A TILE ABOVE US, REDUCE ALL THIS
+					if (Mathf.Abs(ObjGetBodyChunkPos(myObject, "middle").y - self.bodyChunks[0].pos.y) > 10)
+						pushBack /= 5f;
 
-                    if (self.GetBelly().pushingCreature == null || self.GetBelly().pushingOther < 2)
-                        pushBack = 0f; //A SAFETY BACKUP WHILE OUR TARGET CREATURE IS NO LONGER IN RANGE OR SOMETHING
-                    //Debug.Log("---I'M PUSHING X! LETS SHOW SOME EFFORT: " + pushBack + " -! " + myObject.ToString() + " - " + IsStuckOrWedged(myObject) + " - " + ObjIsPushingOther(myObject) + " - " + IsPiggyBacked(myObject as Player) + " - " + pushBoostStrn + " - " + horzPushLine + " - " + Mathf.Abs(ObjGetBodyChunkPos(myObject, "rear").x - self.bodyChunks[0].pos.x - (BonusChunkRad(myObject, 1) * self.GetBelly().myFlipValX)) + " - (" + ObjGetBodyChunkPos(myObject, "rear").x + " - " + self.bodyChunks[0].pos.x + " - " + BonusChunkRad(myObject, 1) + " - " + self.GetBelly().myFlipValX + " )");
+					if (self.GetBelly().pushingCreature == null || self.GetBelly().pushingOther < 2)
+						pushBack = 0f; //A SAFETY BACKUP WHILE OUR TARGET CREATURE IS NO LONGER IN RANGE OR SOMETHING
+					//Debug.Log("---I'M PUSHING X! LETS SHOW SOME EFFORT: " + pushBack + " -! " + myObject.ToString() + " - " + IsStuckOrWedged(myObject) + " - " + ObjIsPushingOther(myObject) + " - " + IsPiggyBacked(myObject as Player) + " - " + pushBoostStrn + " - " + horzPushLine + " - " + Mathf.Abs(ObjGetBodyChunkPos(myObject, "rear").x - self.bodyChunks[0].pos.x - (BonusChunkRad(myObject, 1) * self.GetBelly().myFlipValX)) + " - (" + ObjGetBodyChunkPos(myObject, "rear").x + " - " + self.bodyChunks[0].pos.x + " - " + BonusChunkRad(myObject, 1) + " - " + self.GetBelly().myFlipValX + " )");
 
-                    //CHECK FOR RUNNING START!
-                    if (self.slideCounter > 0 || self.simulateHoldJumpButton > 0 || self.animation == Player.AnimationIndex.BellySlide) //self.animation == Player.AnimationIndex.RocketJump
+					//CHECK FOR RUNNING START!
+					if (self.slideCounter > 0 || self.simulateHoldJumpButton > 0 || self.animation == Player.AnimationIndex.BellySlide) //self.animation == Player.AnimationIndex.RocketJump
 					{
 						self.slideCounter = 0;
 						self.rocketJumpFromBellySlide = false;
@@ -7073,8 +7073,8 @@ public class patch_Player
 							self.GetBelly().corridorExhaustion += 80;
 							ObjSetFwumpDelay(myObject, 12);
 							ObjGainBoostStrain(myObject, 5, 15, 22);
-                            ObjGainSquishForce(myObject, 15, 22);
-                            ObjGainHeat(myObject, 100);
+							ObjGainSquishForce(myObject, 15, 22);
+							ObjGainHeat(myObject, 100);
 							ObjSetFwumpFlag(myObject, 6);
 							bonusMomentum = Mathf.Max((GetChubValue(self) * 4 ) + (GetOverstuffed(self) * 3), 0f) + (self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand ? 40 : 0);
 							self.AerobicIncrease(2f);
@@ -7095,7 +7095,7 @@ public class patch_Player
 								self.room.AddObject(myPop);
 							}
 							else
-                            {
+							{
 								//WEHH, IM GONNA BE LAZY...
 								Vector2 pos = myObject.bodyChunks[1].pos;
 								float lifetime = 6f;
@@ -7114,17 +7114,17 @@ public class patch_Player
 
 							//FALL OVER IF THEY'RE SLICK
 							if (ObjIsSlick(myObject) && UnityEngine.Random.value > 0.5f)
-                            {
+							{
 								self.standing = false;
-                            }
+							}
 							//self.standing = false;
 							self.bodyChunks[0].vel.y += 4f;
 							self.bodyChunks[0].vel *= 1.5f;
 							self.bodyChunks[1].vel *= 1.5f;
-                            //self.Stun(5);
-                            if (BellyPlus.splatCatEnabled)
-                                TrySplat(myObject as Player, 0, myObject.GetBelly().stuckVector, 0.75f, 2f);
-                        }
+							//self.Stun(5);
+							if (BellyPlus.splatCatEnabled)
+								TrySplat(myObject as Player, 0, myObject.GetBelly().stuckVector, 0.75f, 2f);
+						}
 						else 
 						{
 							//IF WE WERE EXHAUSTED. JUST SLOUCH ON EM INSTEAD
@@ -7136,7 +7136,7 @@ public class patch_Player
 						}
 					}
 
-                    //Debug.Log("PUSHBACK SHOVE!: " + pushBack);
+					//Debug.Log("PUSHBACK SHOVE!: " + pushBack);
 					bool isPullLine = ObjIsPullingOther(myObject);
 					self.bodyChunks[0].vel.x -= pushBack * (isPullLine ? 1.5f : 1f);
 					self.bodyChunks[1].vel.x -= (pushBack + (1.2f * self.GetBelly().myFlipValX) * (self.GetBelly().inPipeStatus ? 0f : 1f))  * 1.2f * (isPullLine ? 0.5f : 1f) ;
@@ -7179,7 +7179,7 @@ public class patch_Player
 			if (ObjIsWedged(self))
 				ObjGainBoostStrain(self, 0, 4, 8);
 			else
-                ObjGainBoostStrain(self, 0, 10, 18);
+				ObjGainBoostStrain(self, 0, 10, 18);
 
 
 			self.GetBelly().corridorExhaustion += 25; //30
@@ -7189,9 +7189,9 @@ public class patch_Player
 
 			float strainMag = 15f * GetExhaustionMod(self, 60);
 			if (self.slugcatStats?.name?.value == "Estranged")
-                boostAmnt = 14;
+				boostAmnt = 14;
 
-            if (self.GetBelly().boostCounter > 1)
+			if (self.GetBelly().boostCounter > 1)
 			{
 				boostAmnt /= 3;
 				boostAmnt *= 2; //OK SO NOW IT ENDS UP 2/3rds
@@ -7224,7 +7224,7 @@ public class patch_Player
 			/*
 			//self.GetBelly().myLastVel >= self.GetBelly().lastBoost - 0.001f && self.GetBelly().boostCounter <= 0 && 
 			if (self.GetBelly().boostCounter < -5 && self.GetBelly().boostCounter > -12 && stuckPerc != 0 && !Double.IsNaN(stuckPerc) && IsStuckOrWedged(self) && self.GetBelly().tileTightnessMod > 280)
-            {
+			{
 				float timingStrn = 1f; // Mathf.InverseLerp(-(22 + stuckPerc * 30), -(8 + stuckPerc * 10), self.GetBelly().boostCounter);
 				// timingStrn += (self.GetBelly().boostCounter / 30f);
 				timingStrn = 0.2f + Mathf.Pow(-(self.GetBelly().boostCounter / 10f), 1.8f);
@@ -7256,7 +7256,7 @@ public class patch_Player
 			*/
 
 			else if (self.GetBelly().wiggleCount > 0f)
-            {
+			{
 				float timingStrn = self.GetBelly().wiggleCount / 10f;
 
 				strainMag += (10f + (5f * (1 - timingStrn))) ;
@@ -7305,7 +7305,7 @@ public class patch_Player
 				else
 					self.GetBelly().myFlipValY *= -1;
 				//UNIQUE INTERACTION WITH NOIRCAT!
-                if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < 0.2f)
+				if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < 0.2f)
 					DoNoirSounds(self, false);
 			}
 			if (self.GetBelly().pushingOther > 0)
@@ -7322,22 +7322,22 @@ public class patch_Player
 
 
 				if (myObject is Player target)
-                {
+				{
 					boostAmnt *= 1 + (1 - GetSweetSpotPerc(target));
 					loosenAmnt *= 1 + 2f * (1 - GetSweetSpotPerc(target));
-                    if (BellyPlus.splatCatEnabled)
-                        TrySplat(target, 0, myObject.GetBelly().stuckVector, 0.25f, 1f);
+					if (BellyPlus.splatCatEnabled)
+						TrySplat(target, 0, myObject.GetBelly().stuckVector, 0.25f, 1f);
 					if (self.slugcatStats?.name?.value == "NoirCatto" && target.slugcatStats?.name?.value == "Friend" && UnityEngine.Random.value < 0.1f)
 						patch_PlayerGraphics.SolaceUpdate(self);
-                }
-                else if (myObject is Lizard)
+				}
+				else if (myObject is Lizard)
 				{
 					if (!patch_Lizard.IsTamed(myObject as Lizard))
 					{
 						boostAmnt *= 2f; //BIG ADRENALINE BOOST IF WE ARE PLAYING WITH DANGER
-                        loosenAmnt *= 3f;
-                    }
-                }
+						loosenAmnt *= 3f;
+					}
+				}
 					
 
 				//Debug.Log("CREATURRR?!: " + myObject + " ISNULL?" + );
@@ -7347,11 +7347,11 @@ public class patch_Player
 					ObjGainLoosenProg(myObject, (loosenAmnt / 6000f) * (ObjIsSlick(myObject) ? 3f : 1f));  // 8000f
 					//if (ObjIsPushingOther(myObject) == false) //DON'T APPLY THIS TO PUSHING LINES. WE USE BOOSTSTRAIN AS A TIMER
 					ObjGainBoostStrain(myObject, 0, 8, 14); //WHY DID WE SKIP THIS?
-                    ObjGainSquishForce(myObject, 9, 15);
-                    // Debug.Log("HEAVE!: ");
+					ObjGainSquishForce(myObject, 9, 15);
+					// Debug.Log("HEAVE!: ");
 
-                    //SQUEALCH SOUNDS IF SLICK!
-                    if (ObjIsSlick(myObject))
+					//SQUEALCH SOUNDS IF SLICK!
+					if (ObjIsSlick(myObject))
 					{
 						MakeSquealch(myObject, BPOptions.blushEnabled.Value); //false
 						ObjGainHeat(self, 20);
@@ -7366,18 +7366,18 @@ public class patch_Player
 			}
 			else if (self.GetBelly().pullingOther)
 			{
-                Creature myGrasped = GetGraspedCreature(self);
+				Creature myGrasped = GetGraspedCreature(self);
 				if (myGrasped != null)
 				{
-                    boostAmnt += Math.Max(GetChubValue(self), 0);
-                    if (myGrasped is Player)
-                    {
-                        boostAmnt *= 1 + (1 - GetSweetSpotPerc(myGrasped as Player));
-                        loosenAmnt *= 1 + 2f * (1 - GetSweetSpotPerc(myGrasped as Player));
-                    }
-                    PassDownBenifits(myGrasped, boostAmnt / 2f, 10, 14);
-                    ObjGainLoosenProg(myGrasped, (loosenAmnt / 4000f) * (ObjIsSlick(myGrasped) ? 3f : 1f));
-                }
+					boostAmnt += Math.Max(GetChubValue(self), 0);
+					if (myGrasped is Player)
+					{
+						boostAmnt *= 1 + (1 - GetSweetSpotPerc(myGrasped as Player));
+						loosenAmnt *= 1 + 2f * (1 - GetSweetSpotPerc(myGrasped as Player));
+					}
+					PassDownBenifits(myGrasped, boostAmnt / 2f, 10, 14);
+					ObjGainLoosenProg(myGrasped, (loosenAmnt / 4000f) * (ObjIsSlick(myGrasped) ? 3f : 1f));
+				}
 			}
 			if (ObjIsWedged(self))
 			{
@@ -7405,7 +7405,7 @@ public class patch_Player
 
 	//POST UPDATE 
 	public static void BPUUpdatePass6(Player self)
-    {
+	{
 
 		//THIS MIGHT HELP OUR FACING WHILE PULLING - IT REALLY DOESN'T
 		//if (self.GetBelly().pullingOther)
@@ -7421,11 +7421,11 @@ public class patch_Player
 		if (self.GetBelly().boostCounter > 0 || (self.GetBelly().myLastVel >= self.GetBelly().lastBoost - 0.001f && self.GetBelly().boostCounter > -30))
 			self.GetBelly().boostCounter--;
 
-        if (self.GetBelly().squishForce > 0)
-            self.GetBelly().squishForce--;
+		if (self.GetBelly().squishForce > 0)
+			self.GetBelly().squishForce--;
 		
 		if (self.GetBelly().squishDelay > 0)
-            self.GetBelly().squishDelay--;
+			self.GetBelly().squishDelay--;
 		else if (self.GetBelly().squishMemory > 0) //ONCE THE DELAY REACHES 0, ADD OUR MEMORY TO THE CURRENT SQUISH
 		{
 			self.GetBelly().squishForce = self.GetBelly().squishMemory;
@@ -7438,21 +7438,21 @@ public class patch_Player
 		if (self.GetBelly().beingRolled > 0)
 			self.GetBelly().beingRolled--;
 
-        if (self.GetBelly().slugBed > 0)
-            self.GetBelly().slugBed--;
+		if (self.GetBelly().slugBed > 0)
+			self.GetBelly().slugBed--;
 		else if (self.GetBelly().slugBed < 0)
-            self.GetBelly().slugBed++;
+			self.GetBelly().slugBed++;
 		
 		if (self.GetBelly().pushingOther > 0)
 			self.GetBelly().pushingOther--;
 
-        //IF WE'RE ABOUT TO EAT POPCORN, ADD IT TO OUR BELLY.
-        //if (self.eatExternalFoodSourceCounter == 2) //1 FRAME AWAY FROM TAKING A CHOMP
-        //	AddPersonalFood(self, 1); //NOT NEEDED ANYMORE
+		//IF WE'RE ABOUT TO EAT POPCORN, ADD IT TO OUR BELLY.
+		//if (self.eatExternalFoodSourceCounter == 2) //1 FRAME AWAY FROM TAKING A CHOMP
+		//	AddPersonalFood(self, 1); //NOT NEEDED ANYMORE
 
 
-        //SLOW DOWN OUR EATING IF WE'RE STUFFED
-        int stuffing = GetOverstuffed(self);
+		//SLOW DOWN OUR EATING IF WE'RE STUFFED
+		int stuffing = GetOverstuffed(self);
 		if (stuffing > 0)
 		{
 			//stuffing += 0;
@@ -7523,7 +7523,7 @@ public class patch_Player
 		{
 			self.GetBelly().overDrive += 5;
 			if (self.touchedNoInputCounter > 90)
-            {
+			{
 				self.GetBelly().overDrive += 3;
 				self.Blink(2);
 			}
@@ -7533,11 +7533,11 @@ public class patch_Player
 		*/
 
 		if (BPOptions.hudHints.Value && !BellyPlus.struggleHintGiven && self.lungsExhausted && IsStuckOrWedged(self) && !self.submerged)
-        {
+		{
 			// self.GetBelly().struggleHintCount += 2;
 
 			if (self.GetBelly().struggleHintCount > BellyPlus.struggleHint && self.room.game.cameras[0].hud != null) //400
-            {
+			{
 				//self.room.game.cameras[0].hud.textPrompt.AddMessage(self.room.game.manager.rainWorld.inGameTranslator.Translate("Grab your prey and hold the eat button to feed"), 0, 160, true, true);
 				self.room.game.cameras[0].hud.textPrompt.AddMessage(self.room.game.rainWorld.inGameTranslator.Translate("Struggling too quickly will make you exhausted and slow down your progress."), 0, 200, false, false);
 				self.room.game.cameras[0].hud.textPrompt.AddMessage(self.room.game.rainWorld.inGameTranslator.Translate("Try to slow down and save stamina for when you're close to being free."), 15, 200, false, false);
@@ -7547,7 +7547,7 @@ public class patch_Player
 			}
 		}
 		else if (BPOptions.hudHints.Value && !BellyPlus.struggleHintGiven && self.GetBelly().struggleHintCount > 0)
-        {
+		{
 			self.GetBelly().struggleHintCount--;
 		}
 		else if (!BPOptions.hudHints.Value || BellyPlus.struggleHintGiven)
@@ -7555,7 +7555,7 @@ public class patch_Player
 		
 
 		if (self.slideCounter == 4 && self.lungsExhausted)
-        {
+		{
 			self.standing = false;
 			MakeStrainSparks(self, 8);
 			self.slideCounter = 0;
@@ -7580,7 +7580,7 @@ public class patch_Player
 
 
 	public static void BPUUpdatePass7(Player self, bool eu)
-    {
+	{
 		//KARMA BOOST
 		/*
 		else
@@ -7607,7 +7607,7 @@ public class patch_Player
 		
 		
 		//THIS ALWAYS RUNS ANYWAYS DUMMY!
-        // if (self.graphicsModule != null && self.timeSinceSpawned < 60 && !ModManager.MSC)
+		// if (self.graphicsModule != null && self.timeSinceSpawned < 60 && !ModManager.MSC)
 			// self.timeSinceSpawned++;
 		
 		//MAKE SURE OUR GRAPHICS ARENT BEING STOLEN - THIS IS PRETTY OUTDATED. NO MODS SHOULD DO THIS ANYMORE...
@@ -7617,19 +7617,19 @@ public class patch_Player
 		//CHECK EXTERNALS
 		if (self.timeSinceSpawned == 2 && !self.isNPC && self.objectInStomach != null)
 		{
-            self.room.abstractRoom.AddEntity(self.objectInStomach);
-            //self.objectInStomach.pos = self.abstractCreature.pos;
-            self.objectInStomach.RealizeInRoom();
-            CheckExternal(self, self.objectInStomach.realizedObject);
-            //THEN PUT IT BACK
+			self.room.abstractRoom.AddEntity(self.objectInStomach);
+			//self.objectInStomach.pos = self.abstractCreature.pos;
+			self.objectInStomach.RealizeInRoom();
+			CheckExternal(self, self.objectInStomach.realizedObject);
+			//THEN PUT IT BACK
 			if (self.objectInStomach.realizedObject != null)
 				self.objectInStomach.realizedObject.RemoveFromRoom(); //ONE OF THESE IS NULL SOMEHOW??
-            self.objectInStomach.Abstractize(self.abstractCreature.pos);
-            self.objectInStomach.Room.RemoveEntity(self.objectInStomach);
-        }
+			self.objectInStomach.Abstractize(self.abstractCreature.pos);
+			self.objectInStomach.Room.RemoveEntity(self.objectInStomach);
+		}
 
-        //if (self.timeSinceSpawned == 60 && self.graphicsModule != null && (RainWorld.GAME_VERSION_STRING == "v1.9.01" || RainWorld.GAME_VERSION_STRING == "v1.9.02" || RainWorld.GAME_VERSION_STRING == "v1.9.03"))
-        //    self.room.game.cameras[0].hud.textPrompt.AddMessage(self.room.game.rainWorld.inGameTranslator.Translate("Rotund World Warning - Outdated game version will crash on hibernation! Use version v1.9.04 or higher"), 90, 1000, false, false);
+		//if (self.timeSinceSpawned == 60 && self.graphicsModule != null && (RainWorld.GAME_VERSION_STRING == "v1.9.01" || RainWorld.GAME_VERSION_STRING == "v1.9.02" || RainWorld.GAME_VERSION_STRING == "v1.9.03"))
+		//	self.room.game.cameras[0].hud.textPrompt.AddMessage(self.room.game.rainWorld.inGameTranslator.Translate("Rotund World Warning - Outdated game version will crash on hibernation! Use version v1.9.04 or higher"), 90, 1000, false, false);
 		//THAT JUST WASN'T RELIABLE ENOUGH, AND/OR DOESN'T WORK IN THE OLD VERSIONS. TRY THIS INSTEAD
 		if (!BellyPlus.versionCheck && self.graphicsModule != null && self.room.game.cameras[0].hud != null)
 		{
@@ -7646,22 +7646,22 @@ public class patch_Player
 			//Lizard lizardPartner = FindLizardInRange(self, 0, 0);
 			//Scavenger scavPartner = patch_Scavenger.FindScavInRange(self);
 			Creature fatCrit = FindFatCreatureInRange(self);
-            if (fatCrit != null)
-            {
-                patch_MiscCreatures.AddFood(fatCrit, 1);
-                self.room.PlaySound(SoundID.HUD_Food_Meter_Fill_Plop_A, self.mainBodyChunk, false, 1f, 1.2f);
-                Debug.Log("--ADDING CREATURE FAT :" + fatCrit.abstractCreature.GetAbsBelly().myFoodInStomach);
-            }
-            else
+			if (fatCrit != null)
+			{
+				patch_MiscCreatures.AddFood(fatCrit, 1);
+				self.room.PlaySound(SoundID.HUD_Food_Meter_Fill_Plop_A, self.mainBodyChunk, false, 1f, 1.2f);
+				Debug.Log("--ADDING CREATURE FAT :" + fatCrit.abstractCreature.GetAbsBelly().myFoodInStomach);
+			}
+			else
 			{
 				if (self.input[0].y == -1)
-                {
+				{
 					//AddPersonalFood(self, -1);
 					self.SubtractFood(1);
 					self.room.PlaySound(SoundID.HUD_Food_Meter_Fill_Plop_A, self.mainBodyChunk, false, 1f, 0.5f);
 				}
 				else
-                {
+				{
 					//AddPersonalFood(self, 1);
 					self.AddFood(self.input[0].pckp ? 10 : 1);
 				}
@@ -7673,7 +7673,7 @@ public class patch_Player
 		}
 
 
-        if (ModManager.JollyCoop && self.room?.game.Players.Count > 1 && BPOptions.blushEnabled.Value && self.input[0].mp && !self.input[1].mp)
+		if (ModManager.JollyCoop && self.room?.game.Players.Count > 1 && BPOptions.blushEnabled.Value && self.input[0].mp && !self.input[1].mp)
 		{
 			//SKIP IF PLAYERS ARE WAITING IN PIPES
 			bool pipeWait = false;
@@ -7691,13 +7691,13 @@ public class patch_Player
 			}
 				
 		}
-        //self.input[0].mp
+		//self.input[0].mp
 
 
-    }
+	}
 
 
-    public static void BPPlayer_Update(On.Player.orig_Update orig, Player self, bool eu)
+	public static void BPPlayer_Update(On.Player.orig_Update orig, Player self, bool eu)
 	{
 		if (BellyPlus.VisualsOnly())
 		{
@@ -7709,9 +7709,9 @@ public class patch_Player
 
 		BPUUpdatePass1(self, eu);
 
-        orig.Invoke(self, eu); //ORIGINAL (BTW, EU = EVERY OTHER (TICK) )
-        
-        if (self == null || self.dead) //OKAY??? I GUESS THIS WORKS???
+		orig.Invoke(self, eu); //ORIGINAL (BTW, EU = EVERY OTHER (TICK) )
+		
+		if (self == null || self.dead) //OKAY??? I GUESS THIS WORKS???
 		{
 			return;
 		}
@@ -7734,13 +7734,13 @@ public class patch_Player
 
 		BPUUpdatePass6(self);
 
-        //Debug.Log("---ME! " + self.bodyMode + " - " + self.animation);
+		//Debug.Log("---ME! " + self.bodyMode + " - " + self.animation);
 
-        //OK THIS JOLLY BINCH... GONNA TRICK IT'S PLAYER UPDATE METHOD~ TO FIX LETTING GO OF OUR PARTNER WHEN BOOSTING
-        //if (self.GetBelly().isStuck && IsGrabbedByPlayer(self) && self.input[0].jmp) //if (self.GetBelly().pullingOther == true)
-        if (InPullingChain(self) && IsGrabbedByPlayer(self) && self.input[0].jmp)
+		//OK THIS JOLLY BINCH... GONNA TRICK IT'S PLAYER UPDATE METHOD~ TO FIX LETTING GO OF OUR PARTNER WHEN BOOSTING
+		//if (self.GetBelly().isStuck && IsGrabbedByPlayer(self) && self.input[0].jmp) //if (self.GetBelly().pullingOther == true)
+		if (InPullingChain(self) && IsGrabbedByPlayer(self) && self.input[0].jmp)
 			self.input[1].jmp = true; //HAHAA, TRY THAT ON FOR SIZE >:3
-        
+		
 		//FANCY SLUGCATS STOLE OUR GRAPHICS UPDATER! BUT THAT'S OKAY, WE CAN JUST TACK OURS ON THE END...
 		//if (BellyPlus.fancySlugsEnabled)
 		//{
@@ -7750,33 +7750,33 @@ public class patch_Player
 	}
 
 
-    public static void MeadowPopFree(Creature self, float power, bool inPipe)
+	public static void MeadowPopFree(Creature self, float power, bool inPipe)
 	{
 		//if (!BellyPlus.isMeadowClient)
 		if (OnlineManager.lobby.isOwner && (OnlinePhysicalObject.map.TryGetValue(self.abstractPhysicalObject, out var onlinePlayer)))
 		{
-            foreach (var player in OnlineManager.players)
-            {
+			foreach (var player in OnlineManager.players)
+			{
 				if (!player.isMe) //IF WE WERE OPTIMAL...
 				{
 					//player.InvokeOnceRPC(RotundRPCs.MeadowPopFree, onlinePlayer, power, inPipe);
-                    player.InvokeOnceRPC(typeof(RotundRPCs).GetMethod("MeadowPopFree").CreateDelegate(typeof(Action<RPCEvent, OnlinePhysicalObject, float, bool>)), onlinePlayer, power, inPipe);
-                }
-                else
+					player.InvokeOnceRPC(typeof(RotundRPCs).GetMethod("MeadowPopFree").CreateDelegate(typeof(Action<RPCEvent, OnlinePhysicalObject, float, bool>)), onlinePlayer, power, inPipe);
+				}
+				else
 				{
 					if (self is Player)
 						PopFree(self as Player, power, inPipe);
 					else
 						patch_Lizard.PopFree(self, power, inPipe);
 				}
-                //WE CANT PASS PLAYER OBJECT TYPES AS ARGUMENTS IN RPCS, SO WE PASS IN THE ONLINEPHYSICALOBJECT INSTEAD
-            }
-        }
+				//WE CANT PASS PLAYER OBJECT TYPES AS ARGUMENTS IN RPCS, SO WE PASS IN THE ONLINEPHYSICALOBJECT INSTEAD
+			}
+		}
 	}
 
 
 
-    public static void PopFree(Player self, float power, bool inPipe)
+	public static void PopFree(Player self, float power, bool inPipe)
 	{
 		
 		float popMag = Mathf.Min(power / 120f, 2f); //CAP OUT AT 2
@@ -7794,8 +7794,8 @@ public class patch_Player
 		self.GetBelly().autoPilot = new IntVector2(0, 0);
 		self.GetBelly().bloated = false;
 		self.GetBelly().stuckLock = 0;
-        // self.GetBelly().slicked /= 2;
-        self.bodyChunkConnections[0].type = PhysicalObject.BodyChunkConnection.Type.Normal; //IN CASES OF UNCONCOUSNESS, THE GAME MIGHT OTHERWISE FORGET TO RESET THIS
+		// self.GetBelly().slicked /= 2;
+		self.bodyChunkConnections[0].type = PhysicalObject.BodyChunkConnection.Type.Normal; //IN CASES OF UNCONCOUSNESS, THE GAME MIGHT OTHERWISE FORGET TO RESET THIS
 		self.shortcutDelay = 1;
 		self.gourmandAttackNegateTime = Math.Max(6, self.gourmandAttackNegateTime); //PHYSICS IS WEIRD. THIS IS NESSESARY APPARENTLY
 		
@@ -7823,14 +7823,14 @@ public class patch_Player
 
 		float launchSpeed = inPipe ? 5f : 8f;
 		if (ObjIsSlick(self))
-        {
+		{
 			launchSpeed *= 1.5f;
 			popVol *= 1.3f;
 			sparkCount += 4;
 		}
 		
 		if (self.GetBelly().fwumpFlag > 0)
-        {
+		{
 			launchSpeed *= 1.5f;
 			popVol *= 1.3f;
 			sparkCount += 4;
@@ -7851,15 +7851,15 @@ public class patch_Player
 		if (BPOptions.debugLogs.Value)
 			Debug.Log("-----LAUNCH!!!: " + (launchSpeed * popMag));
 
-        if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < ((launchSpeed * popMag) - 10f) / 10f)
-            DoNoirSounds(self, true);
+		if (self.slugcatStats?.name?.value == "NoirCatto" && UnityEngine.Random.value < ((launchSpeed * popMag) - 10f) / 10f)
+			DoNoirSounds(self, true);
 
-        //IF WE'RE BEING TUGGED (BY A SLUGCAT) RELEASE US 
-        if (IsGrabbedByPlayer(self))
+		//IF WE'RE BEING TUGGED (BY A SLUGCAT) RELEASE US 
+		if (IsGrabbedByPlayer(self))
 		{
-            Creature myHelper = self.grabbedBy[0].grabber;
+			Creature myHelper = self.grabbedBy[0].grabber;
 			if (myHelper != null)
-            {
+			{
 				//Debug.Log("-----LAUNCH OUR PULLER!!!: " + self.grabbedBy[0].graspUsed);
 				if (!(self.isNPC && self.isSlugpup))
 					myHelper.ReleaseGrasp(self.grabbedBy[0].graspUsed);
@@ -7916,16 +7916,16 @@ public class patch_Player
 
 		//IF WE WERE AAALMOST EXHAUSTED TOO, ADD A SPAT OF MINI EXHAUSTION~
 		if (self.GetBelly().corridorExhaustion > (maxStamina - 20) && self.GetBelly().corridorExhaustion < maxStamina && self.airInLungs >= 1)
-        {
+		{
 			self.airInLungs = 0.8f;
 			self.lungsExhausted = true;
 		}
 
-        //SOME LAST MINUTE STUFF
-        self.horizontalCorridorSlideCounter = 0;
-        self.GetBelly().stuckStrain = 6; //FAST PASS TO FIX VOLUME N STUFF
-        self.GetBelly().squeezeStrain = 0; //SO WE DON'T ALSO GET THE POP
-    }
+		//SOME LAST MINUTE STUFF
+		self.horizontalCorridorSlideCounter = 0;
+		self.GetBelly().stuckStrain = 6; //FAST PASS TO FIX VOLUME N STUFF
+		self.GetBelly().squeezeStrain = 0; //SO WE DON'T ALSO GET THE POP
+	}
 
 
 
@@ -7955,19 +7955,19 @@ public class patch_Player
 			DeadFall(self);
 		}
 
-        //CURSE THIS GAME... FEETSTICKPOSITION FORGETS TO CHECK THE TERRAIN RAD T_T SO WE NEED TO BRIEFLY PRETEND OUR RAD IS DIFFERENT
-        //float myOrigBodyRad = self.bodyChunks[1].rad;
-        //self.bodyChunks[1].rad = 8f;
+		//CURSE THIS GAME... FEETSTICKPOSITION FORGETS TO CHECK THE TERRAIN RAD T_T SO WE NEED TO BRIEFLY PRETEND OUR RAD IS DIFFERENT
+		//float myOrigBodyRad = self.bodyChunks[1].rad;
+		//self.bodyChunks[1].rad = 8f;
 		//OKAY! THIS WAS ACTUALLY CAUSING BIG PROBLEMS WITH TERRAIN RADIUS, SO I ADDED AN IL HOOK TO SWAP THIS METHOD'S RAD WITH TERRAIN RAD THE CORRECT WAY.
 
-        orig.Invoke(self, eu); //ORIGINAL
+		orig.Invoke(self, eu); //ORIGINAL
 
 		if (self.GetBelly().slugBed < 0)
 		{
-            self.flipDirection = origFlipDir;
+			self.flipDirection = origFlipDir;
 			self.standing = false;
 			//if (self.inp)
-        }
+		}
 		//self.bodyChunks[1].rad = myOrigBodyRad;
 		//Debug.Log("BODY CHUNK RAD: " + self.bodyChunks[1].rad);
 
@@ -8020,17 +8020,17 @@ public class patch_Player
 
 		//INCREASED DRAG RESISTANCE ON TUGGING OUR PARTNERS
 		self.GetBelly().pullingOther = false;
-        int myGrasp = -1;
-        //CHECK BOTH GRASPS, DUMMY
-        for (int j = self.grasps.Length - 1; j >= 0; j--)
-        {
-            if (self.grasps[j] != null && self.grasps[j].grabbed is Creature crit && !crit.dead)
-                myGrasp = j;
-        }
+		int myGrasp = -1;
+		//CHECK BOTH GRASPS, DUMMY
+		for (int j = self.grasps.Length - 1; j >= 0; j--)
+		{
+			if (self.grasps[j] != null && self.grasps[j].grabbed is Creature crit && !crit.dead)
+				myGrasp = j;
+		}
 
-        //if (self.grasps[0] != null && ObjIsStuckable(self.grasps[0].grabbed as Creature) && !(self.grasps[0].grabbed as Creature).dead) //&& self.HeavyCarry(self.grasps[0].grabbed)
-        if (myGrasp != -1 && self.grasps[myGrasp].grabbed is Creature myPartner && ObjIsStuckable(myPartner) && !myPartner.dead)
-        {
+		//if (self.grasps[0] != null && ObjIsStuckable(self.grasps[0].grabbed as Creature) && !(self.grasps[0].grabbed as Creature).dead) //&& self.HeavyCarry(self.grasps[0].grabbed)
+		if (myGrasp != -1 && self.grasps[myGrasp].grabbed is Creature myPartner && ObjIsStuckable(myPartner) && !myPartner.dead)
+		{
 			// Player myPartner = self.grasps[0].grabbed as Player;
 			//Creature myPartner = self.grasps[0].grabbed as Creature;
 
@@ -8062,12 +8062,12 @@ public class patch_Player
 					// Debug.Log("-----OUR GRABBD PLAYER IS STUCK!: " + matchingShoveDir);
 
 					if (matchingShoveDir)
-                    {
+					{
 						self.GetBelly().pullingOther = true;
 						if (self.graphicsModule != null)
 							(self.graphicsModule as PlayerGraphics).LookAtObject(myPartner); //LOOK AT IT
 						if (!self.lungsExhausted) //GIVE THEM THAT BOOST IF WE'RE PULLING THEM WHILE THEY'RE STUCK
-                        {
+						{
 							ObjGainStuckStrain(myPartner, 1);
 							ObjGainBoostStrain(myPartner, 0, 2, 8 + (ObjBeingPushed(myPartner) > 0 ? 2 : 0));
 						}
@@ -8089,9 +8089,9 @@ public class patch_Player
 							self.bodyChunks[0].vel.y += str;
 							 //Debug.Log("-----TUG!!! " + pushVal);
 
-                            // self.graphicsModule.bodyParts[1].vel.y += (GetCappedBoostStrain(self) / 6f); // * -self.GetBelly().myFlipValX;
+							// self.graphicsModule.bodyParts[1].vel.y += (GetCappedBoostStrain(self) / 6f); // * -self.GetBelly().myFlipValX;
 							WagTailSegment(self, 1, new Vector2(0, GetCappedBoostStrain(self) / 6f));
-                            GetHead(self).vel.x += GetCappedBoostStrain(self) * self.GetBelly().myFlipValX;
+							GetHead(self).vel.x += GetCappedBoostStrain(self) * self.GetBelly().myFlipValX;
 						}
 					}
 				}
@@ -8102,20 +8102,20 @@ public class patch_Player
 
 				//IF WE'RE HANGIN OFF SOME POOR CEILING STUCKEE, SWANG~
 				if ((self.bodyChunks[1].ContactPoint.y < 0) == false)
-                {
+				{
 					self.standing = false;
 					self.animation = Player.AnimationIndex.HangUnderVerticalBeam;
 				}
 			}
 			else
-            {
+			{
 				//THIS DOESN'T REALLY SEEM TO WORK - NVM IT WORKS
 				//IF OUR TARGET IS NOT STUCK. WE SHOULD LET GO. EVENTUALLY.
 				if (self.GetBelly().targetStuck > 1)
 					self.GetBelly().targetStuck --;
 
 				if (self.GetBelly().targetStuck < 1)
-                {
+				{
 					if (ObjIsStuckable(myPartner as Creature) && myPartner is Player && !((myPartner as Player).isNPC && (myPartner as Player).isSlugpup)) // && !(myPartner is LanternMouse) && !(myPartner is Cicada) && !(myPartner is Player && (myPartner as Player).isNPC &&  (myPartner as Player).isSlugpup))
 					{
 						self.ReleaseGrasp(myGrasp); //GENTLY release them
@@ -8129,9 +8129,9 @@ public class patch_Player
 
 
 		if (self.GetBelly().isSqueezing)
-        {
+		{
 			self.GetBelly().squeezeStrain = Math.Min(self.GetBelly().squeezeStrain +1, 60);
-        }
+		}
 		else if (self.GetBelly().squeezeStrain > 0)
 		{
 			self.GetBelly().squeezeStrain -= 2;
@@ -8166,8 +8166,8 @@ public class patch_Player
 					self.airInLungs = 0.6f; //THIS SHOULD MAKE US TIRED
 					self.lungsExhausted = true;
 					self.GetBelly().stuckStrain += 25; //LAST DITCH SHOVING~
-                    self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1.2f, 0.6f);
-                }
+					self.room.PlaySound(SoundID.Slugcat_Normal_Jump, self.mainBodyChunk.pos, 1.2f, 0.6f);
+				}
 				//DON'T LET US GO OVER MAX STAMINA
 				self.GetBelly().corridorExhaustion = Mathf.CeilToInt(maxStamina);
 			}
@@ -8204,8 +8204,8 @@ public class patch_Player
 		//THIS SHOULD BE HANDLED BE THE RADTOTERRAINRAD IL HOOK NOW
 
 
-        //FIRST!!! CHECK IF WE'RE STUCK. IF WE ARE, CHANGE OUR BODYMODE TO CRAWL AND RUN THE ORIGINAL.
-        if (self.GetBelly().isStuck
+		//FIRST!!! CHECK IF WE'RE STUCK. IF WE ARE, CHANGE OUR BODYMODE TO CRAWL AND RUN THE ORIGINAL.
+		if (self.GetBelly().isStuck
 			&& (self.bodyMode == Player.BodyModeIndex.CorridorClimb || self.bodyMode == Player.BodyModeIndex.Default || self.bodyMode == Player.BodyModeIndex.Stunned || self.rollCounter > 0)
 			&& self.animation != Player.AnimationIndex.ClimbOnBeam
 			&& self.GetBelly().stuckVector.y == 0)//Math.Abs(GetCreatureVector(self).y) == 0)//Math.Abs(self.bodyChunks[1].pos.x - self.bodyChunks[0].pos.x) > 3f) //MAKE SURE OUR UPPER AND LOWER BODY ARE NOT SOMEWHAT PARALEL
@@ -8568,10 +8568,10 @@ public class patch_Player
 				//IF WE HAVE THE NOSTUCK TAG AND ARE NOT IN A PIPE, RECALCULATE PIPE CRAWL SPEED AS IF WE HAD NO MODIFIERS
 
 				if(self.GetBelly().noStuck > 0) //NAH, WE CAN BE IN A PIPE TOO && !self.GetBelly().inPipeStatus)
-                {
+				{
 					num3 = 1f; //SURPRISE. FORGET ALL THE REST
 					if (self.GetBelly().shortStuck > 0)
-                    {
+					{
 						num3 *= -0.5f;
 					}
 					// Debug.Log("-----SWOOOOOOSH THROUGH PIPE!: " + self.bodyChunks[1].vel);
@@ -8585,10 +8585,10 @@ public class patch_Player
 					bool rigged = (self.room.roomSettings.name.ToString() == "SU_A44") ? true : false;
 
 					num3 *= CheckWedge(self, rigged);
-                    //WE PROBABLY DO NEED TO CHECK THIS CONSTANTLY IN PIPES, SO WE REMAIN "STUCK" SO FRIENDLIES CAN PUSH US IF WE STAY STILL.
-                    //OK HOLDUP, WE CAN'T RUN THE PART THAT HALTS US IN PLACE IF OUR VELOCITY IS TINY HERE, BECAUSE THEN WE'D NEVER START MOVING AGAIN
-                    //self.horizontalCorridorSlideCounter = 0;
-                    //self.verticalCorridorSlideCounter = 0;
+					//WE PROBABLY DO NEED TO CHECK THIS CONSTANTLY IN PIPES, SO WE REMAIN "STUCK" SO FRIENDLIES CAN PUSH US IF WE STAY STILL.
+					//OK HOLDUP, WE CAN'T RUN THE PART THAT HALTS US IN PLACE IF OUR VELOCITY IS TINY HERE, BECAUSE THEN WE'D NEVER START MOVING AGAIN
+					//self.horizontalCorridorSlideCounter = 0;
+					//self.verticalCorridorSlideCounter = 0;
 					//self.bodyChunks[0].vel *= 0f;
 					//self.bodyChunks[1].vel *= 0f;
 					//Debug.Log("-----MYVEL!: " + self.bodyChunks[1].vel + " JMP?" + self.input[0]);
@@ -8689,7 +8689,7 @@ public class patch_Player
 			if (ObjIsWedged(self) && GetAxisMagnitude(self) < 0.05f) //DON'T MOVE AT ALL IF WE AINT REALLY MOVING //self.bodyChunks[1].vel.magnitude
 			{
 				 // Debug.Log("TOO SLOW! WEDGING IN PLACE: " + self.bodyChunks[1].vel + " MAG:" + GetAxisMagnitude(self));
-                self.bodyChunks[0].vel = new Vector2(0, self.gravity);
+				self.bodyChunks[0].vel = new Vector2(0, self.gravity);
 				self.bodyChunks[1].vel = new Vector2(0, self.gravity);
 				////ALSO APPARENTLY OUR FLIP VALUES ARENT ALWAYS CORRECT SO LETS CORRECT THAT
 				//IntVector2 myVec = GetCreatureVector(self);
@@ -8709,22 +8709,22 @@ public class patch_Player
 
 			//12-4-22 OKAY, THIS NEEDS SOME REPLACING
 			if (IsPullingOther(self))
-            {
+			{
 				self.dynamicRunSpeed[1] *= 0.1f; //HALT HIP MOVEMENT. ONLY UPPER TORSO MOVEMENT
 			}
 
 			float runspeedMult = self.GetBelly().runSpeedMod;
-            //IF WE'VE GOT A CHONKY PLAYER PIGGYBACKING...
-            if (GetPlayerOnBack(self) != null)
+			//IF WE'VE GOT A CHONKY PLAYER PIGGYBACKING...
+			if (GetPlayerOnBack(self) != null)
 				runspeedMult *= (GetHeaviestOnStack(self, true)).GetBelly().runSpeedMod - 0.05f;
 
-            //GREATLY REDUCE THESE PENALTIES IF JUMPING FROM A BEAM TIP!
-            //if (self.animation == Player.AnimationIndex.BeamTip)
-            if (self.GetBelly().weightless > 0)
+			//GREATLY REDUCE THESE PENALTIES IF JUMPING FROM A BEAM TIP!
+			//if (self.animation == Player.AnimationIndex.BeamTip)
+			if (self.GetBelly().weightless > 0)
 			{
 				//runspeedMult = Mathf.Lerp(runspeedMult, 1.0f, 0.85f);
 				runspeedMult = 1.0f; //OVERRIDE WEIGHT PENALTY
-            }
+			}
 			
 			
 			self.dynamicRunSpeed[0] *= runspeedMult;//self.GetBelly().runSpeedMod;
@@ -8761,31 +8761,31 @@ public class patch_Player
 		}
 
 
-        //BODY CHUNK BACK TO NORMAL!
-        //self.bodyChunks[1].rad = myOrigBodyRad;
+		//BODY CHUNK BACK TO NORMAL!
+		//self.bodyChunks[1].rad = myOrigBodyRad;
 
 
-        //NO POLE JUMPING IF WE'RE STUCK OR PUSHING!
-        if (self.GetBelly().isStuck || ObjIsPushingOther(self))
+		//NO POLE JUMPING IF WE'RE STUCK OR PUSHING!
+		if (self.GetBelly().isStuck || ObjIsPushingOther(self))
 			self.slideUpPole = 0;
 		
 
-        //WE NEED TO RUN THIS HERE BECAUSE IT'S THE ONLY THING INBETWEEN THE SETTING AND CHECKING OF CANJUMP
-        if (self.GetBelly().isStuck && IsGrabbedByPlayer(self)) //if (self.GetBelly().pullingOther == true)
-            self.canJump = 0;
-        //AND THEN THE JOLLYCOOP GUY CHANGED HIS MOD AGAIN!! WAH >:( QUIT THAT!
+		//WE NEED TO RUN THIS HERE BECAUSE IT'S THE ONLY THING INBETWEEN THE SETTING AND CHECKING OF CANJUMP
+		if (self.GetBelly().isStuck && IsGrabbedByPlayer(self)) //if (self.GetBelly().pullingOther == true)
+			self.canJump = 0;
+		//AND THEN THE JOLLYCOOP GUY CHANGED HIS MOD AGAIN!! WAH >:( QUIT THAT!
 
-    }
+	}
 
 	
 	
 	public static void BPUpdateAnimation(On.Player.orig_UpdateAnimation orig, Player self)
 	{
-        //CHECK TO MAKE SURE WE HAVEN'T FAILED A PULLUP DUE TO OUR SHEER MASS
-        if (self.animation == Player.AnimationIndex.GetUpOnBeam && GetOverstuffed(self) > 80)
-            self.straightUpOnHorizontalBeam = true;
+		//CHECK TO MAKE SURE WE HAVEN'T FAILED A PULLUP DUE TO OUR SHEER MASS
+		if (self.animation == Player.AnimationIndex.GetUpOnBeam && GetOverstuffed(self) > 80)
+			self.straightUpOnHorizontalBeam = true;
 
-        orig.Invoke(self);
+		orig.Invoke(self);
 	}
 	
 	
@@ -8806,11 +8806,11 @@ public class patch_Player
 		int grpIndex = 0;
 		Creature stuckCrit = null;
 
-        //THIS PART OF THE CODE ALSO DETERMINES HOW CLOSELY WE HOLD OUR GRABBED OBJECTS TO US. SO UNDER THOSE SPECIFIC CONDTIONS, SKIP THE NORMAL VERSION.
-        for (int i = 0; i < 2; i++)
+		//THIS PART OF THE CODE ALSO DETERMINES HOW CLOSELY WE HOLD OUR GRABBED OBJECTS TO US. SO UNDER THOSE SPECIFIC CONDTIONS, SKIP THE NORMAL VERSION.
+		for (int i = 0; i < 2; i++)
 		{
 			if (self.grasps[i] != null && self.grasps[i].grabbed is Creature myTarget && self.HeavyCarry(self.grasps[i].grabbed) && ObjIsStuckable(myTarget) && (IsStuckOrWedged(myTarget) || InPullingChain(myTarget)))
-            {
+			{
 				//AND RUNNING OUR SLIGHTLY ALTERED VERSION OF THE BASE CODE INSTEAD, WHERE EVERYTHING IS THE SAME EXCEPT WE PRETENT WE'RE HOLDING A SQUIDCADA
 				Vector2 vector = Custom.DirVec(self.mainBodyChunk.pos, self.grasps[i].grabbedChunk.pos);
 				float num = Vector2.Distance(self.mainBodyChunk.pos, self.grasps[i].grabbedChunk.pos);
@@ -8839,15 +8839,15 @@ public class patch_Player
 					return; //4/7/24
 
 				//IT'S TOO LATE I'M ALREADY IN TOO DEEP
-                stuckCrit = myTarget;
-                grpIndex = i;
+				stuckCrit = myTarget;
+				grpIndex = i;
 
 				//THE IMPORTANT PART! TEMPORARILY SET THE GRASP TO NULL SO IT DOESN'T UPDATE AGAIN
 				//self.grasps[i] = null;
 				//self.ReleaseGrasp(i);
 				(self as Creature).ReleaseGrasp(i); //RUN AS CREATURE BECAUSE PLAYER VERSION PLAYS A SOUND
-                break;
-            }
+				break;
+			}
 		}
 		
 		//OKAY NEW PLAN, WE AREN'T ACTUALLY SKIPPING THE ORIGINAL. JUST MODIFYING OUR GRASPS BEFORE RUNNING IT
@@ -8857,7 +8857,7 @@ public class patch_Player
 		{
 			//self.grasps[grpIndex] = new Creature.Grasp(self, stuckCrit, grpIndex, chunk, grpShare, dom, false);
 			self.SlugcatGrab(stuckCrit, grpIndex);
-        }
+		}
 	}
 	
 	
@@ -8874,8 +8874,8 @@ public class patch_Player
 		//WE MIGHT NOT NEED THIS AS OF 1.9
 		// public void ReplaceOwner(Player owner)
 		// {
-            // this.owner = owner;
-        // }
+			// this.owner = owner;
+		// }
 
 		public bool HasAFood
 		{
@@ -8967,9 +8967,9 @@ public class patch_Player
 				return;
 
 			if (this.spear.room != this.owner.room) //IN CASE MODDING SHENANIGANS DESYNCED THIS
-                this.owner.room.AddObject(this.spear);
+				this.owner.room.AddObject(this.spear);
 
-            if (this.owner.grasps[1] != null)
+			if (this.owner.grasps[1] != null)
 				return;
 
 			int num = -1;
@@ -9014,12 +9014,12 @@ public class patch_Player
 
 			//IF IT'S A BATFLY, KILL IT. IF IT'S A DIFFERENT LIVING CREATURE, DON'T STOW IT
 			if (spr is Creature && (spr as Creature).dead == false)
-            {
+			{
 				if (spr is Fly)
 					(spr as Fly).Die();
 				else
 					return false;
-            }
+			}
 			
 			if (spr is Mushroom)
 				(spr as Mushroom).growPos = null;
@@ -9108,7 +9108,7 @@ public class patch_Player
 
 		public void ChangeOverlap(bool newOverlap)
 		{
-            /*
+			/*
 			if (this.inFrontOfObjects == ((!newOverlap) ? 0 : 1) || this.owner.room == null)
 			{
 				return;
@@ -9119,24 +9119,24 @@ public class patch_Player
 			}
 			this.inFrontOfObjects = ((!newOverlap) ? 0 : 1);
 			*/
-            //MAYBE WE JUST GO AS SIMPLE AS POSSIBLE?
+			//MAYBE WE JUST GO AS SIMPLE AS POSSIBLE?
 
-            for (int i = 0; i < this.owner.room?.game.cameras.Length; i++)
-            {
-                //DIFFERENT OBJECT TYPES NEED TO PASS IN DIFFERENT THINGS TO SWAP LAYERS CORRECTLY
-                IDrawable objTarget; // = this.spear;
-                if (this.spear is IDrawable)
-                    objTarget = this.spear as IDrawable;
-                else
-                    objTarget = this.spear.graphicsModule;
-                this.owner.room.game.cameras[i].MoveObjectToContainer(objTarget, this.owner.room.game.cameras[i].ReturnFContainer((!newOverlap) ? "Background" : "Items"));
-            }
+			for (int i = 0; i < this.owner.room?.game.cameras.Length; i++)
+			{
+				//DIFFERENT OBJECT TYPES NEED TO PASS IN DIFFERENT THINGS TO SWAP LAYERS CORRECTLY
+				IDrawable objTarget; // = this.spear;
+				if (this.spear is IDrawable)
+					objTarget = this.spear as IDrawable;
+				else
+					objTarget = this.spear.graphicsModule;
+				this.owner.room.game.cameras[i].MoveObjectToContainer(objTarget, this.owner.room.game.cameras[i].ReturnFContainer((!newOverlap) ? "Background" : "Items"));
+			}
 
 
-            //IF IT'S LIKE A CREATURE OR SOMETHING, RESET IT'S GRAPHICS MODULE
-            //if (newOverlap == false && this.spear.graphicsModule != null)
-            //	this.spear.graphicsModule.Reset();
-        }
+			//IF IT'S LIKE A CREATURE OR SOMETHING, RESET IT'S GRAPHICS MODULE
+			//if (newOverlap == false && this.spear.graphicsModule != null)
+			//	this.spear.graphicsModule.Reset();
+		}
 
 		public Player owner;
 		// public Spear spear;

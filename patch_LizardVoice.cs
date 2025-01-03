@@ -2,8 +2,8 @@
 public class patch_LizardVoice
 {
 
-    public static void Patch()
-    {
+	public static void Patch()
+	{
 		On.LizardVoice.GetMyVoiceTrigger += Lizard_GetMyVoiceTrigger;
 	}
 	

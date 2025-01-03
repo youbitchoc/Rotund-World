@@ -9,17 +9,17 @@ namespace RotundWorld;
 public class patch_LizardAI
 {
 	public static void Patch()
-    {
+	{
 		On.LizardAI.Update += BP_Update;
 		On.LizardAI.DoIWantToHoldThisWithMyTongue += Lizard_DoIWantToHoldThisWithMyTongue;
 		// On.LizardAI.ctor += BPLizardAI_ctor;
 	}
 	
 	public static void BPLizardAI_ctor(On.LizardAI.orig_ctor orig, LizardAI self, AbstractCreature creature, World world)
-    {
-        orig.Invoke(self, creature, world);
+	{
+		orig.Invoke(self, creature, world);
 		
-    }
+	}
 
 
 	public static bool Lizard_DoIWantToHoldThisWithMyTongue(On.LizardAI.orig_DoIWantToHoldThisWithMyTongue orig, LizardAI self, BodyChunk chunk)
@@ -43,7 +43,7 @@ public class patch_LizardAI
 
 
 	public static void BP_Update(On.LizardAI.orig_Update orig, LizardAI self)
-    {
+	{
 		float origRunspeed = self.runSpeed;
 
 		orig.Invoke(self);
@@ -51,7 +51,7 @@ public class patch_LizardAI
 		 if (BellyPlus.VisualsOnly())
 			 return;
 
-        
+		
 		//MORNING UPDATE OUR SAVED BELLY SIZE
 		if (self.friendTracker.friend != null && (self.friendTracker.friend as Player).stillInStartShelter && BellyPlus.lizardFood != 0)
 		{
@@ -87,7 +87,7 @@ public class patch_LizardAI
 			//	self.lizard.timeSpentTryingThisMove--;
 
 			//if (UnityEngine.Random.value < 0.0125f)
-			//    self.lizard.EnterAnimation(Lizard.Animation.PreyReSpotted, false);
+			//	self.lizard.EnterAnimation(Lizard.Animation.PreyReSpotted, false);
 
 			if (UnityEngine.Random.value < 0.125f && self.lizard.GetBelly().beingPushed == 0)
 				self.lizard.bodyWiggleCounter = Math.Max(self.lizard.bodyWiggleCounter, (int)(UnityEngine.Random.value * 35f));
@@ -99,11 +99,11 @@ public class patch_LizardAI
 			if (UnityEngine.Random.value < 0.0125f)
 			{
 				//if (BellyPlus.lungsExhausted[patch_Lizard.GetRef(self.lizard)])
-				//    self.lizard.voice.MakeSound(LizardVoice.Emotion.Submission);
+				//	self.lizard.voice.MakeSound(LizardVoice.Emotion.Submission);
 				//else if (patch_Lizard.GetBoostStrain(self.lizard) > 0)
-				//    self.lizard.voice.MakeSound(LizardVoice.Emotion.PainImpact, 0.7f);
+				//	self.lizard.voice.MakeSound(LizardVoice.Emotion.PainImpact, 0.7f);
 				//else
-				//    self.lizard.voice.MakeSound(LizardVoice.Emotion.Frustration);
+				//	self.lizard.voice.MakeSound(LizardVoice.Emotion.Frustration);
 				//self.lizard.voice.MakeSound(LizardVoice.Emotion.GeneralSmallNoise); //MANY LIZARDS DON'T HAVE THESE
 				//else
 				self.lizard.voice.MakeSound(LizardVoice.Emotion.Frustration);
@@ -115,7 +115,7 @@ public class patch_LizardAI
 		else if (self.behavior == LizardAI.Behavior.FollowFriend && self.friendTracker.friend != null && self.lizard.graphicsModule != null && patch_Player.IsStuckOrWedged(self.friendTracker.friend as Player) && self.friendTracker.friend.room != null)
 		{
 			//if (self.obstacleTracker != null)
-			//    self.obstacleTracker.EraseObstacleObject(self.friendTracker.friend);
+			//	self.obstacleTracker.EraseObstacleObject(self.friendTracker.friend);
 
 			Player myFriend = self.friendTracker.friend as Player;
 			Vector2 stuckPos = new Vector2(0, 0);
@@ -181,7 +181,7 @@ public class patch_LizardAI
 					&& self.lizard.tongue.Ready
 					&& self.lizard.grasps[0] == null
 					&& myFriend != null && self.focusCreature != null
-                    && Custom.DistLess(self.creature.realizedCreature.mainBodyChunk.pos, myFriend.mainBodyChunk.pos, self.lizard.lizardParams.tongueAttackRange)
+					&& Custom.DistLess(self.creature.realizedCreature.mainBodyChunk.pos, myFriend.mainBodyChunk.pos, self.lizard.lizardParams.tongueAttackRange)
 					&& (self.lizard.Submersion < 0.5f) && UnityEngine.Random.value < self.lizard.lizardParams.tongueChance * 0.5f //0.05f
 					&& self.focusCreature.VisualContact)
 				{
@@ -208,7 +208,7 @@ public class patch_LizardAI
 
 	// public static void RemoteControl(LizardAI self, float origRunspeed)
 	public static void RemoteControl(Creature self, float origRunspeed)
-    {
+	{
 		
 		bool behaviorConditions = false;
 		if (self is Lizard)
@@ -219,8 +219,8 @@ public class patch_LizardAI
 		if (self.room != null && behaviorConditions) // &&  && self.lizard.room == self.friendTracker.friend.room)
 		{
 			Player myFriend = null; // self.AI.friendTracker.friend as Player;
-            if (self is Lizard)
-                myFriend = (self as Lizard).AI.friendTracker.friend as Player;
+			if (self is Lizard)
+				myFriend = (self as Lizard).AI.friendTracker.friend as Player;
 			else if (self is Player)
 				myFriend = (self as Player).AI.friendTracker.friend as Player;
 
@@ -333,18 +333,18 @@ public class patch_LizardAI
 					if (patch_Player.IsStuckOrWedged(self))
 						((self as Lizard).AI as LizardAI).runSpeed = origRunspeed;
 
-                    (self as Lizard).AI.creature.abstractAI.SetDestination(myDest);
-                    (self as Lizard).AI.friendTracker.friendDest = myDest;
-                    (self as Lizard).AI.friendTracker.tempFriendDest = myDest;
-                }
+					(self as Lizard).AI.creature.abstractAI.SetDestination(myDest);
+					(self as Lizard).AI.friendTracker.friendDest = myDest;
+					(self as Lizard).AI.friendTracker.tempFriendDest = myDest;
+				}
 				else
-                {
+				{
 
-                    (self as Player).AI.friendTracker.friendMovingCounter = 50;
-                    (self as Player).AI.friendTracker.friendDest = myDest;
+					(self as Player).AI.friendTracker.friendMovingCounter = 50;
+					(self as Player).AI.friendTracker.friendDest = myDest;
 					(self as Player).AI.friendTracker.tempFriendDest = myDest;
-                    (self as Player).AI.abstractAI.SetDestination(myDest);
-                }
+					(self as Player).AI.abstractAI.SetDestination(myDest);
+				}
 				
 				//Vector2 pos2 = self.lizard.room.MiddleOfTile(commandPos);
 				self.room.AddObject(new StrainSpark(commandPos, new Vector2(0, 0), 10f, Color.blue));

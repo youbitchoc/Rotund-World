@@ -16,26 +16,26 @@ public class patch_Cicada
 		On.Cicada.Die += BP_Die;
 		On.Cicada.Collide += BP_Collide;
 
-        On.CicadaGraphics.InitiateSprites += CicadaGraphics_InitiateSprites;
+		On.CicadaGraphics.InitiateSprites += CicadaGraphics_InitiateSprites;
 
-    }
+	}
 
 	private static void BP_CicadaPatch(On.Cicada.orig_ctor orig, Cicada self, AbstractCreature abstractCreature, World world, bool gender)
 	{
 		orig(self, abstractCreature, world, gender);
 
-        if (self.abstractCreature.GetAbsBelly().myFoodInStomach != -1)
-        {
-            UpdateBellySize(self);
-            return;
-        }
+		if (self.abstractCreature.GetAbsBelly().myFoodInStomach != -1)
+		{
+			UpdateBellySize(self);
+			return;
+		}
 		
 		//BellyPlus.InitializeCreature(critNum);
 
 		//NEW, LETS BASE OUR RANDOM VALUE ON OUR ABSTRACT CREATURE ID
 		UnityEngine.Random.seed = self.abstractCreature.ID.RandomSeed;
 
-        int critChub = Mathf.FloorToInt(Mathf.Lerp(3, 9, UnityEngine.Random.value));
+		int critChub = Mathf.FloorToInt(Mathf.Lerp(3, 9, UnityEngine.Random.value));
 		if (patch_MiscCreatures.CheckFattable(self) == false)
 			critChub = 0;
 		
@@ -51,22 +51,22 @@ public class patch_Cicada
 	
 	public static Cicada FindCicadaInRange(Creature self)
 	{
-        if (self.room == null)
-            return null; 
+		if (self.room == null)
+			return null; 
 		
 		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
-        {
-            if (self.room.abstractRoom.creatures[i].realizedCreature != null
-                && self.room.abstractRoom.creatures[i].realizedCreature is Cicada crit
-                && crit != self && crit.room != null && crit.room == self.room && !crit.dead
-                && Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[1].pos, 35f)
-            )
-            {
-                return crit;
-            }
-        }
+		{
+			if (self.room.abstractRoom.creatures[i].realizedCreature != null
+				&& self.room.abstractRoom.creatures[i].realizedCreature is Cicada crit
+				&& crit != self && crit.room != null && crit.room == self.room && !crit.dead
+				&& Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[1].pos, 35f)
+			)
+			{
+				return crit;
+			}
+		}
 
-        return null;
+		return null;
 	}
 
 
@@ -160,7 +160,7 @@ public class patch_Cicada
 		
 		//RECALCULATE RUN SPEED
 		if (self.GetBelly().isStuck)
-        {
+		{
 			self.flyingPower = Mathf.Min(self.flyingPower, 0.1f);
 			//MAKE THEM FACE THE WAY THEY NEED TO
 			self.bodyChunkConnections[0].type = PhysicalObject.BodyChunkConnection.Type.Pull;
@@ -237,7 +237,7 @@ public class patch_Cicada
 				self.GetBelly().loosenProg += boostAmnt / 4000f;
 			}
 			else if (isTowingOther)
-            {
+			{
 				//WE CAN ONLY TUG SLUGCATS
 				Creature myPartner = self.grabbedBy[0].grabber;
 				if (myPartner != null)
@@ -286,44 +286,44 @@ public class patch_Cicada
 	}
 
 
-    private static void CicadaGraphics_InitiateSprites(On.CicadaGraphics.orig_InitiateSprites orig, CicadaGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
-    {
-        orig.Invoke(self, sLeaser, rCam);
-        BP_UpdateFatness(self, sLeaser);
+	private static void CicadaGraphics_InitiateSprites(On.CicadaGraphics.orig_InitiateSprites orig, CicadaGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
+	{
+		orig.Invoke(self, sLeaser, rCam);
+		BP_UpdateFatness(self, sLeaser);
 
-    }
+	}
 
-    public static void BP_UpdateFatness(CicadaGraphics self, RoomCamera.SpriteLeaser sLeaser)
-    {
-        //orig.Invoke(self, sLeaser, rCam);
+	public static void BP_UpdateFatness(CicadaGraphics self, RoomCamera.SpriteLeaser sLeaser)
+	{
+		//orig.Invoke(self, sLeaser, rCam);
 
-        //float bodySize = Custom.ClampedRandomVariation((!self.cicada.gender) ? 0.4f : 0.6f, 0.1f, 0.5f) * 2f;
+		//float bodySize = Custom.ClampedRandomVariation((!self.cicada.gender) ? 0.4f : 0.6f, 0.1f, 0.5f) * 2f;
 
-        float bodySize = self.cicada.iVars.fatness;
-        switch (patch_Lizard.GetChubValue(self.cicada))
-        {
-            case 4:
-                bodySize *= 1.4f;
-                break;
-            case 3:
-                bodySize *= 1.3f;
-                break;
-            case 2:
-                bodySize *= 1.1f;
-                break;
-            case 1:
-                bodySize *= 1.0f;
-                break;
-            case 0:
-            default:
-                bodySize *= 1.0f;
-                break;
-        }
+		float bodySize = self.cicada.iVars.fatness;
+		switch (patch_Lizard.GetChubValue(self.cicada))
+		{
+			case 4:
+				bodySize *= 1.4f;
+				break;
+			case 3:
+				bodySize *= 1.3f;
+				break;
+			case 2:
+				bodySize *= 1.1f;
+				break;
+			case 1:
+				bodySize *= 1.0f;
+				break;
+			case 0:
+			default:
+				bodySize *= 1.0f;
+				break;
+		}
 
-        sLeaser.sprites[self.BodySprite].scale = bodySize; // self.iVars.fatness;
-                                                           //sLeaser.sprites[self.BodySprite].scaleY = bodySize;
-        sLeaser.sprites[self.HighlightSprite].scaleX = Mathf.Lerp(5f, 3f, Mathf.Abs(bodySize - 1f) * 10f) / 20f;
-        sLeaser.sprites[self.HighlightSprite].scaleY = Mathf.Lerp(12f, 8f, Mathf.Abs(bodySize - 1f) * 10f) / 20f;
-    }
+		sLeaser.sprites[self.BodySprite].scale = bodySize; // self.iVars.fatness;
+														   //sLeaser.sprites[self.BodySprite].scaleY = bodySize;
+		sLeaser.sprites[self.HighlightSprite].scaleX = Mathf.Lerp(5f, 3f, Mathf.Abs(bodySize - 1f) * 10f) / 20f;
+		sLeaser.sprites[self.HighlightSprite].scaleY = Mathf.Lerp(12f, 8f, Mathf.Abs(bodySize - 1f) * 10f) / 20f;
+	}
 
 }

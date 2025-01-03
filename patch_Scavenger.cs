@@ -18,13 +18,13 @@ public class patch_Scavenger
 		//On.Scavenger.Collide += BP_Collide;
 		On.Scavenger.PickUpAndPlaceInInventory += Scavenger_PickUpAndPlaceInInventory;
 
-        On.ScavengerGraphics.ctor += ScavengerGraphics_ctor;
-        On.ScavengerGraphics.InitiateSprites += ScavengerGraphics_InitiateSprites;
-        // On.ScavengerGraphics.DrawSprites += PG_DrawSprites;
-        On.ScavengerGraphics.Update += ScavengerGraphics_Update;
+		On.ScavengerGraphics.ctor += ScavengerGraphics_ctor;
+		On.ScavengerGraphics.InitiateSprites += ScavengerGraphics_InitiateSprites;
+		// On.ScavengerGraphics.DrawSprites += PG_DrawSprites;
+		On.ScavengerGraphics.Update += ScavengerGraphics_Update;
 
-        //TO EDIT THEIR MOVEMENT SPEED FLOAT
-        BindingFlags propFlags = BindingFlags.Instance | BindingFlags.Public;
+		//TO EDIT THEIR MOVEMENT SPEED FLOAT
+		BindingFlags propFlags = BindingFlags.Instance | BindingFlags.Public;
 		BindingFlags myMethodFlags = BindingFlags.Static | BindingFlags.Public;
 
 		Hook myMovespdHook = new Hook(
@@ -34,8 +34,8 @@ public class patch_Scavenger
 		
 	}
 
-    private static void Scavenger_PickUpAndPlaceInInventory(On.Scavenger.orig_PickUpAndPlaceInInventory orig, Scavenger self, PhysicalObject obj)
-    {
+	private static void Scavenger_PickUpAndPlaceInInventory(On.Scavenger.orig_PickUpAndPlaceInInventory orig, Scavenger self, PhysicalObject obj)
+	{
 		//IF WE'RE PULLING SOMEONE, DON'T INTERRUPT US. UPDATEPASS1 WILL TAKE CARE OF THAT
 		if (patch_Player.IsGraspingActualSlugcat(self))
 			return;
@@ -49,7 +49,7 @@ public class patch_Scavenger
 		orig(self, abstractCreature, world);
 
 		if (self.abstractCreature.GetAbsBelly().myFoodInStomach != -1)
-        {
+		{
 			//Debug.Log("SCAV ALREADY EXISTS! CANCELING: " + critNum);
 			UpdateBellySize(self);
 			return;
@@ -58,24 +58,24 @@ public class patch_Scavenger
 		//NEW, LETS BASE OUR RANDOM VALUE ON OUR ABSTRACT CREATURE ID
 		UnityEngine.Random.seed = self.abstractCreature.ID.RandomSeed;
 
-        int critChub = Mathf.FloorToInt(Mathf.Lerp(2, 9, UnityEngine.Random.value));
+		int critChub = Mathf.FloorToInt(Mathf.Lerp(2, 9, UnityEngine.Random.value));
 		if (critChub != 8 || !patch_MiscCreatures.CheckFattable(self))
 			critChub = 4;
 
-        //EXTRA RARE CHANCE FOR AN EVEN FATTER CREATURE
-        int coinFlip = Mathf.FloorToInt(Mathf.Lerp(0, 5, UnityEngine.Random.value)); ////20% CHANCE TO BE TRUE
-        if (critChub == 8 && coinFlip >= 4)
-            critChub += 4;
+		//EXTRA RARE CHANCE FOR AN EVEN FATTER CREATURE
+		int coinFlip = Mathf.FloorToInt(Mathf.Lerp(0, 5, UnityEngine.Random.value)); ////20% CHANCE TO BE TRUE
+		if (critChub == 8 && coinFlip >= 4)
+			critChub += 4;
 
-        if (BPOptions.debugLogs.Value)
+		if (BPOptions.debugLogs.Value)
 			Debug.Log("SCAV SPAWNED! CHUB SIZE: " + critChub);
 		self.abstractCreature.GetAbsBelly().myFoodInStomach = critChub;
 
 		UpdateBellySize(self);
-        //Debug.Log("SCAV SPAWNED! - KARMA? " + self.abstractCreature.karmicPotential);
-        if (BellyPlus.parasiticEnabled)
-            BellyPlus.InitPSFoodValues(abstractCreature);
-    }
+		//Debug.Log("SCAV SPAWNED! - KARMA? " + self.abstractCreature.karmicPotential);
+		if (BellyPlus.parasiticEnabled)
+			BellyPlus.InitPSFoodValues(abstractCreature);
+	}
 	
 	
 	
@@ -88,26 +88,26 @@ public class patch_Scavenger
 		//new BodyChunk(this, 0, new Vector2(0f, 0f), 9.5f, 0.5f);
 		float newMass = baseWeight;
 		switch (System.Math.Min(currentFood, 8))
-        {
-            case 8:
-                newMass = baseWeight * 1.4f;
+		{
+			case 8:
+				newMass = baseWeight * 1.4f;
 				//self.bodyChunks[0].rad = baseRad * 1.5f;
 				self.GetBelly().myFatness = 1.4f + (patch_Lizard.GetOverstuffed(self) / 10f);
 				break;
-            case 7:
-                newMass = baseWeight * 1.2f;
-                self.GetBelly().myFatness = 1.2f;
-                break;
-            default:
+			case 7:
+				newMass = baseWeight * 1.2f;
+				self.GetBelly().myFatness = 1.2f;
+				break;
+			default:
 				newMass = baseWeight * 1f;
 				self.GetBelly().myFatness = 1f;
 				break;
-        }
+		}
 		
 		if (!BellyPlus.VisualsOnly())
 			self.bodyChunks[0].mass = newMass;
 
-        patch_Lizard.UpdateChubValue(self);
+		patch_Lizard.UpdateChubValue(self);
 	}
 	
 	
@@ -115,57 +115,57 @@ public class patch_Scavenger
 	
 	public static float Scavenger_get_MovementSpeed(orig_MovementSpeed orig, Scavenger self)
 	{
-        //IF WE'RE ON SCREEN AND PUSHING SOMEONE, SLOW US DOWN
-        if (self.graphicsModule != null && !BellyPlus.VisualsOnly())
-        {
-            int critNum = self.abstractCreature.ID.RandomSeed;
-            if (self.GetBelly().pushingOther > 0 || self.GetBelly().isStuck)
-                return Mathf.Min(0.5f, orig.Invoke(self)); //RETURN 10% SPEED (OR 0, IF WE WOULD BE STANDING STILL)
-        }
-        return orig.Invoke(self); //OTHERWISE, JUST RUN AS NORMAL
+		//IF WE'RE ON SCREEN AND PUSHING SOMEONE, SLOW US DOWN
+		if (self.graphicsModule != null && !BellyPlus.VisualsOnly())
+		{
+			int critNum = self.abstractCreature.ID.RandomSeed;
+			if (self.GetBelly().pushingOther > 0 || self.GetBelly().isStuck)
+				return Mathf.Min(0.5f, orig.Invoke(self)); //RETURN 10% SPEED (OR 0, IF WE WOULD BE STANDING STILL)
+		}
+		return orig.Invoke(self); //OTHERWISE, JUST RUN AS NORMAL
 	}
 	
 
 
 	public static Scavenger FindScavInRange(Creature self)
 	{
-        if (self.room == null)
-            return null; 
+		if (self.room == null)
+			return null; 
 		
 		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
-        {
-            if (self.room.abstractRoom.creatures[i].realizedCreature != null
-                && self.room.abstractRoom.creatures[i].realizedCreature is Scavenger crit
-                && crit != self && crit.room != null && crit.room == self.room && !crit.dead
-                && Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[1].pos, 35f)
-            )
-            {
-                return crit;
-            }
-        }
-        return null;
+		{
+			if (self.room.abstractRoom.creatures[i].realizedCreature != null
+				&& self.room.abstractRoom.creatures[i].realizedCreature is Scavenger crit
+				&& crit != self && crit.room != null && crit.room == self.room && !crit.dead
+				&& Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[1].pos, 35f)
+			)
+			{
+				return crit;
+			}
+		}
+		return null;
 	}
 	
 	
 	
 	public static Scavenger FindStuckScavInRange(Creature self)
 	{
-        if (self.room == null)
-            return null; 
+		if (self.room == null)
+			return null; 
 		
 		for (int i = 0; i < self.room.abstractRoom.creatures.Count; i++)
-        {
-            if (self.room.abstractRoom.creatures[i].realizedCreature != null
-                && self.room.abstractRoom.creatures[i].realizedCreature is Scavenger crit
+		{
+			if (self.room.abstractRoom.creatures[i].realizedCreature != null
+				&& self.room.abstractRoom.creatures[i].realizedCreature is Scavenger crit
 				&& crit != self && crit.room != null && crit.room == self.room && !crit.dead
-                && patch_Player.ObjIsStuck(crit)
-                && Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[0].pos, 60f)
-            )
-            {
-                return crit;
-            }
-        }
-        return null;
+				&& patch_Player.ObjIsStuck(crit)
+				&& Custom.DistLess(self.mainBodyChunk.pos, crit.bodyChunks[0].pos, 60f)
+			)
+			{
+				return crit;
+			}
+		}
+		return null;
 	}
 	
 	
@@ -275,80 +275,80 @@ public class patch_Scavenger
 
 
 
-    private static void ScavengerGraphics_ctor(On.ScavengerGraphics.orig_ctor orig, ScavengerGraphics self, PhysicalObject ow)
-    {
-        orig.Invoke(self, ow);
-        float scavFatness = self.scavenger.GetBelly().myFatness;
-        self.iVars.fatness *= scavFatness;
-        self.iVars.narrowWaist = Mathf.Lerp(Mathf.Lerp(Random.value, 1f - self.iVars.fatness, Random.value), 1f - self.scavenger.abstractCreature.personality.energy, Random.value);
-        self.iVars.neckThickness = Mathf.Lerp(Mathf.Pow(Random.value, 1.5f - self.scavenger.abstractCreature.personality.aggression), 1f - self.iVars.fatness, Random.value * 0.5f);
-        self.iVars.armThickness = Mathf.Lerp(Random.value, Mathf.Lerp(self.scavenger.abstractCreature.personality.dominance, self.iVars.fatness, 0.5f), Random.value);
+	private static void ScavengerGraphics_ctor(On.ScavengerGraphics.orig_ctor orig, ScavengerGraphics self, PhysicalObject ow)
+	{
+		orig.Invoke(self, ow);
+		float scavFatness = self.scavenger.GetBelly().myFatness;
+		self.iVars.fatness *= scavFatness;
+		self.iVars.narrowWaist = Mathf.Lerp(Mathf.Lerp(Random.value, 1f - self.iVars.fatness, Random.value), 1f - self.scavenger.abstractCreature.personality.energy, Random.value);
+		self.iVars.neckThickness = Mathf.Lerp(Mathf.Pow(Random.value, 1.5f - self.scavenger.abstractCreature.personality.aggression), 1f - self.iVars.fatness, Random.value * 0.5f);
+		self.iVars.armThickness = Mathf.Lerp(Random.value, Mathf.Lerp(self.scavenger.abstractCreature.personality.dominance, self.iVars.fatness, 0.5f), Random.value);
 
-        self.iVars.neckThickness *= scavFatness;
-        self.iVars.armThickness *= scavFatness;
-        self.iVars.narrowWaist *= scavFatness;
-        //sLeaser.sprites[this.NeckSprite] = TriangleMesh.MakeLongMesh(4, false, true);
-    }
+		self.iVars.neckThickness *= scavFatness;
+		self.iVars.armThickness *= scavFatness;
+		self.iVars.narrowWaist *= scavFatness;
+		//sLeaser.sprites[this.NeckSprite] = TriangleMesh.MakeLongMesh(4, false, true);
+	}
 
 
-    private static void ScavengerGraphics_InitiateSprites(On.ScavengerGraphics.orig_InitiateSprites orig, ScavengerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
-    {
-        orig.Invoke(self, sLeaser, rCam);
-        float myFat = self.scavenger.GetBelly().myFatness;
-        sLeaser.sprites[self.ChestSprite].scaleX *= myFat;
-        sLeaser.sprites[self.ChestSprite].scaleY *= myFat;
-        sLeaser.sprites[self.HipSprite].scale *= myFat;
-    }
+	private static void ScavengerGraphics_InitiateSprites(On.ScavengerGraphics.orig_InitiateSprites orig, ScavengerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
+	{
+		orig.Invoke(self, sLeaser, rCam);
+		float myFat = self.scavenger.GetBelly().myFatness;
+		sLeaser.sprites[self.ChestSprite].scaleX *= myFat;
+		sLeaser.sprites[self.ChestSprite].scaleY *= myFat;
+		sLeaser.sprites[self.HipSprite].scale *= myFat;
+	}
 
-    private static void ScavengerGraphics_Update(On.ScavengerGraphics.orig_Update orig, ScavengerGraphics self)
-    {
+	private static void ScavengerGraphics_Update(On.ScavengerGraphics.orig_Update orig, ScavengerGraphics self)
+	{
 		orig(self);
 
-        if (self.scavenger.room == null || BellyPlus.VisualsOnly())
-            return;
+		if (self.scavenger.room == null || BellyPlus.VisualsOnly())
+			return;
 
-        if (self.scavenger.GetBelly().pullingOther && self.scavenger.grasps[0] != null && self.scavenger.grasps[0].grabbed != null && self.scavenger.grasps[0].grabbed is Player)
-        {
-            Limb myHand = self.hands[0];
-            myHand.mode = Limb.Mode.HuntAbsolutePosition;
-            myHand.absoluteHuntPos = self.scavenger.grasps[0].grabbedChunk.pos;
-            myHand.pos = self.scavenger.grasps[0].grabbedChunk.pos;
-        }
-
-
+		if (self.scavenger.GetBelly().pullingOther && self.scavenger.grasps[0] != null && self.scavenger.grasps[0].grabbed != null && self.scavenger.grasps[0].grabbed is Player)
+		{
+			Limb myHand = self.hands[0];
+			myHand.mode = Limb.Mode.HuntAbsolutePosition;
+			myHand.absoluteHuntPos = self.scavenger.grasps[0].grabbedChunk.pos;
+			myHand.pos = self.scavenger.grasps[0].grabbedChunk.pos;
+		}
 
 
-        //RESET
-        if (self.scavenger.GetBelly().pushingOther > 0)
-            self.scavenger.GetBelly().pushingOther--;
-
-        //STOLEN FROM SLUGCAT HANDS
-        Creature myHelper = patch_Player.FindPlayerInRange(self.scavenger);
-        if (myHelper == null)
-            myHelper = patch_Scavenger.FindScavInRange(self.scavenger);
-        if (myHelper == null)
-            myHelper = patch_LanternMouse.FindMouseInRange(self.scavenger);
-
-        if (myHelper != null)
-        {
-            if (patch_Player.IsStuckOrWedged(myHelper) || patch_Player.ObjIsPushingOther(myHelper))
-            {
-                if (UnityEngine.Random.value < 0.125f)
-                {
-                    self.hands[0].pos = myHelper.bodyChunks[1].pos;
-                    self.hands[0].lastPos = myHelper.bodyChunks[1].pos;
-                    self.hands[0].vel *= 0f;
-                }
 
 
-                // bool vertStuck = patch_LanternMouse.IsVerticalStuck(myHelper);
-                // if (!vertStuck && patch_LanternMouse.GetMouseAngle(self.scavenger).x == patch_LanternMouse.GetMouseAngle(myHelper).x
-                // || (vertStuck && patch_LanternMouse.GetMouseAngle(self.scavenger).y == patch_LanternMouse.GetMouseAngle(myHelper).y))
-                //FORGET THAT. JUST ALWAYS PUSH IF WE'RE CLOSE ENOUGH
-                patch_Player.ObjPushedOn(myHelper);
-                self.scavenger.GetBelly().pushingOther = 3;
-            }
-        }
-    }
+		//RESET
+		if (self.scavenger.GetBelly().pushingOther > 0)
+			self.scavenger.GetBelly().pushingOther--;
+
+		//STOLEN FROM SLUGCAT HANDS
+		Creature myHelper = patch_Player.FindPlayerInRange(self.scavenger);
+		if (myHelper == null)
+			myHelper = patch_Scavenger.FindScavInRange(self.scavenger);
+		if (myHelper == null)
+			myHelper = patch_LanternMouse.FindMouseInRange(self.scavenger);
+
+		if (myHelper != null)
+		{
+			if (patch_Player.IsStuckOrWedged(myHelper) || patch_Player.ObjIsPushingOther(myHelper))
+			{
+				if (UnityEngine.Random.value < 0.125f)
+				{
+					self.hands[0].pos = myHelper.bodyChunks[1].pos;
+					self.hands[0].lastPos = myHelper.bodyChunks[1].pos;
+					self.hands[0].vel *= 0f;
+				}
+
+
+				// bool vertStuck = patch_LanternMouse.IsVerticalStuck(myHelper);
+				// if (!vertStuck && patch_LanternMouse.GetMouseAngle(self.scavenger).x == patch_LanternMouse.GetMouseAngle(myHelper).x
+				// || (vertStuck && patch_LanternMouse.GetMouseAngle(self.scavenger).y == patch_LanternMouse.GetMouseAngle(myHelper).y))
+				//FORGET THAT. JUST ALWAYS PUSH IF WE'RE CLOSE ENOUGH
+				patch_Player.ObjPushedOn(myHelper);
+				self.scavenger.GetBelly().pushingOther = 3;
+			}
+		}
+	}
 
 }
